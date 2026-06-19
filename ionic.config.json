@@ -1,0 +1,7 @@
+{
+  "name": "saber-libre",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

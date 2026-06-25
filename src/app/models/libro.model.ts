@@ -7,4 +7,5 @@ export interface Libro {
   cantidadTotal: number;
   cantidadDisponible: number;
   imagenPortada?: string;
+  descripcion?: string;
 }

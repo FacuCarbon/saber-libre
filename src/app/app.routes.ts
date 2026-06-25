@@ -5,7 +5,8 @@ import { roleGuard } from './guards/role-guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth/login',
+    //redirectTo: 'auth/login',
+    redirectTo: 'demo',
     pathMatch: 'full',
   },
   {
@@ -74,6 +75,11 @@ export const routes: Routes = [
         },
       },
     ],
+  },
+  {
+    path: 'demo',
+    loadComponent: () =>
+      import('./pages/demo/demo.page').then((m) => m.DemoPage),
   },
   {
     path: '**',

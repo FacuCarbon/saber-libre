@@ -1,0 +1,121 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>demo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-label> Titulo </ion-label>
+  <ion-input
+    [(ngModel)]="titulo"
+    placeholder="Ingrese el titulo del libro"
+  ></ion-input>
+
+  <ion-item>
+    <ion-label position="stacked">Autores</ion-label>
+
+    <div class="chip-container">
+      @for (autor of autores; track $index) {
+      <ion-chip>
+        <ion-label>{{ autor }}</ion-label>
+        <ion-icon
+          name="close-circle"
+          (click)="eliminarAutor($index)"
+        ></ion-icon>
+      </ion-chip>
+      }
+    </div>
+
+    <ion-input
+      placeholder="Escribe y presiona Enter"
+      [(ngModel)]="nuevaAutor"
+      (keydown.enter)="agregarAutor()"
+    >
+    </ion-input>
+  </ion-item>
+
+  <ion-label> ISBN </ion-label>
+  <ion-input
+    [(ngModel)]="isbn"
+    placeholder="Ingrese el ISBN del libro"
+  ></ion-input>
+
+  <ion-label> Cantidad disponible </ion-label>
+  <ion-input
+    [(ngModel)]="cantidadDisponible"
+    placeholder="Ingrese la cantidad disponible del libro"
+  ></ion-input>
+
+  <ion-label> Cantidad total </ion-label>
+  <ion-input
+    [(ngModel)]="cantidadTotal"
+    placeholder="Ingrese la cantidad total del libro"
+  ></ion-input>
+
+  <ion-item>
+    <ion-label position="stacked">Categorías</ion-label>
+
+    <div class="chip-container">
+      @for (categoria of categorias; track $index) {
+      <ion-chip>
+        <ion-label>{{ categoria }}</ion-label>
+        <ion-icon
+          name="close-circle"
+          (click)="eliminarCategoria($index)"
+        ></ion-icon>
+      </ion-chip>
+      }
+    </div>
+
+    <ion-input
+      placeholder="Escribe y presiona Enter"
+      [(ngModel)]="nuevaCategoria"
+      (keydown.enter)="agregarCategoria()"
+    >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Descripción</ion-label>
+    <ion-textarea
+      [(ngModel)]="descripcion"
+      placeholder="Ingrese la descripción del libro"
+    >
+    </ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Imagen portada</ion-label>
+    <ion-input
+      [(ngModel)]="imagenPortada"
+      placeholder="Ingrese la imagen portada del libro"
+    ></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="guardarLibro()">
+    <ion-icon name="add"></ion-icon>
+    Guardar
+  </ion-button>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Libros</ion-label>
+    </ion-list-header>
+    @for (libro of libros; track $index) {
+    <ion-item>
+      <ion-img [src]="libro.imagenPortada" style="margin-right: 15px"></ion-img>
+      <ion-label>
+        <h2>{{ libro.titulo }}</h2>
+        <ion-label>
+          @for (autor of libro.autores; track $index) {
+          <p>{{ autor }}</p>
+          }
+        </ion-label>
+        <p>{{ libro.descripcion }}</p>
+        <p>Disponible: {{ libro.cantidadDisponible }}</p>
+        <p>Total: {{ libro.cantidadTotal }}</p>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { StorageService } from 'src/app/services/storage.service';
-import { Libro } from 'src/app/models';
 import { IonicModule } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-demo',
@@ -12,76 +12,80 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [FormsModule, IonicModule],
 })
-export class DemoPage implements OnInit {
-  constructor(private _storageService: StorageService) {}
+export class DemoPage {
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+  ) {}
 
-  ngOnInit() {
-    this.listarLibros();
+  ionViewWillEnter() {
+    this.email = '';
+    this.password = '';
+    this.error = '';
+    this.mensajeConfirmacion = '';
   }
 
-  libros: Libro[] = [];
+  email: string = '';
+  password: string = '';
+  nombreCompleto: string = '';
+  error: string = '';
+  mensajeConfirmacion: string = '';
 
-  titulo: string = '';
-  autores: string[] = [];
-  nuevaAutor: string = '';
-  isbn: string = '';
-  cantidadDisponible: number = 0;
-  cantidadTotal: number = 0;
-  categorias: string[] = [];
-  nuevaCategoria: string = '';
-  imagenPortada: string = '';
-  descripcion: string = '';
+  async login() {
+    try {
+      this.mensajeConfirmacion = '';
+      this.error = '';
 
-  agregarCategoria() {
-    if (this.nuevaCategoria.trim() !== '') {
-      this.categorias = [...this.categorias, this.nuevaCategoria.trim()];
-      this.nuevaCategoria = '';
+      if (this.email.trim() === '' || this.password.trim() === '') {
+        throw new Error('El email y la contraseña son requeridos.');
+      }
+
+      await this._authService.iniciarSesion(this.email, this.password);
+
+      this._router.navigate(['/dashboard']);
+    } catch {
+      this.error =
+        'Ocurrió un error al iniciar sesión, verifique sus credenciales.';
     }
   }
 
-  eliminarCategoria(index: number) {
-    this.categorias.splice(index, 1);
-  }
+  async registrarCuenta() {
+    try {
+      this.mensajeConfirmacion = '';
+      this.error = '';
 
-  agregarAutor() {
-    if (this.nuevaAutor.trim() !== '') {
-      this.autores = [...this.autores, this.nuevaAutor.trim()];
-      this.nuevaAutor = '';
-      console.log('autores: ', this.autores);
+      if (this.nombreCompleto.trim() === '') {
+        throw new Error('El nombre completo es requerido.');
+      }
+      if (this.email.trim() === '' || this.password.trim() === '') {
+        throw new Error('El email y la contraseña son requeridos.');
+      }
+
+      await this._authService.registrar(
+        this.email,
+        this.password,
+        this.nombreCompleto,
+      );
+
+      this.mensajeConfirmacion =
+        'Verifique su correo electrónico para activar su cuenta.';
+
+      this.email = '';
+      this.password = '';
+    } catch {
+      this.error =
+        'Error desconocido al registrar al usuario, por favor comuniquese con un administrador del sitio.';
     }
   }
 
-  eliminarAutor(index: number) {
-    this.autores.splice(index, 1);
-  }
+  async iniciarSesionGoogle() {
+    try {
+      await this._authService.iniciarSesionGoogle();
 
-  async listarLibros() {
-    const respuesta = await this._storageService.obtenerLista<Libro>('libros');
-    this.libros = respuesta;
-  }
-
-  async guardarLibro() {
-    const nuevoLibro: Libro = {
-      id: crypto.randomUUID(),
-      titulo: this.titulo,
-      autores: this.autores,
-      isbn: this.isbn,
-      cantidadDisponible: this.cantidadDisponible,
-      cantidadTotal: this.cantidadTotal,
-      categorias: this.categorias,
-      imagenPortada: this.imagenPortada,
-      descripcion: this.descripcion,
-    };
-
-    const resultado = await this._storageService.guardar<Libro>(
-      'libros',
-      nuevoLibro,
-    );
-    if (resultado) {
-      console.log('Libro guardado exitosamente');
-      this.listarLibros();
-    } else {
-      console.log('El libro ya existe');
+      this._router.navigate(['/dashboard']);
+    } catch {
+      this.error =
+        'Ocurrió un error al iniciar sesión con Google, por favor intentelo nuevamente.';
     }
   }
 }

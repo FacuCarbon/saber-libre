@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role-guard';
+import { guestGuard } from './guards/guest-guard';
 
 export const routes: Routes = [
   {
@@ -13,11 +14,13 @@ export const routes: Routes = [
     path: 'auth/login',
     loadComponent: () =>
       import('./pages/auth/login/login.page').then((m) => m.LoginPage),
+    canActivate: [guestGuard],
   },
   {
     path: 'auth/register',
     loadComponent: () =>
       import('./pages/auth/register/register.page').then((m) => m.RegisterPage),
+    canActivate: [guestGuard],
   },
   {
     path: 'dashboard',
@@ -80,6 +83,7 @@ export const routes: Routes = [
     path: 'demo',
     loadComponent: () =>
       import('./pages/demo/demo.page').then((m) => m.DemoPage),
+    canActivate: [guestGuard],
   },
   {
     path: '**',

@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { User } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { RolUsuario, Usuario } from 'src/app/models';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,8 +13,22 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule],
 })
-export class DashboardPage implements OnInit {
-  constructor() {}
+export class DashboardPage {
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+  ) {}
 
-  ngOnInit() {}
+  usuario: Usuario | null = null;
+  rol: RolUsuario | null = null;
+
+  async ionViewWillEnter() {
+    this.usuario = await this._authService.usuarioActual();
+    this.rol = await this._authService.rolUsuarioActual();
+  }
+
+  logout() {
+    this._authService.logout();
+    this._router.navigate(['/demo']);
+  }
 }

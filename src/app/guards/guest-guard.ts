@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Auth, onAuthStateChanged, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
-export const authGuard = async () => {
+export const guestGuard = async () => {
   const auth = inject(Auth);
   const router = inject(Router);
 
@@ -13,10 +13,9 @@ export const authGuard = async () => {
     });
   });
 
-  if (usuario && usuario.emailVerified) {
+  if (!usuario) {
     return true;
-  } else {
-    alert('Debes iniciar sesión para acceder a esta página.');
-    return router.createUrlTree(['/demo']);
   }
+
+  return router.createUrlTree(['/dashboard/catalogo']);
 };

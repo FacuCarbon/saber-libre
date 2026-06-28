@@ -13,15 +13,16 @@
 
   <div class="login-container">
     <div class="login-card">
-
-      // logo
       <div class="login-header">
-        <img class="login-logo" src="../saber-libre-assets/pngs/04_isotipo_transparente.png" alt="Saber Libre">
+        <img
+          class="login-logo"
+          src="./../../../../assets/icon/logo_login.png"
+          alt="Saber Libre"
+        />
         <h1>Saber Libre</h1>
         <p>Inicia sesión para continuar</p>
       </div>
 
-      // error
       @if (error) {
       <div class="error-box">
         <ion-icon name="alert-circle"></ion-icon>
@@ -29,7 +30,6 @@
       </div>
       }
 
-      // form
       <form (ngSubmit)="login()">
         <ion-item class="login-item">
           <ion-label position="stacked">
@@ -68,12 +68,10 @@
         </ion-button>
       </form>
 
-      // divider
       <div class="divider">
         <span>o continúa con</span>
       </div>
 
-      // google
       <ion-button
         expand="block"
         fill="outline"
@@ -84,13 +82,10 @@
         Iniciar Sesión con Google
       </ion-button>
 
-      // registro
       <p class="register-link">
         ¿No tenés cuenta?
         <a routerLink="/auth/register">Registrate</a>
       </p>
-
     </div>
   </div>
-
 </ion-content>

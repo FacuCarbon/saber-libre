@@ -122,11 +122,36 @@
       <h3>{{ libro.titulo }}</h3>
       <p>ISBN: {{ libro.isbn }}</p>
       <p>Autores: {{ libro.autores.join(', ') || 'Sin autor' }}</p>
+      <p>Categorias: {{ libro.categorias.join(', ') || 'Sin categoria' }}</p>
       <p>Disponibles: {{ libro.cantidadDisponible }}</p>
       <p>Total: {{ libro.cantidadTotal }}</p>
     </article>
     } @empty {
     <p>Todavía no hay libros guardados.</p>
+    }
+  </section>
+
+  <section>
+    <h2>Buscar libro por titulo, categoria o autor</h2>
+
+    <input
+      type="text"
+      [(ngModel)]="busqueda"
+      placeholder="Ingrese titulo, categoria o autor"
+    />
+
+    <button type="button" (click)="buscarLibros()">Buscar libro</button>
+
+    @if(librosFiltrados.length > 0){
+    <ul>
+      @for (libro of librosFiltrados; track libro.id) {
+      <li>
+        <p>{{ libro.titulo }}</p>
+        <p>{{ libro.autores.join(', ') }}</p>
+        <p>{{ libro.categorias.join(', ') }}</p>
+      </li>
+      }
+    </ul>
     }
   </section>
 </div>

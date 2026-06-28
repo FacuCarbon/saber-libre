@@ -1,5 +1,3 @@
-import { Prestamo } from './prestamo.model';
-
 export type EstadoEjemplar = 'disponible' | 'prestado' | 'mantenimiento';
 
 export interface Ejemplar {

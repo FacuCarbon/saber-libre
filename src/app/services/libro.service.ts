@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
+import { EjemplarService } from './ejemplar.service';
 import { Libro } from '../models/libro.model';
 import { VolumenGoogleBooks } from '../models/google-books.model';
 import { GoogleBooksService } from './google-books.service';
@@ -11,6 +12,7 @@ import { StorageService } from './storage.service';
 export class LibroService {
   private _storageService = inject(StorageService);
   private _googleBooksService = inject(GoogleBooksService);
+  private _ejemplarService = inject(EjemplarService);
 
   /**
    * Busca un libro por su ISBN.
@@ -48,12 +50,113 @@ export class LibroService {
   }
 
   /**
+   * Busca libros por su título, categoría o autor.
+   * @param query El término de búsqueda.
+   * @returns Una lista de libros encontrados.
+   */
+  async buscarLibro(query: string): Promise<Libro[]> {
+    const catalogo = await this.obtenerLibros();
+    const libros: Libro[] = catalogo.filter((libro) => {
+      if (libro.titulo.toLowerCase().includes(query.toLowerCase())) {
+        return true;
+      }
+      if (
+        libro.autores.some((autor) =>
+          autor.toLowerCase().includes(query.toLowerCase()),
+        )
+      ) {
+        return true;
+      }
+      if (
+        libro.categorias.some((categoria) =>
+          categoria.toLowerCase().includes(query.toLowerCase()),
+        )
+      ) {
+        return true;
+      }
+      return false;
+    });
+    return libros;
+  }
+
+  /**
    * Actualiza un libro.
    * @param libro El libro a actualizar.
    * @returns true si el libro se actualizó correctamente, false en caso contrario.
    */
   actualizarLibro(libro: Libro): Promise<boolean> {
     return this._storageService.actualizar<Libro>('libros', libro);
+  }
+
+  /**
+   * Actualiza la cantidad disponible de un libro.
+   * @param idLibro El ID del libro.
+   * @param cantidadDisponible La nueva cantidad disponible.
+   * @returns true si el libro se actualizo correctamente, false en caso contrario.
+   */
+  async actualizarCantidadDisponible(
+    idLibro: string,
+    cantidadDisponible: number,
+  ): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro) {
+      return false;
+    }
+
+    if (
+      cantidadDisponible < 0 ||
+      cantidadDisponible > libro.cantidadTotal
+    ) {
+      return false;
+    }
+
+    libro.cantidadDisponible = cantidadDisponible;
+    return this.actualizarLibro(libro);
+  }
+
+  /**
+   * Disminuye la cantidad disponible de un libro.
+   * @param idLibro El ID del libro.
+   * @param cantidad La cantidad a descontar.
+   * @returns true si se actualizo correctamente, false en caso contrario.
+   */
+  async descontarCantidadDisponible(
+    idLibro: string,
+    cantidad = 1,
+  ): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro) {
+      return false;
+    }
+
+    return this.actualizarCantidadDisponible(
+      idLibro,
+      libro.cantidadDisponible - cantidad,
+    );
+  }
+
+  /**
+   * Aumenta la cantidad disponible de un libro.
+   * @param idLibro El ID del libro.
+   * @param cantidad La cantidad a sumar.
+   * @returns true si se actualizo correctamente, false en caso contrario.
+   */
+  async incrementarCantidadDisponible(
+    idLibro: string,
+    cantidad = 1,
+  ): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro) {
+      return false;
+    }
+
+    return this.actualizarCantidadDisponible(
+      idLibro,
+      libro.cantidadDisponible + cantidad,
+    );
   }
 
   /**
@@ -111,5 +214,76 @@ export class LibroService {
     };
 
     return this._storageService.guardar<Libro>('libros', nuevoLibro);
+  }
+
+  /**
+   * Guarda un libro y crea sus ejemplares en una sola operacion.
+   * @param volumen El volumen del libro.
+   * @param cantidad La cantidad total de ejemplares.
+   * @param ubicacion La ubicacion inicial de los ejemplares.
+   * @returns true si se guardo todo correctamente, false en caso contrario.
+   */
+  async guardarLibroConEjemplares(
+    volumen: VolumenGoogleBooks,
+    cantidad: number,
+    ubicacion: string,
+  ): Promise<boolean> {
+    if (cantidad <= 0) {
+      throw new Error('La cantidad debe ser mayor a cero.');
+    }
+
+    const isbn =
+      volumen.industryIdentifiers?.find(
+        (identificador) => identificador.type === 'ISBN_13',
+      )?.identifier ??
+      volumen.industryIdentifiers?.find(
+        (identificador) => identificador.type === 'ISBN_10',
+      )?.identifier;
+
+    if (!isbn) {
+      throw new Error('El libro no tiene un ISBN.');
+    }
+
+    const libros = await this.obtenerLibros();
+    const libroExistente = libros.some((libro) => libro.isbn === isbn);
+
+    if (libroExistente) {
+      return false;
+    }
+
+    const nuevoLibro: Libro = {
+      id: crypto.randomUUID(),
+      isbn,
+      titulo: volumen.title,
+      autores: volumen.authors ?? [],
+      categorias: volumen.categories ?? [],
+      cantidadTotal: cantidad,
+      cantidadDisponible: cantidad,
+      imagenPortada: volumen.imageLinks?.thumbnail,
+      descripcion: volumen.description,
+    };
+
+    const libroGuardado = await this._storageService.guardar<Libro>(
+      'libros',
+      nuevoLibro,
+    );
+
+    if (!libroGuardado) {
+      return false;
+    }
+
+    const ejemplaresCreados = await this._ejemplarService.crearEjemplaresParaLibro(
+      nuevoLibro.id,
+      cantidad,
+      ubicacion,
+    );
+
+    if (ejemplaresCreados.length !== cantidad) {
+      await this._ejemplarService.eliminarEjemplaresPorLibro(nuevoLibro.id);
+      await this.eliminarLibro(nuevoLibro.id);
+      return false;
+    }
+
+    return true;
   }
 }

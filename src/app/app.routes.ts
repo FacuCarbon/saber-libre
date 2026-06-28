@@ -6,8 +6,7 @@ import { guestGuard } from './guards/guest-guard';
 export const routes: Routes = [
   {
     path: '',
-    //redirectTo: 'auth/login',
-    redirectTo: 'demo',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {

@@ -14,14 +14,16 @@ import { LibroService } from '../../../services/libro.service';
 })
 export class GestionPage implements OnInit {
   private _libroService = inject(LibroService);
-
-  isbnBusqueda = '';
-  tituloBusqueda = '';
-  cantidad = 1;
+  busqueda: string = '';
+  isbnBusqueda: string = '';
+  tituloBusqueda: string = '';
+  cantidad: number = 1;
 
   resultados: VolumenGoogleBooks[] = [];
   libroSeleccionado: VolumenGoogleBooks | null = null;
   librosGuardados: Libro[] = [];
+
+  librosFiltrados: Libro[] = [];
 
   mensaje = '';
 
@@ -68,6 +70,25 @@ export class GestionPage implements OnInit {
       console.error(error);
       this.mensaje = 'Error al buscar por título.';
     }
+  }
+
+  async buscarLibros(): Promise<Libro[] | null> {
+    this.mensaje = '';
+    if (this.busqueda.trim() === '') return null;
+
+    const librosEncontrados = await this._libroService.buscarLibro(
+      this.busqueda,
+    );
+
+    if (librosEncontrados.length === 0) {
+      this.mensaje = 'No se encontraron libros.';
+      this.librosFiltrados = [];
+      return null;
+    } else {
+      this.librosFiltrados = librosEncontrados;
+    }
+
+    return this.librosFiltrados;
   }
 
   seleccionarLibro(volumen: VolumenGoogleBooks): void {

@@ -13,15 +13,16 @@
 
   <div class="register-container">
     <div class="register-card">
-
-      // logo
       <div class="register-header">
-        <img class="register-logo" src="../saber-libre-assets/pngs/04_isotipo_transparente.png" alt="Saber Libre">
+        <img
+          class="register-logo"
+          src="../saber-libre-assets/pngs/04_isotipo_transparente.png"
+          alt="Saber Libre"
+        />
         <h1>Saber Libre</h1>
         <p>Creá tu cuenta</p>
       </div>
 
-      // error
       @if (error) {
       <div class="error-box">
         <ion-icon name="alert-circle"></ion-icon>
@@ -29,7 +30,6 @@
       </div>
       }
 
-      // form
       <form (ngSubmit)="register()">
         <ion-item class="register-item">
           <ion-label position="stacked">
@@ -92,12 +92,10 @@
         </ion-button>
       </form>
 
-      // divider
       <div class="divider">
         <span>o registrate con</span>
       </div>
 
-      // google
       <ion-button
         expand="block"
         fill="outline"
@@ -108,13 +106,10 @@
         Google
       </ion-button>
 
-      // login link
       <p class="login-link">
         ¿Ya tenés cuenta?
         <a routerLink="/auth/login">Iniciá sesión</a>
       </p>
-
     </div>
   </div>
-
 </ion-content>

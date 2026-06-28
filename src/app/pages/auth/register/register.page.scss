@@ -1,0 +1,214 @@
+// Colores marca: naranja #ff6b35, fondo #f8f6f3, texto #1a1a1a, borde #eae6e1
+
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px;
+}
+
+// Tarjeta blanca del formulario
+.register-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 32px 32px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 12px 40px rgba(255, 107, 53, 0.06);
+  border: 1px solid #f0edea;
+}
+
+// Encabezado: logo + titulo
+.register-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.register-logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.2);
+}
+
+.register-header h1 {
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+
+.register-header p {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+// Inputs del formulario
+.register-item {
+  --border-radius: 14px;
+  --border-color: #eae6e1;
+  --border-width: 2px;
+  --background: #faf8f6;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 52px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  transition: box-shadow 0.25s;
+}
+
+.register-item:focus-within {
+  --border-color: #ff6b35;
+  --background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+.register-item ion-label {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+}
+
+.register-item ion-label ion-icon {
+  font-size: 0.82rem;
+  color: #ff6b35;
+  background: none;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.register-item ion-input {
+  --padding-start: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+// Boton de crear cuenta
+.btn-primary {
+  --background: #ff6b35;
+  --background-hover: #e85d2a;
+  --border-radius: 14px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  --box-shadow: 0 6px 20px rgba(255, 107, 53, 0.25);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  min-height: 52px;
+  text-transform: none;
+}
+
+// Separador
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eae6e1;
+}
+
+.divider span {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #bfb8b0;
+  white-space: nowrap;
+}
+
+// Boton de Google
+.btn-google {
+  --border-color: #eae6e1;
+  --border-width: 2px;
+  --border-radius: 14px;
+  --background: #faf8f6;
+  --background-hover: #ffffff;
+  --color: #1a1a1a;
+  --box-shadow: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0;
+  min-height: 50px;
+  text-transform: none;
+}
+
+.btn-google ion-icon {
+  color: #4285f4;
+  font-size: 1.2rem;
+}
+
+// Link de login
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #a0a0a0;
+}
+
+.login-link a {
+  color: #ff6b35;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  color: #e85d2a;
+  text-decoration: underline;
+}
+
+// Mensaje de error
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #e85d2a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.error-box ion-icon {
+  color: #e85d2a;
+  font-size: 0.9rem;
+}
+
+// Responsive: pantallas chicas
+@media (max-width: 520px) {
+  .register-container {
+    padding: 0;
+    align-items: flex-start;
+    background: #ffffff;
+  }
+
+  .register-card {
+    max-width: 100%;
+    border-radius: 0;
+    padding: 44px 20px 32px;
+    box-shadow: none;
+    border: none;
+  }
+}

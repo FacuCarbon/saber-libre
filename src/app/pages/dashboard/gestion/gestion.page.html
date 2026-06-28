@@ -1,3 +1,132 @@
-<div class="ion-padding">
-  <h1>Gestión!</h1>
+<div class="gestion-contenido ion-padding">
+  <h1>Gestión de libros</h1>
+
+  <section>
+    <h2>Buscar por ISBN</h2>
+
+    <input type="text" [(ngModel)]="isbnBusqueda" placeholder="Ingresar ISBN" />
+
+    <button type="button" (click)="buscarPorIsbn()">Buscar por ISBN</button>
+  </section>
+
+  <section>
+    <h2>Buscar por título</h2>
+
+    <input
+      type="text"
+      [(ngModel)]="tituloBusqueda"
+      placeholder="Ingresar título"
+    />
+
+    <button type="button" (click)="buscarPorTitulo()">Buscar por título</button>
+  </section>
+
+  @if (mensaje) {
+  <p>{{ mensaje }}</p>
+  } @if (resultados.length > 0) {
+  <section class="sugerencias">
+    <h2>Sugerencias</h2>
+
+    @for (resultado of resultados; track $index) {
+    <article>
+      @if (resultado.imageLinks?.thumbnail; as portada) {
+      <img [src]="portada" [alt]="resultado.title" />
+      }
+
+      <h3>{{ resultado.title }}</h3>
+
+      <p>{{ resultado.authors?.join(', ') || 'Autor desconocido' }}</p>
+
+      <button type="button" (click)="seleccionarLibro(resultado)">
+        Seleccionar
+      </button>
+    </article>
+    }
+  </section>
+  } @if (libroSeleccionado; as libro) {
+  <section>
+    <h2>Datos del libro</h2>
+
+    <form (ngSubmit)="guardarLibro(libro)">
+      <div>
+        <label for="tituloLibro">Título</label>
+
+        <input
+          id="tituloLibro"
+          name="tituloLibro"
+          type="text"
+          [(ngModel)]="libro.title"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="autoresLibro">Autores</label>
+
+        <input
+          id="autoresLibro"
+          type="text"
+          [value]="libro.authors?.join(', ') || ''"
+          readonly
+        />
+      </div>
+
+      <div>
+        <label for="categoriasLibro">Categorías</label>
+
+        <input
+          id="categoriasLibro"
+          type="text"
+          [value]="libro.categories?.join(', ') || ''"
+          readonly
+        />
+      </div>
+
+      <div>
+        <label for="descripcionLibro">Descripción</label>
+
+        <textarea
+          id="descripcionLibro"
+          name="descripcionLibro"
+          [(ngModel)]="libro.description"
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="cantidadLibro">Cantidad</label>
+
+        <input
+          id="cantidadLibro"
+          name="cantidadLibro"
+          type="number"
+          min="1"
+          [(ngModel)]="cantidad"
+          required
+        />
+      </div>
+
+      @if (libro.imageLinks?.thumbnail; as portada) {
+      <img [src]="portada" [alt]="libro.title" />
+      }
+
+      <button type="submit" [disabled]="cantidad <= 0">Guardar libro</button>
+    </form>
+  </section>
+  }
+
+  <section>
+    <h2>Libros guardados</h2>
+
+    @for (libro of librosGuardados; track libro.id) {
+    <article>
+      <h3>{{ libro.titulo }}</h3>
+      <p>ISBN: {{ libro.isbn }}</p>
+      <p>Autores: {{ libro.autores.join(', ') || 'Sin autor' }}</p>
+      <p>Disponibles: {{ libro.cantidadDisponible }}</p>
+      <p>Total: {{ libro.cantidadTotal }}</p>
+    </article>
+    } @empty {
+    <p>Todavía no hay libros guardados.</p>
+    }
+  </section>
 </div>

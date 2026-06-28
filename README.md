@@ -6,6 +6,13 @@ Aplicación multiplataforma (Web y Mobile) en Angular 19 e Ionic/Capacitor para 
 
 - [María de los Ángeles Jiménez](https://github.com/MeriHeroes)
 - [Matías Becker](https://github.com/Federico-Becker)
-- [Martín Torrico](#)
 - [Maximiliano Montero](https://github.com/47296726-tech)
 - [Facundo Carbón](https://github.com/FacuCarbon)
+
+---
+
+## Tablero
+
+#### Requiere invitación.
+
+- [Tablero de Trello](https://trello.com/b/JFFn1hNU/tp-saber-libre)

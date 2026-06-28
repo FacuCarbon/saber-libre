@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Demo Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Autenticación</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Nombre completo</ion-label>
+      <ion-input [(ngModel)]="nombreCompleto"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-button (click)="login()">Iniciar Sesión</ion-button>
+    <ion-button (click)="registrarCuenta()">Registrarse</ion-button>
+    <ion-button (click)="iniciarSesionGoogle()"
+      >Iniciar Sesión con Google</ion-button
+    >
+  </ion-list>
+</ion-content>

@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.gestion-contenido {
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
+
+.sugerencias {
+  max-height: 50vh;
+  overflow-y: auto;
+  margin: 24px 0;
+  padding: 12px;
+  border: 1px solid #ccc;
+}
+
+.sugerencias article {
+  padding: 12px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+img {
+  display: block;
+  max-width: 140px;
+  height: auto;
+  margin: 8px 0;
+}

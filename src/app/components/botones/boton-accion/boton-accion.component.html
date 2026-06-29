@@ -1,0 +1,12 @@
+<ion-button
+  type="button"
+  class="boton-accion"
+  [disabled]="deshabilitado"
+  (click)="accion.emit()"
+>
+  @if (icono) {
+    <ion-icon slot="start" [name]="icono"></ion-icon>
+  }
+
+  {{ texto }}
+</ion-button>

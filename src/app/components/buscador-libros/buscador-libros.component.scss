@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.buscador {
+  width: 100%;
+}
+
+.buscador-libros {
+  --background: #fffdfa;
+  --border-radius: 0.75rem;
+  --box-shadow: inset 0 0 0 1px #e9e3dd;
+  --clear-button-color: #746b65;
+  --color: #29231f;
+  --icon-color: #918981;
+  --placeholder-color: #918981;
+  --placeholder-font-weight: 400;
+  --placeholder-opacity: 1;
+
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-body);
+}
+
+.buscador-libros.searchbar-has-focus {
+  --box-shadow:
+    inset 0 0 0 2px #ff6b35,
+    0 0 0 3px rgba(255, 107, 53, 0.1);
+  --icon-color: #ff6b35;
+}

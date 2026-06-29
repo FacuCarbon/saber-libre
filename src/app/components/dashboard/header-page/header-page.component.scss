@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.container-header-info {
+  min-width: 0;
+}
+
+.header-titulo {
+  margin: 0;
+  color: #302b28;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.header-subtitulo {
+  margin: 0.4rem 0 0;
+  color: #746b65;
+  line-height: 1.5;
+}
+
+.container-boton {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 575px) {
+  .container-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .container-boton {
+    width: 100%;
+  }
+}

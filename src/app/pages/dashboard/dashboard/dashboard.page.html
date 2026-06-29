@@ -41,9 +41,9 @@
         <router-outlet (activate)="actualizarPaginaActual()"></router-outlet>
       </ion-content>
 
-      <ion-footer class="ion-hide-md-up">
+      <ion-footer class="ion-hide-lg-up">
         <ion-tab-bar>
-          @for (item of rutas; track $index) {
+          @for (item of rutasTabs; track item.url) {
           <ion-tab-button
             [routerLink]="item.url"
             routerLinkActive="route-active"
@@ -53,7 +53,38 @@
             <ion-label>{{ item.title }}</ion-label>
           </ion-tab-button>
           }
+
+          <ion-tab-button
+            id="mobile-more-trigger"
+            [class.route-active]="masActivo"
+          >
+            <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+            <ion-label>Más</ion-label>
+          </ion-tab-button>
         </ion-tab-bar>
+
+        <ion-popover
+          trigger="mobile-more-trigger"
+          triggerAction="click"
+          [dismissOnSelect]="true"
+          class="more-popover"
+        >
+          <ng-template>
+            <ion-list lines="none">
+              @for (item of rutasMas; track item.url) {
+              <ion-item
+                button
+                [routerLink]="item.url"
+                routerLinkActive="route-active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <ion-icon [name]="item.icon" slot="start"></ion-icon>
+                <ion-label>{{ item.title }}</ion-label>
+              </ion-item>
+              }
+            </ion-list>
+          </ng-template>
+        </ion-popover>
       </ion-footer>
     </div>
   </ion-split-pane>

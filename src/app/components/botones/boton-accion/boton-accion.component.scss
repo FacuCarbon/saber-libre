@@ -1,0 +1,23 @@
+:host {
+  display: inline-block;
+}
+
+.boton-accion {
+  --background: #ff6b35;
+  --background-hover: #e85a26;
+  --background-activated: #cf461a;
+  --border-radius: 0.75rem;
+  --box-shadow: none;
+
+  min-height: 44px;
+  margin: 0;
+  font-weight: 600;
+  text-transform: none;
+}
+
+@media (max-width: 575px) {
+  :host,
+  .boton-accion {
+    width: 100%;
+  }
+}

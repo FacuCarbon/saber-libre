@@ -1,0 +1,18 @@
+<header class="container-header">
+  <div class="container-header-info">
+    <h1 class="header-titulo">{{ titulo }}</h1>
+    @if (subtitulo) {
+      <p class="header-subtitulo">{{ subtitulo }}</p>
+    }
+  </div>
+
+  @if (textoBoton) {
+    <div class="container-boton">
+      <app-boton-accion
+        [texto]="textoBoton"
+        [icono]="icono"
+        (accion)="accion.emit()"
+      />
+    </div>
+  }
+</header>

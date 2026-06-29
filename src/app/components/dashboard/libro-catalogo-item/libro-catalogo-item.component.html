@@ -1,0 +1,107 @@
+<article class="libro-item">
+  <div class="libro-identidad">
+    @if (libro.imagenPortada) {
+      <img
+        class="libro-portada"
+        [src]="libro.imagenPortada"
+        [alt]="'Portada de ' + libro.titulo"
+      />
+    } @else {
+      <div class="libro-portada libro-portada--placeholder" aria-hidden="true">
+        <ion-icon name="book"></ion-icon>
+      </div>
+    }
+
+    <div class="libro-info">
+      <h3 [title]="libro.titulo">{{ libro.titulo }}</h3>
+      <p [title]="libro.autores.join(', ')">
+        {{ libro.autores.join(", ") }}
+      </p>
+    </div>
+  </div>
+
+  <div class="dato isbn">
+    <span class="etiqueta-mobile">ISBN:</span>
+    <span>{{ libro.isbn }}</span>
+  </div>
+
+  <div class="dato categoria">
+    <span class="etiqueta-mobile">Categoría:</span>
+    <span>{{ libro.categorias.join(", ") }}</span>
+  </div>
+
+  <div class="dato disponibles">
+    <span class="etiqueta-mobile">Disponibles:</span>
+    <strong>{{ libro.cantidadDisponible }}</strong>
+  </div>
+
+  <div class="dato total">
+    <span class="etiqueta-mobile">Total:</span>
+    <span>{{ libro.cantidadTotal }}</span>
+  </div>
+
+  <div
+    class="acciones"
+    role="group"
+    [attr.aria-label]="'Acciones para ' + libro.titulo"
+  >
+    <ion-button
+      class="boton-icono"
+      fill="clear"
+      aria-label="Ver detalle"
+      (click)="verDetalles.emit(libro.id)"
+    >
+      <ion-icon name="eye-outline"></ion-icon>
+    </ion-button>
+
+    <ion-button
+      class="boton-icono"
+      fill="clear"
+      aria-label="Editar libro"
+      (click)="editarLibro.emit(libro.id)"
+    >
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-button>
+
+    <ion-button
+      [id]="'opciones-libro-' + libro.id"
+      class="boton-icono"
+      fill="clear"
+      aria-label="Más opciones"
+    >
+      <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+    </ion-button>
+
+    <ion-popover
+      [trigger]="'opciones-libro-' + libro.id"
+      triggerAction="click"
+      side="bottom"
+      alignment="end"
+      [dismissOnSelect]="true"
+      class="menu-opciones"
+    >
+      <ng-template>
+        <ion-list lines="none">
+          <ion-item
+            button
+            [detail]="false"
+            (click)="gestionarEjemplares.emit(libro.id)"
+          >
+            <ion-icon name="library-outline" slot="start"></ion-icon>
+            <ion-label>Gestionar ejemplares</ion-label>
+          </ion-item>
+
+          <ion-item
+            button
+            [detail]="false"
+            class="opcion-eliminar"
+            (click)="eliminarLibro.emit(libro.id)"
+          >
+            <ion-icon name="trash" slot="start"></ion-icon>
+            <ion-label>Eliminar libro</ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-template>
+    </ion-popover>
+  </div>
+</article>

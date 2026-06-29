@@ -39,6 +39,9 @@ export class DashboardPage {
   rol: RolUsuario | null = null;
 
   rutas = this._navegacionService.dashboardMenu;
+  rutasTabs = this.rutas.filter((item) => item.mobile === 'tab');
+  rutasMas = this.rutas.filter((item) => item.mobile === 'more');
+  masActivo = false;
 
   async ionViewWillEnter() {
     this.usuario = await this._authService.usuarioActual();
@@ -47,9 +50,9 @@ export class DashboardPage {
 
   actualizarPaginaActual(): void {
     const urlActual = this._router.url.split('?')[0].split('#')[0];
-    console.log('Url actual: ', urlActual);
     this.tituloPaginaActual =
       this.rutas.find((item) => item.url === urlActual)?.title ?? 'Dashboard';
+    this.masActivo = this.rutasMas.some((item) => item.url === urlActual);
   }
 
   mostrarSaludo() {

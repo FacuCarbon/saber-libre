@@ -1,0 +1,35 @@
+<ion-card>
+
+  <ion-img [src]="libro.imagenPortada"></ion-img>
+  <ion-card-header>
+    <ion-card-title> {{ libro.titulo }}</ion-card-title>
+
+    <ion-card-subtitle>
+      {{ libro.autores.join(', ') }} · {{ libro.categorias.join(', ') }}
+    </ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="estado-stock">
+      @if (libro.cantidadDisponible >0) {
+        <span class="estado-disponible">
+          <strong>Estado: </strong> Disponible
+        </span>
+      }@else {
+        <span class="estado-no-disponible">
+          <strong>Estado: </strong> No disponible
+        </span>
+      }
+
+      <span class="stock">
+        {{libro.cantidadDisponible}} disponibles
+      </span>
+
+    </div>
+
+    <ion-button expand="block">
+      Ver detalle
+    </ion-button>
+    
+  </ion-card-content>
+</ion-card>

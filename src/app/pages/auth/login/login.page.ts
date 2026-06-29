@@ -53,6 +53,11 @@ export class LoginPage {
       return;
     }
 
+    if (this.password.length < 6) {
+      this.error = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
+
     try {
       await this._authService.iniciarSesion(this.email, this.password);
       this._router.navigate(['/dashboard/catalogo']);

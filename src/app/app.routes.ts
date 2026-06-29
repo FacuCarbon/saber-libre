@@ -6,8 +6,7 @@ import { guestGuard } from './guards/guest-guard';
 export const routes: Routes = [
   {
     path: '',
-    //redirectTo: 'auth/login',
-    redirectTo: 'demo',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {
@@ -22,6 +21,7 @@ export const routes: Routes = [
       import('./pages/auth/register/register.page').then((m) => m.RegisterPage),
     canActivate: [guestGuard],
   },
+
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -30,6 +30,18 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
     children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/dashboard/inicio/inicio.page').then(
+            (m) => m.InicioPage,
+          ),
+      },
       {
         path: 'catalogo',
         loadComponent: () =>
@@ -89,9 +101,5 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./pages/not-found/not-found.page').then((m) => m.NotFoundPage),
-  },  {
-    path: 'inicio',
-    loadComponent: () => import('./pages/dashboard/inicio/inicio.page').then( m => m.InicioPage)
   },
-
 ];

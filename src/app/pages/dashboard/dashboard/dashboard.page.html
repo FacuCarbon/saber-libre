@@ -1,13 +1,60 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>dashboard</ion-title>
-    @if(usuario){
-    <h2>Hola {{usuario.nombreCompleto || usuario.email}}!</h2>
-    }
-    <ion-button (click)="logout()">Cerrar Sesión</ion-button>
-  </ion-toolbar>
-</ion-header>
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay" class="menu-sidebar">
+      <div>
+        <logo-app></logo-app>
+      </div>
+      <!--Mostramos el rol del usuario actual-->
+      @if (rol) {
+      <div class="ion-padding container-rol">
+        <ion-label class="rol">{{ rol }}</ion-label>
+      </div>
+      }
+      <ion-content>
+        <app-sidebar-menu></app-sidebar-menu>
+      </ion-content>
 
-<ion-content>
-  <ion-router-outlet></ion-router-outlet>
-</ion-content>
+      <div class="ion-padding">
+        <ion-button expand="block" class="boton-logout" (click)="logout()">
+          <ion-icon
+            name="log-out-outline"
+            style="margin-right: 10px"
+          ></ion-icon>
+          Cerrar sesión
+        </ion-button>
+      </div>
+    </ion-menu>
+
+    <div class="ion-page container-children" id="main-content">
+      <ion-header>
+        @if (usuario) {
+        <ion-toolbar>
+          <ion-title class="saludo-usuario"
+            >{{tituloPaginaActual}} / {{mostrarSaludo()}}
+            {{usuario.nombreCompleto}}!</ion-title
+          >
+        </ion-toolbar>
+        }
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <router-outlet (activate)="actualizarPaginaActual()"></router-outlet>
+      </ion-content>
+
+      <ion-footer class="ion-hide-md-up">
+        <ion-tab-bar>
+          @for (item of rutas; track $index) {
+          <ion-tab-button
+            [routerLink]="item.url"
+            routerLinkActive="route-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <ion-icon [name]="item.icon"></ion-icon>
+            <ion-label>{{ item.title }}</ion-label>
+          </ion-tab-button>
+          }
+        </ion-tab-bar>
+      </ion-footer>
+    </div>
+  </ion-split-pane>
+</ion-app>

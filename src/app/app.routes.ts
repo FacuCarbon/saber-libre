@@ -21,6 +21,7 @@ export const routes: Routes = [
       import('./pages/auth/register/register.page').then((m) => m.RegisterPage),
     canActivate: [guestGuard],
   },
+
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -29,6 +30,18 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
     children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/dashboard/inicio/inicio.page').then(
+            (m) => m.InicioPage,
+          ),
+      },
       {
         path: 'catalogo',
         loadComponent: () =>

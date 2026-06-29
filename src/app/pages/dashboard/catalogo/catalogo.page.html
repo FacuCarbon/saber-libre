@@ -1,3 +1,42 @@
-<div>
-  <h1>Catálogo!</h1>
-</div>
+<main class="catalogo-contenido">
+  <app-header-page
+    titulo="Gestión de libros"
+    subtitulo="Gestionar catalogo de libros."
+    textoBoton="Agregar libro"
+    icono="add"
+    (accion)="agregarLibro()"
+  ></app-header-page>
+
+  <section class="inventario">
+    <h2>Inventario bibliográfico</h2>
+    <p>Catalogo y cantidades disponibles</p>
+
+    <app-buscador-libros
+      placeholder="Buscar libro por título, autor o ISBN..."
+      (busqueda)="filtrarLibros($event)"
+    />
+
+    <div class="inventario-columnas" aria-hidden="true">
+      <span>Libro</span>
+      <span>ISBN</span>
+      <span>Categoría</span>
+      <span>Disponibles</span>
+      <span>Total</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="inventario-lista">
+      @for (libro of librosFiltrados; track libro.id) {
+      <app-libro-catalogo-item
+        [libro]="libro"
+        (verDetalles)="verLibro($event)"
+        (editarLibro)="editarLibro($event)"
+        (gestionarEjemplares)="abrirGestionEjemplares($event)"
+        (eliminarLibro)="solicitarEliminarLibro($event)"
+      />
+      } @empty {
+      <p class="estado-vacio">No se encontraron libros.</p>
+      }
+    </div>
+  </section>
+</main>

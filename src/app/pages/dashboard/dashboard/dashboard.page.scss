@@ -1,5 +1,5 @@
 .menu-sidebar {
-  width: 20%;
+  width: 18%;
   border-right: 1px solid lightgrey;
 }
 
@@ -59,7 +59,26 @@ ion-tab-button.route-active {
   --color: #ff6b35;
 }
 
-ion-tab-button.tab-selected {
+ion-popover.more-popover {
+  --width: min(280px, calc(100vw - 32px));
+}
+
+.more-popover ion-list {
+  padding: 0.5rem;
+}
+
+.more-popover ion-item {
+  --background: transparent;
+  --border-color: transparent;
+  --color: #746b65;
+  --min-height: 48px;
+}
+
+.more-popover ion-item::part(native) {
+  border-radius: 0.75rem;
+}
+
+.more-popover ion-item.route-active {
   --background: #fcebe4;
   --color: #ff6b35;
 }

@@ -1,0 +1,14 @@
+<div class="buscador" role="search">
+  <ion-searchbar
+    mode="md"
+    class="buscador-libros"
+    [placeholder]="placeholder"
+    [debounce]="debounce"
+    showClearButton="focus"
+    autocomplete="off"
+    autocorrect="off"
+    enterkeyhint="search"
+    aria-label="Buscar libros"
+    (ionInput)="emitirBusqueda($event)"
+  ></ion-searchbar>
+</div>

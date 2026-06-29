@@ -50,6 +50,27 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'catalogo/agregar',
+        loadComponent: () =>
+          import('./pages/dashboard/catalogo/agregar/agregar.component').then(
+            (m) => m.AgregarComponent,
+          ),
+      },
+      {
+        path: 'catalogo/detalle/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/catalogo/detalle/detalle.component').then(
+            (m) => m.DetalleComponent,
+          ),
+      },
+      {
+        path: 'catalogo/editar/:id',
+        loadComponent: () =>
+          import('./pages/dashboard/catalogo/editar/editar.component').then(
+            (m) => m.EditarComponent,
+          ),
+      },
+      {
         path: 'prestamos',
         loadComponent: () =>
           import('./pages/dashboard/prestamos/prestamos.page').then(

@@ -1,0 +1,219 @@
+:host {
+  display: block;
+}
+
+.libro-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "libro libro"
+    "isbn isbn"
+    "categoria categoria"
+    "disponibles total"
+    "acciones acciones";
+  gap: 0.75rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9e3dd;
+  color: #29231f;
+}
+
+:host(:last-child) .libro-item {
+  border-bottom: 0;
+}
+
+.libro-identidad {
+  grid-area: libro;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.libro-portada {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 56px;
+  border-radius: 0.65rem;
+  object-fit: cover;
+}
+
+.libro-portada--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff0e9;
+  color: #ce3f0b;
+  font-size: 1.25rem;
+}
+
+.libro-info {
+  min-width: 0;
+}
+
+.libro-info h3 {
+  overflow: hidden;
+  margin: 0;
+  color: #29231f;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.libro-info p {
+  overflow: hidden;
+  margin: 0.25rem 0 0;
+  color: #746b65;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dato {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 0.35rem;
+  color: #5f5751;
+  font-size: 0.8rem;
+}
+
+.isbn {
+  grid-area: isbn;
+}
+
+.categoria {
+  grid-area: categoria;
+}
+
+.disponibles {
+  grid-area: disponibles;
+}
+
+.disponibles strong {
+  color: #29231f;
+}
+
+.total {
+  grid-area: total;
+  justify-self: end;
+}
+
+.etiqueta-mobile {
+  color: #918981;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.acciones {
+  grid-area: acciones;
+  display: flex;
+  justify-self: end;
+  gap: 0.4rem;
+}
+
+.boton-icono {
+  --background: #fffdfa;
+  --background-hover: #fff0e9;
+  --background-activated: #fbd8c8;
+  --border-color: #e9e3dd;
+  --border-radius: 0.65rem;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: none;
+  --color: #5f5751;
+  --padding-end: 0;
+  --padding-start: 0;
+
+  width: 40px;
+  min-height: 40px;
+  margin: 0;
+}
+
+.boton-icono:hover {
+  --color: #ce3f0b;
+}
+
+ion-popover.menu-opciones {
+  --backdrop-opacity: 0.08;
+  --border-radius: 0.9rem;
+  --box-shadow: 0 12px 36px rgba(67, 49, 36, 0.14);
+  --width: 230px;
+}
+
+.menu-opciones ion-list {
+  padding: 0.45rem;
+}
+
+.menu-opciones ion-item {
+  --background: transparent;
+  --background-hover: #fff0e9;
+  --border-color: transparent;
+  --color: #5f5751;
+  --min-height: 46px;
+
+  font-size: 0.88rem;
+}
+
+.menu-opciones ion-item::part(native) {
+  border-radius: 0.65rem;
+}
+
+.menu-opciones ion-icon {
+  margin-right: 0.75rem;
+  color: inherit;
+}
+
+.menu-opciones .opcion-eliminar {
+  --background-hover: #fcecea;
+  --color: #b53c36;
+}
+
+/* Desktop: la tarjeta se transforma en una fila con columnas */
+@media (min-width: 992px) {
+  .libro-item {
+    grid-template-columns: var(
+      --columnas-inventario,
+      minmax(240px, 2fr) minmax(150px, 1.2fr) minmax(120px, 1fr) 90px 70px 132px
+    );
+    grid-template-areas: "libro isbn categoria disponibles total acciones";
+    align-items: center;
+    gap: 1rem;
+    min-height: 72px;
+    padding: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .libro-item:hover {
+    background: #fffaf7;
+  }
+
+  .libro-portada {
+    flex-basis: 40px;
+    width: 40px;
+    height: 48px;
+  }
+
+  .dato {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .total {
+    justify-self: initial;
+  }
+
+  .etiqueta-mobile {
+    display: none;
+  }
+
+  .boton-icono {
+    width: 36px;
+    min-height: 36px;
+  }
+}

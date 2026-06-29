@@ -1,0 +1,86 @@
+<ion-card class="tarjeta-usuario">
+  <ion-card-header>
+    <ion-card-title>Datos personales</ion-card-title>
+  </ion-card-header>
+
+
+  <ion-card-content>
+
+
+    <div class="encabezado">
+      <ion-avatar class="avatar">
+        <span> {{iniciales}} </span>
+      </ion-avatar>
+
+
+      <div class="info-principal">
+        <h2> {{ usuario.nombreCompleto}}</h2>
+        <p>{{usuario.rol}}</p>
+      </div>
+    
+    </div>
+
+
+    <div class="formulario">
+      <div class="campo">
+        <label> Nombre completo</label>
+
+
+        <ion-input
+        [(ngModel)]="usuario.nombreCompleto"
+        fill="outline">
+
+
+        </ion-input>
+      </div>
+
+
+      <div class="campo">
+        <label>Correo electrónico</label>
+
+
+        <ion-input
+        [value]="usuario.email"
+        fill="outline"
+        readonly>
+
+
+        </ion-input>
+      </div>
+
+
+      <div class="campo campo-completo">
+        <label>Rol asignado</label>
+          <ion-input
+          [value]="usuario.rol"
+          fill="outline"
+          readonly>
+          
+        </ion-input>
+        <p class="ayuda">El rol solo puede modificarlo un administrador.</p>
+      </div>
+
+
+      <div class="campo campo-completo">
+        <label>Teléfono</label>
+
+
+        <ion-input
+        [(ngModel)]="usuario.telefono"
+        fill="outline"
+        placeholder="Ingrese un teléfono">
+        </ion-input>
+      </div>
+    </div>  
+
+
+        <!-- para cuando el boton componente este listo -->
+    <!--
+    <app-boton
+      [titulo]="tituloBoton"
+      [icono]="iconoBoton"
+      (botonClick)="onBotonClick()">
+    </app-boton>
+    -->
+  </ion-card-content>
+</ion-card>

@@ -89,5 +89,9 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./pages/not-found/not-found.page').then((m) => m.NotFoundPage),
+  },  {
+    path: 'inicio',
+    loadComponent: () => import('./pages/dashboard/inicio/inicio.page').then( m => m.InicioPage)
   },
+
 ];

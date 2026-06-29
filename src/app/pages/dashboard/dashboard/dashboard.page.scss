@@ -1,0 +1,79 @@
+.menu-sidebar {
+  width: 20%;
+  border-right: 1px solid lightgrey;
+}
+
+.container-rol {
+  margin: 0 auto;
+  border: 1px solid #f8f6f3;
+  padding: 10px;
+  border-radius: 30px;
+  width: 70%;
+  background-color: #fff8f4;
+  font-weight: 600;
+}
+.rol {
+  display: block;
+  width: 100%;
+  color: #a72d06;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.saludo-usuario {
+  font-weight: bold;
+  color: #5f5751;
+  font-size: 18px;
+}
+
+.boton-logout {
+  --background: #e85a26;
+}
+
+.container-children {
+  --ion-background-color: #f8f6f3;
+  --ion-toolbar-background: #f8f6f3;
+  background-color: #f8f6f3;
+}
+
+ion-tab-bar {
+  --background: #ffffff;
+}
+
+ion-tab-button {
+  --background: transparent;
+  --color: #746b65;
+  --color-selected: #ff6b35;
+}
+
+ion-tab-button:hover {
+  --background: #fcebe4;
+  --color: #ff6b35;
+}
+
+ion-tab-button:active {
+  --background: #f7d4c5;
+}
+ion-tab-button.route-active {
+  --background: #fcebe4;
+  --color: #ff6b35;
+}
+
+ion-tab-button.tab-selected {
+  --background: #fcebe4;
+  --color: #ff6b35;
+}
+
+ion-header {
+  box-shadow: none;
+  border-bottom: 1px solid lightgray;
+  padding: 10px;
+}
+
+ion-header::after {
+  background-image: none;
+}
+
+ion-toolbar {
+  --border-width: 0;
+}

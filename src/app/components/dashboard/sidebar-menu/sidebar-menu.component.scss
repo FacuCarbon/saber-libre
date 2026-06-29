@@ -1,0 +1,39 @@
+ion-list {
+  background: transparent;
+  padding: 0.5rem;
+}
+
+ion-item {
+  --background: transparent;
+  --color: #504741;
+  --border-color: transparent;
+
+  // Hover
+  --background-hover: #fcebe4;
+  --background-hover-opacity: 1;
+  --color-hover: #ff6b35;
+
+  // Mientras se presiona
+  --background-activated: #f7d4c5;
+  --background-activated-opacity: 1;
+  --color-activated: #ff6b35;
+
+  margin-bottom: 0.25rem;
+}
+
+ion-item::part(native) {
+  border-radius: 0.75rem;
+}
+
+// Ruta actualmente activa
+ion-item.selected {
+  --background: #ff6b35;
+  --color: #ffffff;
+
+  --background-hover: #ff6b35;
+  --color-hover: #ffffff;
+}
+
+ion-item.selected ion-icon {
+  color: inherit;
+}

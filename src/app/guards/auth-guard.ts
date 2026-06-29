@@ -16,7 +16,6 @@ export const authGuard = async () => {
   if (usuario && usuario.emailVerified) {
     return true;
   } else {
-    alert('Debes iniciar sesión para acceder a esta página.');
-    return router.createUrlTree(['/demo']);
+    return router.createUrlTree(['/auth/login']);
   }
 };

@@ -19,6 +19,8 @@ import {
   ellipsisHorizontalOutline,
   eyeOutline,
   createOutline,
+  searchOutline,
+  checkmarkOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -41,6 +43,8 @@ export const iconosApp = {
   person: person,
   'eye-outline': eyeOutline,
   'create-outline': createOutline,
+  'search-outline': searchOutline,
+  'checkmark-outline': checkmarkOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

@@ -1,3 +1,211 @@
-<p>
-  agregar works!
-</p>
+<main class="container-agregar">
+  <app-header-page
+    titulo="Alta de libro"
+    subtitulo="Buscá información externa, revisala y confirmá el alta."
+  />
+
+  <ol class="pasos-alta" aria-label="Progreso del alta de libro">
+    <li
+      class="paso"
+      [class.paso--activo]="libroSeleccionado === null"
+      [class.paso--completado]="libroSeleccionado !== null"
+    >
+      <span class="paso-numero" aria-hidden="true">
+        {{ libroSeleccionado === null ? "1" : "✓" }}
+      </span>
+      <span>Buscar libro</span>
+    </li>
+    <li class="paso" [class.paso--activo]="libroSeleccionado !== null">
+      <span class="paso-numero">2</span>
+      <span>Revisar datos</span>
+    </li>
+    <li class="paso">
+      <span class="paso-numero">3</span>
+      <span>Confirmar alta</span>
+    </li>
+  </ol>
+
+  @if (mensaje) {
+    <p class="mensaje">{{ mensaje }}</p>
+  }
+
+  <div
+    class="alta-layout"
+    [class.alta-layout--con-resultado]="libroSeleccionado !== null"
+  >
+    <section class="panel panel-busqueda" aria-labelledby="titulo-busqueda">
+      <h2 id="titulo-busqueda">Buscar en Google Books</h2>
+
+      <div class="campo-busqueda">
+        <label for="isbn">Buscar por ISBN</label>
+        <ion-input
+          id="isbn"
+          name="isbnBusqueda"
+          mode="md"
+          fill="outline"
+          placeholder="Ingresá el ISBN"
+          aria-label="ISBN del libro"
+          [(ngModel)]="isbnBusqueda"
+        />
+
+        <ion-button
+          type="button"
+          expand="block"
+          class="boton-buscar primario"
+          (click)="buscarPorIsbn()"
+        >
+          <ion-icon name="search-outline" slot="start" />
+          Buscar ISBN
+        </ion-button>
+      </div>
+
+      <div class="divider" role="separator" aria-label="o">
+        <span></span>
+        <small>o</small>
+        <span></span>
+      </div>
+
+      <div class="campo-busqueda">
+        <label for="titulo">Buscar por título</label>
+        <ion-input
+          id="titulo"
+          name="tituloBusqueda"
+          mode="md"
+          fill="outline"
+          placeholder="Ej. Ficciones"
+          aria-label="Título del libro"
+          [(ngModel)]="tituloBusqueda"
+        />
+
+        <ion-button
+          type="button"
+          expand="block"
+          fill="outline"
+          class="boton-buscar secundario"
+          (click)="buscarPorTitulo()"
+        >
+          <ion-icon name="search-outline" slot="start" />
+          Buscar título
+        </ion-button>
+      </div>
+
+      @if (resultados.length > 0) {
+        <section class="sugerencias" aria-labelledby="titulo-sugerencias">
+          <div class="sugerencias-encabezado">
+            <h3 id="titulo-sugerencias">Sugerencias</h3>
+            <span>{{ resultados.length }} resultados</span>
+          </div>
+
+          <ul class="sugerencias-lista">
+            @for (resultado of resultados; track $index) {
+              <li>
+                <article class="sugerencia">
+                  @if (resultado.imageLinks?.thumbnail; as portada) {
+                    <img
+                      class="sugerencia-portada"
+                      [src]="portada"
+                      [alt]="resultado.title"
+                    />
+                  } @else {
+                    <div
+                      class="sugerencia-portada portada-placeholder"
+                      aria-hidden="true"
+                    >
+                      <ion-icon name="book" />
+                    </div>
+                  }
+
+                  <div class="sugerencia-info">
+                    <h4>{{ resultado.title }}</h4>
+                    <p>
+                      {{ resultado.authors?.join(", ") || "Autor desconocido" }}
+                    </p>
+                    <small>ISBN {{ obtenerIsbn(resultado) }}</small>
+                  </div>
+
+                  <ion-button
+                    type="button"
+                    fill="outline"
+                    size="small"
+                    (click)="seleccionarLibro(resultado)"
+                  >
+                    Seleccionar
+                  </ion-button>
+                </article>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </section>
+
+    @if (libroSeleccionado; as libro) {
+      <section class="panel panel-resultado" aria-labelledby="titulo-resultado">
+        <h2 id="titulo-resultado">Resultado seleccionado</h2>
+
+        <article class="libro-seleccionado">
+          @if (libro.imageLinks?.thumbnail; as portada) {
+            <img class="libro-portada" [src]="portada" [alt]="libro.title" />
+          } @else {
+            <div class="libro-portada portada-placeholder" aria-hidden="true">
+              <ion-icon name="book" />
+            </div>
+          }
+
+          <div class="libro-info">
+            <h3>{{ libro.title }}</h3>
+            <p>
+              {{ libro.authors?.join(", ") || "Autor desconocido" }}
+              @if (libro.categories; as categorias) {
+                · {{ categorias.join(", ") }}
+              }
+            </p>
+
+            <dl class="metadatos">
+              <div>
+                <dt>ISBN</dt>
+                <dd>{{ obtenerIsbn(libro) }}</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+
+        <div class="campo-cantidad">
+          <label for="cantidad">Cantidad inicial de ejemplares</label>
+          <ion-input
+            id="cantidad"
+            name="cantidad"
+            mode="md"
+            fill="outline"
+            type="number"
+            min="1"
+            [(ngModel)]="cantidad"
+          />
+        </div>
+
+        <div class="campo-cantidad">
+          <label for="ubicacion">Ubicación de los ejemplares</label>
+          <ion-input
+            id="ubicacion"
+            name="ubicacion"
+            mode="md"
+            fill="outline"
+            placeholder="Ej. Estantería A1"
+            [(ngModel)]="ubicacion"
+          />
+        </div>
+
+        <ion-button
+          type="button"
+          expand="block"
+          class="boton-confirmar"
+          [disabled]="cantidad <= 0 || !ubicacion.trim()"
+          (click)="guardarLibro(libro)"
+        >
+          <ion-icon name="checkmark-outline" slot="start" />
+          Confirmar alta
+        </ion-button>
+      </section>
+    }
+  </div>
+</main>

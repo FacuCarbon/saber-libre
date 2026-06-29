@@ -12,7 +12,10 @@ import { SidebarMenuComponent } from 'src/app/components/dashboard/sidebar-menu/
 import { LogoAppComponent } from 'src/app/components/logo-app/logo-app.component';
 import { RolUsuario, Usuario } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
-import { NavegacionService } from 'src/app/services/navegacion.service';
+import {
+  NavegacionService,
+  NavItem,
+} from 'src/app/services/navegacion.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,8 +54,19 @@ export class DashboardPage {
   actualizarPaginaActual(): void {
     const urlActual = this._router.url.split('?')[0].split('#')[0];
     this.tituloPaginaActual =
-      this.rutas.find((item) => item.url === urlActual)?.title ?? 'Dashboard';
-    this.masActivo = this.rutasMas.some((item) => item.url === urlActual);
+      this.rutas.find((item) => this.rutaCoincide(item, urlActual))?.title ??
+      'Dashboard';
+    this.masActivo = this.rutasMas.some((item) =>
+      this.rutaCoincide(item, urlActual),
+    );
+  }
+
+  private rutaCoincide(item: NavItem, urlActual: string): boolean {
+    if (item.exact === false) {
+      return urlActual === item.url || urlActual.startsWith(`${item.url}/`);
+    }
+
+    return urlActual === item.url;
   }
 
   mostrarSaludo() {
@@ -70,7 +84,7 @@ export class DashboardPage {
     try {
       await this._authService.logout();
 
-      await this._router.navigateByUrl('/demo', {
+      await this._router.navigateByUrl('/auth/login', {
         replaceUrl: true,
       });
     } catch (error) {

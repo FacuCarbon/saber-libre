@@ -55,6 +55,11 @@ export class RegisterPage {
       return;
     }
 
+    if (this.password.length < 6) {
+      this.error = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
+
     if (this.password !== this.confirmPassword) {
       this.error = 'Las contraseñas no coinciden.';
       return;

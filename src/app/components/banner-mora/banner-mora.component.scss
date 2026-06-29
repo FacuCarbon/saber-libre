@@ -1,0 +1,66 @@
+.banner-mora {
+    background-color: #FFF4EF;
+    border: 1 px solid #F3C6B8;
+    border-radius: 14px;
+    box-shadow: none;
+}
+
+.contenido-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.info.banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.icono {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #E85A26;
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+.texto h3 {
+    margin: 0;
+    color: #2A2520;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.texto p {
+    margin: 4px 0 0;
+    color: #6B6560;
+    font-size: .9rem;
+}
+
+ion-button {
+    --color: #E85A26;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+
+    .contenido-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ion-button {
+        align-self: flex-end;
+    }
+}

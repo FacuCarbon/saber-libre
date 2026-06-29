@@ -47,7 +47,7 @@
           <ion-tab-button
             [routerLink]="item.url"
             routerLinkActive="route-active"
-            [routerLinkActiveOptions]="{ exact: true }"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
           >
             <ion-icon [name]="item.icon"></ion-icon>
             <ion-label>{{ item.title }}</ion-label>
@@ -76,7 +76,7 @@
                 button
                 [routerLink]="item.url"
                 routerLinkActive="route-active"
-                [routerLinkActiveOptions]="{ exact: true }"
+                [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
               >
                 <ion-icon [name]="item.icon" slot="start"></ion-icon>
                 <ion-label>{{ item.title }}</ion-label>

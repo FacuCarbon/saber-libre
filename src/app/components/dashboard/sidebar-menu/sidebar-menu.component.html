@@ -1,11 +1,11 @@
 <ion-list>
-  @for (item of rutas; track $index) {
+  @for (item of rutas; track item.url) {
     <ion-item
-      routerLink="{{ item.url }}"
+      [routerLink]="item.url"
       routerLinkActive="selected"
-      [routerLinkActiveOptions]="{ exact: true }"
+      [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
     >
-      <ion-icon name="{{ item.icon }}" slot="start"></ion-icon>
+      <ion-icon [name]="item.icon" slot="start"></ion-icon>
       <ion-label>{{ item.title }}</ion-label>
     </ion-item>
   }

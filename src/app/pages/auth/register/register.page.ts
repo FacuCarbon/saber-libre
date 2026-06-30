@@ -72,7 +72,7 @@ export class RegisterPage {
 
     try {
       await this._authService.iniciarSesionGoogle();
-      this._router.navigate(['/dashboard/catalogo']);
+      this._router.navigate(['/']);
     } catch (err: unknown) {
       this.error = err instanceof Error ? err.message : 'Error al registrarse con Google.';
     }

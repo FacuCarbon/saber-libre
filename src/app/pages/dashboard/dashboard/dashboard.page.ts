@@ -71,15 +71,28 @@ export class DashboardPage {
   usuario: Usuario | null = null;
   rol: RolUsuario | null = null;
 
-  rutas = this._navegacionService.dashboardMenu;
-  rutasTabs = this.rutas.filter((item) => item.mobile === 'tab');
-  rutasMas = this.rutas.filter((item) => item.mobile === 'more');
+  todasLasRutas = this._navegacionService.dashboardMenu;
+  rutas: NavItem[] = [];
+  rutasTabs: NavItem[] = [];
+  rutasMas: NavItem[] = [];
   masActivo = false;
   esDesktop = window.innerWidth >= 992;
 
   async ionViewWillEnter(): Promise<void> {
     this.usuario = await this._authService.usuarioActual();
     this.rol = await this._authService.rolUsuarioActual();
+    this.filtrarRutasPorRol();
+  }
+
+  private filtrarRutasPorRol(): void {
+    this.rutas = this.todasLasRutas.filter((item) => {
+      if (!item.rolesPermitidos) {
+        return true;
+      }
+      return this.rol && item.rolesPermitidos.includes(this.rol);
+    });
+    this.rutasTabs = this.rutas.filter((item) => item.mobile === 'tab');
+    this.rutasMas = this.rutas.filter((item) => item.mobile === 'more');
   }
 
   @HostListener('window:resize')

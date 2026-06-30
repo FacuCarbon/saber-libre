@@ -15,7 +15,7 @@
     </div>
     }
     <ion-content>
-      <app-sidebar-menu></app-sidebar-menu>
+      <app-sidebar-menu [rutas]="rutas"></app-sidebar-menu>
     </ion-content>
 
     <div class="ion-padding">
@@ -62,7 +62,7 @@
             id="mobile-more-trigger"
             [class.route-active]="masActivo"
           >
-            <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+            <ion-icon name="reorder-three-outline"></ion-icon>
             <ion-label>Más</ion-label>
           </ion-tab-button>
         </ion-tab-bar>

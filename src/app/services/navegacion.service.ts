@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RolUsuario } from '../models';
 
 export interface NavItem {
   title: string;
@@ -6,6 +7,7 @@ export interface NavItem {
   icon: string;
   mobile?: 'tab' | 'more';
   exact?: boolean;
+  rolesPermitidos?: RolUsuario[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -26,13 +28,6 @@ export class NavegacionService {
       exact: false,
     },
     {
-      title: 'Usuarios',
-      url: '/dashboard/usuarios',
-      icon: 'people-outline',
-      mobile: 'more',
-      exact: true,
-    },
-    {
       title: 'Prestamos',
       url: '/dashboard/prestamos',
       icon: 'swap-horizontal',
@@ -45,6 +40,7 @@ export class NavegacionService {
       icon: 'receipt-outline',
       mobile: 'more',
       exact: true,
+      rolesPermitidos: ['administrador', 'bibliotecario'],
     },
     {
       title: 'Gestion',
@@ -52,6 +48,7 @@ export class NavegacionService {
       icon: 'construct-outline',
       mobile: 'tab',
       exact: true,
+      rolesPermitidos: ['administrador', 'bibliotecario'],
     },
     {
       title: 'Mi perfil',

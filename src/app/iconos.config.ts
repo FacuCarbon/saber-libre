@@ -37,6 +37,8 @@ import {
   reloadOutline,
   filterOutline,
   warningOutline,
+  caretDownOutline,
+  reorderThreeOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -77,6 +79,8 @@ export const iconosApp = {
   'reload-outline': reloadOutline,
   'filter-outline': filterOutline,
   'warning-outline': warningOutline,
+  'caret-down-outline': caretDownOutline,
+  'reorder-three-outline': reorderThreeOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

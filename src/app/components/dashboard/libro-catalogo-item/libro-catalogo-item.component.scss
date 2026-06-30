@@ -17,6 +17,10 @@
   color: #29231f;
 }
 
+.libro-item--inactivo {
+  opacity: 0.72;
+}
+
 :host(:last-child) .libro-item {
   border-bottom: 0;
 }
@@ -60,6 +64,27 @@
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.libro-titulo {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.5rem;
+}
+
+.libro-titulo h3 {
+  min-width: 0;
+}
+
+.estado-libro {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.45rem;
+  background: #f2efec;
+  border-radius: 999px;
+  color: #746b65;
+  font-size: 0.6rem;
+  font-weight: 800;
 }
 
 .libro-info p {
@@ -170,6 +195,11 @@ ion-popover.menu-opciones {
 .menu-opciones .opcion-eliminar {
   --background-hover: #fcecea;
   --color: #b53c36;
+}
+
+.menu-opciones .opcion-reactivar {
+  --background-hover: #eef6f2;
+  --color: #27775b;
 }
 
 /* Desktop: la tarjeta se transforma en una fila con columnas */

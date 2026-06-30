@@ -1,3 +1,197 @@
-<p>
-  editar works!
-</p>
+<main class="container-editar">
+  <app-go-back
+    texto="Volver al catálogo"
+    ruta="/dashboard/catalogo"
+  ></app-go-back>
+
+  <app-header-page
+    titulo="Editar libro"
+    subtitulo="Actualizá la información bibliográfica del catálogo."
+  />
+
+  @if (libroActual) {
+    <div class="editar-layout">
+      <form
+        #formularioEdicion="ngForm"
+        class="panel formulario-edicion"
+        (ngSubmit)="guardarCambios()"
+      >
+        <div class="panel-encabezado">
+          <div>
+            <p class="eyebrow">Datos editables</p>
+            <h2>Información bibliográfica</h2>
+          </div>
+          <p>Los cambios se aplicarán a la ficha visible en el catálogo.</p>
+        </div>
+
+        <div class="campos-formulario">
+          <div class="campo campo-completo">
+            <label for="titulo">Título</label>
+            <ion-input
+              #tituloCampo="ngModel"
+              id="titulo"
+              name="titulo"
+              mode="md"
+              fill="outline"
+              placeholder="Ingresá el título"
+              required
+              [(ngModel)]="titulo"
+            />
+            @if (tituloCampo.invalid && tituloCampo.touched) {
+              <small class="campo-error">El título es obligatorio.</small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="autores">Autores</label>
+            <ion-input
+              #autoresCampo="ngModel"
+              id="autores"
+              name="autores"
+              mode="md"
+              fill="outline"
+              placeholder="Ej. Jorge Luis Borges, María Kodama"
+              required
+              [(ngModel)]="autores"
+            />
+            <small class="campo-ayuda">Separá varios autores con comas.</small>
+            @if (autoresCampo.invalid && autoresCampo.touched) {
+              <small class="campo-error">Ingresá al menos un autor.</small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="categorias">Categorías</label>
+            <ion-input
+              id="categorias"
+              name="categorias"
+              mode="md"
+              fill="outline"
+              placeholder="Ej. Literatura, Cuentos"
+              [(ngModel)]="categorias"
+            />
+            <small class="campo-ayuda"
+              >Separá varias categorías con comas.</small
+            >
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="descripcion">Descripción</label>
+            <ion-textarea
+              id="descripcion"
+              name="descripcion"
+              mode="md"
+              fill="outline"
+              placeholder="Ingresá una breve descripción del libro"
+              [autoGrow]="true"
+              [rows]="5"
+              [(ngModel)]="descripcion"
+            />
+          </div>
+        </div>
+
+        <div class="acciones-formulario">
+          <ion-button
+            type="button"
+            fill="outline"
+            class="boton-cancelar"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </ion-button>
+          <ion-button
+            type="submit"
+            class="boton-guardar"
+            [disabled]="formularioEdicion.invalid || guardando"
+          >
+            <ion-icon name="checkmark-outline" slot="start" />
+            {{ guardando ? "Guardando..." : "Guardar cambios" }}
+          </ion-button>
+        </div>
+      </form>
+
+      <aside class="panel resumen-libro" aria-labelledby="titulo-resumen">
+        <p class="eyebrow">Vista de referencia</p>
+        <h2 id="titulo-resumen">Libro y ejemplares</h2>
+
+        <article class="identidad-libro">
+          @if (libroActual.imagenPortada; as portada) {
+            <img
+              class="libro-portada"
+              [src]="portada"
+              [alt]="libroActual.titulo"
+            />
+          } @else {
+            <div class="libro-portada portada-placeholder" aria-hidden="true">
+              <ion-icon name="book" />
+            </div>
+          }
+
+          <div class="identidad-info">
+            <h3>{{ titulo || libroActual.titulo }}</h3>
+            <p>{{ autores || "Sin autor" }}</p>
+            <span>ISBN {{ libroActual.isbn }}</span>
+          </div>
+        </article>
+
+        <dl class="resumen-inventario">
+          <div>
+            <dt>Total</dt>
+            <dd>{{ cantidadTotal }}</dd>
+          </div>
+          <div class="disponibles">
+            <dt>Disponibles</dt>
+            <dd>{{ cantidadDisponible }}</dd>
+          </div>
+          <div>
+            <dt>Prestados</dt>
+            <dd>{{ cantidadPrestada }}</dd>
+          </div>
+          <div>
+            <dt>Mantenimiento</dt>
+            <dd>{{ cantidadMantenimiento }}</dd>
+          </div>
+        </dl>
+
+        <div class="aviso-inventario">
+          <ion-icon name="book" aria-hidden="true" />
+          <p>
+            Las cantidades se calculan desde los ejemplares y no se modifican
+            desde esta pantalla.
+          </p>
+        </div>
+
+        <ion-button
+          type="button"
+          expand="block"
+          fill="outline"
+          class="boton-ejemplares"
+          (click)="gestionarEjemplares()"
+        >
+          <ion-icon name="library-outline" slot="start" />
+          Gestionar ejemplares
+        </ion-button>
+      </aside>
+    </div>
+  }
+
+  @if (mensajeError) {
+    <ion-alert
+      [isOpen]="true"
+      header="Error"
+      [message]="mensajeError"
+      [buttons]="['Aceptar']"
+      (ionAlertDidDismiss)="mensajeError = null"
+    />
+  }
+
+  @if (mensajeExito) {
+    <ion-alert
+      [isOpen]="true"
+      header="Éxito"
+      [message]="mensajeExito"
+      [buttons]="['Aceptar']"
+      (ionAlertDidDismiss)="cerrarMensajeExito()"
+    />
+  }
+</main>

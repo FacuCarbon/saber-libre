@@ -1,0 +1,498 @@
+:host {
+  display: block;
+}
+
+.libro-resumen,
+.panel {
+  background: #fff;
+  border: 1px solid #e9e3dd;
+  border-radius: 1rem;
+}
+
+.libro-resumen {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.libro-portada {
+  width: 72px;
+  height: 96px;
+  border-radius: 0.65rem;
+  object-fit: cover;
+  box-shadow: 0 7px 18px rgba(67, 49, 36, 0.13);
+}
+
+.portada-placeholder {
+  display: grid;
+  place-items: center;
+  background: #fff0e9;
+  color: #ce3f0b;
+  box-shadow: none;
+  font-size: 1.4rem;
+}
+
+.libro-info {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0 0 0.3rem;
+  color: #ce3f0b;
+  font: 900 0.68rem var(--font-display);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.libro-info h2,
+.panel h2 {
+  margin: 0;
+  color: #29231f;
+  font: 900 1.15rem var(--font-display);
+}
+
+.libro-info > p:not(.eyebrow) {
+  margin: 0.3rem 0 0.45rem;
+  color: #746b65;
+  font-size: 0.78rem;
+}
+
+.libro-info > span {
+  color: #918981;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.resumen-cantidades {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.resumen-cantidades div {
+  padding: 0.7rem;
+  background: #fffdfa;
+  border: 1px solid #eee8e2;
+  border-radius: 0.7rem;
+}
+
+.resumen-cantidades dt {
+  color: #918981;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.resumen-cantidades dd {
+  margin: 0.2rem 0 0;
+  color: #29231f;
+  font: 900 1.05rem var(--font-display);
+}
+
+.resumen-cantidades .cantidad-disponible {
+  background: #eef6f2;
+  border-color: #cde4d9;
+}
+
+.resumen-cantidades .cantidad-disponible dt,
+.resumen-cantidades .cantidad-disponible dd {
+  color: #27775b;
+}
+
+.mensaje {
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem;
+  background: #eef6f2;
+  border: 1px solid #cde4d9;
+  border-radius: 0.75rem;
+  color: #245e4a;
+  font-size: 0.8rem;
+}
+
+.mensaje--error {
+  background: #fcecea;
+  border-color: #f0c9c5;
+  color: #9c302b;
+}
+
+.mensaje--aviso {
+  background: #fff3d9;
+  border-color: #ecd7a3;
+  color: #7c5b1b;
+}
+
+.panel {
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.formulario-encabezado,
+.inventario-encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid #eee8e2;
+}
+
+.formulario-encabezado > p,
+.inventario-encabezado p {
+  max-width: 300px;
+  margin: 0;
+  color: #746b65;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.inventario-encabezado p {
+  margin-top: 0.3rem;
+  text-align: left;
+}
+
+.inventario-encabezado > span {
+  padding: 0.35rem 0.55rem;
+  background: #f2efec;
+  border-radius: 999px;
+  color: #746b65;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.formulario-campos {
+  display: grid;
+  gap: 1rem;
+}
+
+.campo {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+label {
+  color: #5f5751;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+ion-input,
+ion-select {
+  --background: #fffdfa;
+  --border-color: #e9e3dd;
+  --border-radius: 0.75rem;
+  --highlight-color-focused: #ff6b35;
+  --padding-end: 0.9rem;
+  --padding-start: 0.9rem;
+
+  min-height: 44px;
+  font-size: 0.88rem;
+}
+
+.acciones-formulario {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.1rem;
+  margin-top: 1.2rem;
+  border-top: 1px solid #eee8e2;
+}
+
+.boton-secundario,
+.boton-primario,
+.boton-baja {
+  --border-radius: 0.75rem;
+  --box-shadow: none;
+
+  min-height: 44px;
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.boton-secundario {
+  --background-hover: #fff0e9;
+  --border-color: #e2d7cf;
+  --color: #9f3512;
+}
+
+.boton-primario {
+  --background: #ff6b35;
+  --background-hover: #e85a26;
+}
+
+.confirmar-baja {
+  display: grid;
+  gap: 1rem;
+  background: #fffafa;
+  border-color: #f0c9c5;
+}
+
+.confirmar-baja > div > p:last-child {
+  margin: 0.5rem 0 0;
+  color: #746b65;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.confirmar-baja .acciones-formulario {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.inventario-columnas {
+  display: none;
+}
+
+.ejemplar-item {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "codigo codigo"
+    "estado ubicacion"
+    "acciones acciones";
+  gap: 0.8rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee8e2;
+}
+
+.ejemplar-item:last-child {
+  border-bottom: 0;
+}
+
+.ejemplar-item--baja {
+  opacity: 0.68;
+}
+
+.codigo {
+  grid-area: codigo;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.codigo strong {
+  overflow: hidden;
+  color: #29231f;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+}
+
+.estado {
+  grid-area: estado;
+}
+
+.ubicacion-item {
+  grid-area: ubicacion;
+}
+
+.estado,
+.ubicacion-item {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 0.3rem;
+  color: #5f5751;
+  font-size: 0.78rem;
+}
+
+.etiqueta-mobile {
+  color: #918981;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.estado-badge {
+  display: inline-flex;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.estado-badge--disponible {
+  background: #e8f5ef;
+  color: #27775b;
+}
+
+.estado-badge--prestado {
+  background: #e9f1f7;
+  color: #316b8e;
+}
+
+.estado-badge--mantenimiento {
+  background: #fff3d9;
+  color: #8b651d;
+}
+
+.estado-badge--baja {
+  background: #f2efec;
+  color: #746b65;
+}
+
+.acciones-item {
+  grid-area: acciones;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.boton-icono {
+  --background: #fffdfa;
+  --background-hover: #fff0e9;
+  --border-color: #e9e3dd;
+  --border-radius: 0.65rem;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: none;
+  --color: #5f5751;
+  --padding-end: 0;
+  --padding-start: 0;
+
+  width: 38px;
+  min-height: 38px;
+  margin: 0;
+}
+
+.boton-icono--peligro {
+  --background-hover: #fcecea;
+  --color: #b53c36;
+}
+
+.boton-icono--reactivar {
+  --background-hover: #eef6f2;
+  --color: #27775b;
+}
+
+.sin-acciones {
+  color: #918981;
+  font-size: 0.68rem;
+}
+
+.estado-vacio {
+  display: grid;
+  justify-items: center;
+  padding: 2.5rem 1rem;
+  color: #746b65;
+  text-align: center;
+}
+
+.estado-vacio ion-icon {
+  padding: 0.8rem;
+  background: #fff0e9;
+  border-radius: 50%;
+  color: #ce3f0b;
+  font-size: 1.5rem;
+}
+
+.estado-vacio h3 {
+  margin: 0.8rem 0 0;
+  color: #29231f;
+  font: 900 1rem var(--font-display);
+}
+
+.estado-vacio p {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+}
+
+@media (min-width: 760px) {
+  .libro-resumen {
+    grid-template-columns: 72px minmax(220px, 1fr) minmax(380px, 1.4fr);
+  }
+
+  .resumen-cantidades {
+    grid-column: auto;
+    grid-template-columns: repeat(4, minmax(80px, 1fr));
+  }
+
+  .formulario-campos {
+    grid-template-columns: minmax(140px, 0.5fr) minmax(260px, 1.5fr);
+  }
+
+  .campo-ubicacion {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .inventario-columnas,
+  .ejemplar-item {
+    grid-template-columns: minmax(250px, 1.5fr) minmax(140px, 0.8fr) minmax(
+        180px,
+        1fr
+      ) 120px;
+  }
+
+  .inventario-columnas {
+    display: grid;
+    gap: 1rem;
+    padding: 0.75rem;
+    color: #746b65;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid #eee8e2;
+  }
+
+  .ejemplar-item {
+    grid-template-areas: "codigo estado ubicacion acciones";
+    align-items: center;
+    gap: 1rem;
+    min-height: 66px;
+    padding: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .ejemplar-item:hover {
+    background: #fffaf7;
+  }
+
+  .codigo,
+  .estado,
+  .ubicacion-item {
+    display: block;
+  }
+
+  .etiqueta-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .panel {
+    padding: 1rem;
+  }
+
+  .formulario-encabezado,
+  .inventario-encabezado {
+    display: block;
+  }
+
+  .formulario-encabezado > p {
+    margin-top: 0.4rem;
+    text-align: left;
+  }
+
+  .inventario-encabezado > span {
+    display: inline-flex;
+    margin-top: 0.7rem;
+  }
+
+  .acciones-formulario {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .boton-primario,
+  .boton-baja {
+    grid-row: 1;
+  }
+}

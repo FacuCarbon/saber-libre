@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { BotonAccionComponent } from 'src/app/components/botones/boton-accion/boton-accion.component';
 import { SidebarMenuComponent } from 'src/app/components/dashboard/sidebar-menu/sidebar-menu.component';
 import { LogoAppComponent } from 'src/app/components/logo-app/logo-app.component';
 import { RolUsuario, Usuario } from 'src/app/models';
@@ -29,6 +30,7 @@ import {
     RouterLinkActive,
     LogoAppComponent,
     RouterOutlet,
+    BotonAccionComponent,
   ],
 })
 export class DashboardPage {

@@ -21,6 +21,7 @@ import {
   createOutline,
   searchOutline,
   checkmarkOutline,
+  arrowBack,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -45,6 +46,7 @@ export const iconosApp = {
   'create-outline': createOutline,
   'search-outline': searchOutline,
   'checkmark-outline': checkmarkOutline,
+  'arrow-back': arrowBack,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

@@ -6,6 +6,7 @@ export interface Libro {
   categorias: string[];
   cantidadTotal: number;
   cantidadDisponible: number;
+  activo?: boolean;
   imagenPortada?: string;
   descripcion?: string;
 }

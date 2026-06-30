@@ -57,6 +57,10 @@ export class LibroService {
   async buscarLibro(query: string): Promise<Libro[]> {
     const catalogo = await this.obtenerLibros();
     const libros: Libro[] = catalogo.filter((libro) => {
+      if (libro.activo === false) {
+        return false;
+      }
+
       if (libro.titulo.toLowerCase().includes(query.toLowerCase())) {
         return true;
       }
@@ -86,6 +90,76 @@ export class LibroService {
    */
   actualizarLibro(libro: Libro): Promise<boolean> {
     return this._storageService.actualizar<Libro>('libros', libro);
+  }
+
+  /**
+   * Da de baja un libro sin eliminarlo del almacenamiento.
+   * @param idLibro El ID del libro.
+   * @returns true si se dio de baja correctamente, false en caso contrario.
+   */
+  async darDeBajaLibro(idLibro: string): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro || libro.activo === false) {
+      return false;
+    }
+
+    const ejemplares =
+      await this._ejemplarService.obtenerEjemplaresPorLibro(idLibro);
+    const tieneEjemplaresPrestados = ejemplares.some(
+      (ejemplar) => ejemplar.estadoEjemplar === 'prestado',
+    );
+
+    if (tieneEjemplaresPrestados) {
+      return false;
+    }
+
+    libro.activo = false;
+    return this.actualizarLibro(libro);
+  }
+
+  /**
+   * Reactiva un libro dado de baja.
+   * @param idLibro El ID del libro.
+   * @returns true si se reactivo correctamente, false en caso contrario.
+   */
+  async reactivarLibro(idLibro: string): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro || libro.activo !== false) {
+      return false;
+    }
+
+    libro.activo = true;
+    return this.actualizarLibro(libro);
+  }
+
+  /**
+   * Recalcula las cantidades de un libro desde sus ejemplares activos.
+   * @param idLibro El ID del libro.
+   * @returns true si el libro se actualizo correctamente, false en caso contrario.
+   */
+  async sincronizarCantidadesDesdeEjemplares(
+    idLibro: string,
+  ): Promise<boolean> {
+    const libro = await this.obtenerLibroPorId(idLibro);
+
+    if (!libro) {
+      return false;
+    }
+
+    const ejemplares =
+      await this._ejemplarService.obtenerEjemplaresPorLibro(idLibro);
+    const ejemplaresActivos = ejemplares.filter(
+      (ejemplar) => ejemplar.estadoEjemplar !== 'baja',
+    );
+
+    libro.cantidadTotal = ejemplaresActivos.length;
+    libro.cantidadDisponible = ejemplaresActivos.filter(
+      (ejemplar) => ejemplar.estadoEjemplar === 'disponible',
+    ).length;
+
+    return this.actualizarLibro(libro);
   }
 
   /**
@@ -209,6 +283,7 @@ export class LibroService {
       categorias: volumen.categories ?? [],
       cantidadTotal: cantidad,
       cantidadDisponible: cantidad,
+      activo: true,
       imagenPortada: volumen.imageLinks?.thumbnail,
       descripcion: volumen.description,
     };
@@ -259,6 +334,7 @@ export class LibroService {
       categorias: volumen.categories ?? [],
       cantidadTotal: cantidad,
       cantidadDisponible: cantidad,
+      activo: true,
       imagenPortada: volumen.imageLinks?.thumbnail,
       descripcion: volumen.description,
     };

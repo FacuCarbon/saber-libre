@@ -1,0 +1,338 @@
+<main class="container-ejemplares">
+  <app-go-back
+    texto="Volver al catálogo"
+    ruta="/dashboard/catalogo"
+  ></app-go-back>
+
+  <app-header-page
+    titulo="Gestionar ejemplares"
+    subtitulo="Administrá las copias físicas y su disponibilidad."
+    textoBoton="Agregar ejemplares"
+    icono="add"
+    [botonDeshabilitado]="libroActual?.activo === false"
+    (accion)="abrirFormularioAlta()"
+  />
+
+  @if (libroActual) {
+    <section class="libro-resumen" aria-labelledby="titulo-libro">
+      @if (libroActual.imagenPortada; as portada) {
+        <img
+          class="libro-portada"
+          [src]="portada"
+          [alt]="libroActual.titulo"
+        />
+      } @else {
+        <div class="libro-portada portada-placeholder" aria-hidden="true">
+          <ion-icon name="book" />
+        </div>
+      }
+
+      <div class="libro-info">
+        <p class="eyebrow">Inventario físico</p>
+        <h2 id="titulo-libro">{{ libroActual.titulo }}</h2>
+        <p>{{ libroActual.autores.join(", ") }}</p>
+        <span>ISBN {{ libroActual.isbn }}</span>
+      </div>
+
+      <dl class="resumen-cantidades">
+        <div>
+          <dt>Total activos</dt>
+          <dd>{{ cantidadTotal }}</dd>
+        </div>
+        <div class="cantidad-disponible">
+          <dt>Disponibles</dt>
+          <dd>{{ cantidadDisponible }}</dd>
+        </div>
+        <div>
+          <dt>Prestados</dt>
+          <dd>{{ cantidadPrestada }}</dd>
+        </div>
+        <div>
+          <dt>Mantenimiento</dt>
+          <dd>{{ cantidadMantenimiento }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    @if (mensaje) {
+      <p class="mensaje" [class.mensaje--error]="mensajeEsError">
+        {{ mensaje }}
+      </p>
+    }
+
+    @if (libroActual.activo === false) {
+      <p class="mensaje mensaje--aviso">
+        Este libro está dado de baja. Reactivalo desde el catálogo para volver
+        a gestionar sus ejemplares.
+      </p>
+    }
+
+    @if (mostrarFormularioAlta) {
+      <form
+        #formularioAlta="ngForm"
+        class="panel formulario-operacion"
+        (ngSubmit)="agregarEjemplares()"
+      >
+        <div class="formulario-encabezado">
+          <div>
+            <p class="eyebrow">Alta de inventario</p>
+            <h2>Agregar ejemplares</h2>
+          </div>
+          <p>Todos se crearán disponibles en la misma ubicación inicial.</p>
+        </div>
+
+        <div class="formulario-campos">
+          <div class="campo">
+            <label for="cantidad">Cantidad</label>
+            <ion-input
+              id="cantidad"
+              name="cantidad"
+              mode="md"
+              fill="outline"
+              type="number"
+              min="1"
+              required
+              [(ngModel)]="cantidad"
+            />
+          </div>
+
+          <div class="campo campo-ubicacion">
+            <label for="ubicacion">Ubicación</label>
+            <ion-input
+              id="ubicacion"
+              name="ubicacion"
+              mode="md"
+              fill="outline"
+              placeholder="Ej. Estantería A1"
+              required
+              [(ngModel)]="ubicacion"
+            />
+          </div>
+        </div>
+
+        <div class="acciones-formulario">
+          <ion-button
+            type="button"
+            fill="outline"
+            class="boton-secundario"
+            (click)="cancelarAlta()"
+          >
+            Cancelar
+          </ion-button>
+          <ion-button
+            type="submit"
+            class="boton-primario"
+            [disabled]="formularioAlta.invalid || procesando"
+          >
+            <ion-icon name="add" slot="start" />
+            {{ procesando ? "Agregando..." : "Agregar ejemplares" }}
+          </ion-button>
+        </div>
+      </form>
+    }
+
+    @if (ejemplarSeleccionado) {
+      <form
+        #formularioEdicion="ngForm"
+        class="panel formulario-operacion"
+        (ngSubmit)="guardarEjemplar()"
+      >
+        <div class="formulario-encabezado">
+          <div>
+            <p class="eyebrow">Edición de ejemplar</p>
+            <h2>{{ ejemplarSeleccionado.codigoBarras }}</h2>
+          </div>
+          <p>Podés cambiar su ubicación y estado operativo.</p>
+        </div>
+
+        <div class="formulario-campos">
+          <div class="campo campo-ubicacion">
+            <label for="ubicacionEdicion">Ubicación</label>
+            <ion-input
+              id="ubicacionEdicion"
+              name="ubicacionEdicion"
+              mode="md"
+              fill="outline"
+              required
+              [(ngModel)]="ubicacionEdicion"
+            />
+          </div>
+
+          <div class="campo">
+            <label for="estadoEdicion">Estado</label>
+            <ion-select
+              id="estadoEdicion"
+              name="estadoEdicion"
+              mode="md"
+              fill="outline"
+              interface="popover"
+              [(ngModel)]="estadoEdicion"
+            >
+              <ion-select-option value="disponible">
+                Disponible
+              </ion-select-option>
+              <ion-select-option value="mantenimiento">
+                Mantenimiento
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="acciones-formulario">
+          <ion-button
+            type="button"
+            fill="outline"
+            class="boton-secundario"
+            (click)="cancelarEdicion()"
+          >
+            Cancelar
+          </ion-button>
+          <ion-button
+            type="submit"
+            class="boton-primario"
+            [disabled]="formularioEdicion.invalid || procesando"
+          >
+            <ion-icon name="checkmark-outline" slot="start" />
+            {{ procesando ? "Guardando..." : "Guardar cambios" }}
+          </ion-button>
+        </div>
+      </form>
+    }
+
+    @if (ejemplarParaBaja) {
+      <section class="panel confirmar-baja" aria-labelledby="titulo-baja">
+        <div>
+          <p class="eyebrow">Confirmar baja</p>
+          <h2 id="titulo-baja">{{ ejemplarParaBaja.codigoBarras }}</h2>
+          <p>
+            El ejemplar dejará de contar en el inventario activo, pero se
+            conservará para no perder su historial.
+          </p>
+        </div>
+        <div class="acciones-formulario">
+          <ion-button
+            type="button"
+            fill="outline"
+            class="boton-secundario"
+            (click)="cancelarBaja()"
+          >
+            Cancelar
+          </ion-button>
+          <ion-button
+            type="button"
+            color="danger"
+            class="boton-baja"
+            [disabled]="procesando"
+            (click)="darDeBaja()"
+          >
+            <ion-icon name="trash" slot="start" />
+            {{ procesando ? "Procesando..." : "Dar de baja" }}
+          </ion-button>
+        </div>
+      </section>
+    }
+
+    <section class="panel inventario" aria-labelledby="titulo-inventario">
+      <div class="inventario-encabezado">
+        <div>
+          <h2 id="titulo-inventario">Ejemplares registrados</h2>
+          <p>Los ejemplares prestados no se editan manualmente.</p>
+        </div>
+        @if (cantidadBaja > 0) {
+          <span>{{ cantidadBaja }} de baja</span>
+        }
+      </div>
+
+      <div class="inventario-columnas" aria-hidden="true">
+        <span>Código de barras</span>
+        <span>Estado</span>
+        <span>Ubicación</span>
+        <span>Acciones</span>
+      </div>
+
+      <div class="inventario-lista">
+        @for (ejemplar of ejemplares; track ejemplar.id) {
+          <article
+            class="ejemplar-item"
+            [class.ejemplar-item--baja]="ejemplar.estadoEjemplar === 'baja'"
+          >
+            <div class="codigo">
+              <span class="etiqueta-mobile">Código</span>
+              <strong>{{ ejemplar.codigoBarras }}</strong>
+            </div>
+
+            <div class="estado">
+              <span class="etiqueta-mobile">Estado</span>
+              <span
+                class="estado-badge"
+                [class.estado-badge--disponible]="
+                  ejemplar.estadoEjemplar === 'disponible'
+                "
+                [class.estado-badge--prestado]="
+                  ejemplar.estadoEjemplar === 'prestado'
+                "
+                [class.estado-badge--mantenimiento]="
+                  ejemplar.estadoEjemplar === 'mantenimiento'
+                "
+                [class.estado-badge--baja]="
+                  ejemplar.estadoEjemplar === 'baja'
+                "
+              >
+                {{ obtenerTextoEstado(ejemplar.estadoEjemplar) }}
+              </span>
+            </div>
+
+            <div class="ubicacion-item">
+              <span class="etiqueta-mobile">Ubicación</span>
+              <span>{{ ejemplar.ubicacion }}</span>
+            </div>
+
+            <div class="acciones-item">
+              @if (libroActual.activo === false) {
+                <span class="sin-acciones">Libro inactivo</span>
+              } @else if (ejemplar.estadoEjemplar === "baja") {
+                <ion-button
+                  type="button"
+                  fill="clear"
+                  class="boton-icono boton-icono--reactivar"
+                  aria-label="Reactivar ejemplar"
+                  [disabled]="procesando"
+                  (click)="reactivarEjemplar(ejemplar)"
+                >
+                  <ion-icon name="checkmark-outline" />
+                </ion-button>
+              } @else if (ejemplar.estadoEjemplar !== "prestado") {
+                <ion-button
+                  type="button"
+                  fill="clear"
+                  class="boton-icono"
+                  aria-label="Editar ejemplar"
+                  (click)="editarEjemplar(ejemplar)"
+                >
+                  <ion-icon name="create-outline" />
+                </ion-button>
+                <ion-button
+                  type="button"
+                  fill="clear"
+                  class="boton-icono boton-icono--peligro"
+                  aria-label="Dar de baja el ejemplar"
+                  (click)="solicitarBaja(ejemplar)"
+                >
+                  <ion-icon name="trash" />
+                </ion-button>
+              } @else {
+                <span class="sin-acciones">Sin acciones</span>
+              }
+            </div>
+          </article>
+        } @empty {
+          <div class="estado-vacio">
+            <ion-icon name="library-outline" />
+            <h3>No hay ejemplares registrados</h3>
+            <p>Agregá la primera copia física de este libro.</p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+</main>

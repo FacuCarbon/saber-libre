@@ -71,6 +71,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'catalogo/:id/ejemplares',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/catalogo/ejemplares/ejemplares.component'
+          ).then((m) => m.EjemplaresComponent),
+      },
+      {
         path: 'prestamos',
         loadComponent: () =>
           import('./pages/dashboard/prestamos/prestamos.page').then(

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonButton, IonIcon, IonInput } from '@ionic/angular/standalone';
+import { GoBackComponent } from 'src/app/components/botones/go-back/go-back.component';
 
 import { HeaderPageComponent } from 'src/app/components/dashboard/header-page/header-page.component';
 import { VolumenGoogleBooks } from 'src/app/models/google-books.model';
@@ -11,7 +12,14 @@ import { LibroService } from 'src/app/services/libro.service';
   templateUrl: './agregar.component.html',
   styleUrls: ['./agregar.component.scss'],
   standalone: true,
-  imports: [FormsModule, HeaderPageComponent, IonButton, IonIcon, IonInput],
+  imports: [
+    FormsModule,
+    IonButton,
+    IonIcon,
+    IonInput,
+    HeaderPageComponent,
+    GoBackComponent,
+  ],
 })
 export class AgregarComponent {
   private _libroService = inject(LibroService);

@@ -73,6 +73,15 @@ export class EjemplarService {
   }
 
   /**
+   * Actualiza los datos de un ejemplar.
+   * @param ejemplar El ejemplar a actualizar.
+   * @returns true si se actualizo correctamente, false en caso contrario.
+   */
+  actualizarEjemplar(ejemplar: Ejemplar): Promise<boolean> {
+    return this._storageService.actualizar<Ejemplar>('ejemplares', ejemplar);
+  }
+
+  /**
    * Crea varias copias para un libro.
    * @param idLibro El ID del libro.
    * @param cantidad La cantidad de ejemplares a crear.

@@ -1,4 +1,8 @@
-export type EstadoEjemplar = 'disponible' | 'prestado' | 'mantenimiento';
+export type EstadoEjemplar =
+  | 'disponible'
+  | 'prestado'
+  | 'mantenimiento'
+  | 'baja';
 
 export interface Ejemplar {
   id: string;

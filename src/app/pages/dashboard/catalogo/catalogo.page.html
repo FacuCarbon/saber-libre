@@ -5,11 +5,49 @@
     textoBoton="Agregar libro"
     icono="add"
     (accion)="agregarLibro()"
+    sizeBoton="grande"
+    [botonAnchoCompleto]="true"
   ></app-header-page>
 
+  @if (mensaje) {
+  <p class="mensaje" [class.mensaje--error]="mensajeEsError">{{ mensaje }}</p>
+  } @if (libroParaBaja) {
+  <section class="confirmar-baja" aria-labelledby="titulo-confirmar-baja">
+    <div>
+      <p class="confirmar-baja-eyebrow">Confirmar baja</p>
+      <h2 id="titulo-confirmar-baja">{{ libroParaBaja.titulo }}</h2>
+      <p>
+        El libro se ocultará del catálogo y no admitirá nuevos préstamos. Sus
+        datos y ejemplares se conservarán.
+      </p>
+    </div>
+    <div class="confirmar-baja-acciones">
+      <ion-button fill="outline" (click)="cancelarBaja()">
+        Cancelar
+      </ion-button>
+      <ion-button color="danger" (click)="confirmarBaja()">
+        <ion-icon name="trash" slot="start" />
+        Dar de baja
+      </ion-button>
+    </div>
+  </section>
+  }
+
   <section class="inventario">
-    <h2>Inventario bibliográfico</h2>
-    <p>Catalogo y cantidades disponibles</p>
+    <div class="inventario-encabezado">
+      <div>
+        <h2>Inventario bibliográfico</h2>
+        <p>Catálogo y cantidades disponibles</p>
+      </div>
+      <ion-button
+        fill="outline"
+        class="boton-inactivos"
+        (click)="alternarLibrosInactivos()"
+      >
+        {{ mostrarInactivos ? "Ver libros activos" : "Ver dados de baja (" +
+        cantidadInactivos + ")" }}
+      </ion-button>
+    </div>
 
     <app-buscador-libros
       placeholder="Buscar libro por título, autor o ISBN..."
@@ -32,7 +70,8 @@
         (verDetalles)="verLibro($event)"
         (editarLibro)="editarLibro($event)"
         (gestionarEjemplares)="abrirGestionEjemplares($event)"
-        (eliminarLibro)="solicitarEliminarLibro($event)"
+        (darDeBajaLibro)="solicitarBajaLibro($event)"
+        (reactivarLibro)="reactivarLibro($event)"
       />
       } @empty {
       <p class="estado-vacio">No se encontraron libros.</p>

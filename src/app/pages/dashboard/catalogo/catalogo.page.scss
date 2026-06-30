@@ -12,6 +12,101 @@
   display: none;
 }
 
+.inventario-encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.inventario-encabezado h2,
+.inventario-encabezado p {
+  margin: 0;
+}
+
+.inventario-encabezado p {
+  margin-top: 0.3rem;
+  color: #746b65;
+  font-size: 0.8rem;
+}
+
+.boton-inactivos {
+  --background-hover: #fff0e9;
+  --border-color: #e2d7cf;
+  --border-radius: 0.7rem;
+  --color: #9f3512;
+
+  min-height: 40px;
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.mensaje {
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem;
+  background: #eef6f2;
+  border: 1px solid #cde4d9;
+  border-radius: 0.75rem;
+  color: #245e4a;
+  font-size: 0.8rem;
+}
+
+.mensaje--error {
+  background: #fcecea;
+  border-color: #f0c9c5;
+  color: #9c302b;
+}
+
+.confirmar-baja {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: #fffafa;
+  border: 1px solid #f0c9c5;
+  border-radius: 1rem;
+}
+
+.confirmar-baja-eyebrow {
+  margin: 0 0 0.25rem;
+  color: #b53c36;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.confirmar-baja h2 {
+  margin: 0;
+  color: #29231f;
+  font: 900 1rem var(--font-display);
+}
+
+.confirmar-baja div > p:last-child {
+  margin: 0.35rem 0 0;
+  color: #746b65;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.confirmar-baja-acciones {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+}
+
+.confirmar-baja-acciones ion-button {
+  --border-radius: 0.7rem;
+  --box-shadow: none;
+
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
 app-buscador-libros {
   margin: 1.25rem 0 1rem;
 }
@@ -34,5 +129,19 @@ app-buscador-libros {
     font-weight: 700;
     text-transform: uppercase;
     border-bottom: 1px solid lightgray;
+  }
+}
+
+@media (max-width: 575px) {
+  .inventario-encabezado,
+  .confirmar-baja {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .boton-inactivos,
+  .confirmar-baja-acciones,
+  .confirmar-baja-acciones ion-button {
+    width: 100%;
   }
 }

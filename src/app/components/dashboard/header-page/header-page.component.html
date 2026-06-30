@@ -11,6 +11,9 @@
       <app-boton-accion
         [texto]="textoBoton"
         [icono]="icono"
+        [deshabilitado]="botonDeshabilitado"
+        [size]="sizeBoton"
+        [anchoCompleto]="botonAnchoCompleto"
         (accion)="accion.emit()"
       />
     </div>

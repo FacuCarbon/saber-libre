@@ -3,6 +3,9 @@
   class="boton-accion"
   [disabled]="deshabilitado"
   (click)="accion.emit()"
+  [class.boton-accion--chico]="size === 'chico'"
+  [class.boton-accion--mediano]="size === 'mediano'"
+  [class.boton-accion--grande]="size === 'grande'"
 >
   @if (icono) {
     <ion-icon slot="start" [name]="icono"></ion-icon>

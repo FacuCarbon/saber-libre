@@ -11,5 +11,7 @@ export class DetalleComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   constructor() {}
   idLibro = this._route.snapshot.paramMap.get('id');
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('ID libro ', this.idLibro);
+  }
 }

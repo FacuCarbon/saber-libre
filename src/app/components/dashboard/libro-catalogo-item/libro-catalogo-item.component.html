@@ -1,4 +1,4 @@
-<article class="libro-item">
+<article class="libro-item" [class.libro-item--inactivo]="libro.activo === false">
   <div class="libro-identidad">
     @if (libro.imagenPortada) {
       <img
@@ -13,7 +13,12 @@
     }
 
     <div class="libro-info">
-      <h3 [title]="libro.titulo">{{ libro.titulo }}</h3>
+      <div class="libro-titulo">
+        <h3 [title]="libro.titulo">{{ libro.titulo }}</h3>
+        @if (libro.activo === false) {
+          <span class="estado-libro">Dado de baja</span>
+        }
+      </div>
       <p [title]="libro.autores.join(', ')">
         {{ libro.autores.join(", ") }}
       </p>
@@ -27,7 +32,11 @@
 
   <div class="dato categoria">
     <span class="etiqueta-mobile">Categoría:</span>
-    <span>{{ libro.categorias.join(", ") }}</span>
+    @if (libro.categorias.length > 0) {
+      <span>{{ libro.categorias.join(", ") }}</span>
+    } @else {
+      <span> Sin categoría </span>
+    }
   </div>
 
   <div class="dato disponibles">
@@ -54,14 +63,16 @@
       <ion-icon name="eye-outline"></ion-icon>
     </ion-button>
 
-    <ion-button
-      class="boton-icono"
-      fill="clear"
-      aria-label="Editar libro"
-      (click)="editarLibro.emit(libro.id)"
-    >
-      <ion-icon name="create-outline"></ion-icon>
-    </ion-button>
+    @if (libro.activo !== false) {
+      <ion-button
+        class="boton-icono"
+        fill="clear"
+        aria-label="Editar libro"
+        (click)="editarLibro.emit(libro.id)"
+      >
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+    }
 
     <ion-button
       [id]="'opciones-libro-' + libro.id"
@@ -82,24 +93,36 @@
     >
       <ng-template>
         <ion-list lines="none">
-          <ion-item
-            button
-            [detail]="false"
-            (click)="gestionarEjemplares.emit(libro.id)"
-          >
-            <ion-icon name="library-outline" slot="start"></ion-icon>
-            <ion-label>Gestionar ejemplares</ion-label>
-          </ion-item>
+          @if (libro.activo !== false) {
+            <ion-item
+              button
+              [detail]="false"
+              (click)="gestionarEjemplares.emit(libro.id)"
+            >
+              <ion-icon name="library-outline" slot="start"></ion-icon>
+              <ion-label>Gestionar ejemplares</ion-label>
+            </ion-item>
 
-          <ion-item
-            button
-            [detail]="false"
-            class="opcion-eliminar"
-            (click)="eliminarLibro.emit(libro.id)"
-          >
-            <ion-icon name="trash" slot="start"></ion-icon>
-            <ion-label>Eliminar libro</ion-label>
-          </ion-item>
+            <ion-item
+              button
+              [detail]="false"
+              class="opcion-eliminar"
+              (click)="darDeBajaLibro.emit(libro.id)"
+            >
+              <ion-icon name="trash" slot="start"></ion-icon>
+              <ion-label>Dar de baja</ion-label>
+            </ion-item>
+          } @else {
+            <ion-item
+              button
+              [detail]="false"
+              class="opcion-reactivar"
+              (click)="reactivarLibro.emit(libro.id)"
+            >
+              <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+              <ion-label>Reactivar libro</ion-label>
+            </ion-item>
+          }
         </ion-list>
       </ng-template>
     </ion-popover>

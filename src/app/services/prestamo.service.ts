@@ -76,6 +76,12 @@ export class PrestamoService {
     idBibliotecario: string,
     diasPrestamo = 7,
   ): Promise<Prestamo | null> {
+    const libro = await this._libroService.obtenerLibroPorId(idLibro);
+
+    if (!libro || libro.activo === false) {
+      return null;
+    }
+
     const ejemplarDisponible =
       await this._ejemplarService.obtenerPrimerDisponiblePorLibro(idLibro);
 

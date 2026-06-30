@@ -1,4 +1,6 @@
 <main class="container-agregar">
+  <app-go-back texto="Volver al catalogo"></app-go-back>
+
   <app-header-page
     titulo="Alta de libro"
     subtitulo="Buscá información externa, revisala y confirmá el alta."
@@ -34,7 +36,7 @@
     [class.alta-layout--con-resultado]="libroSeleccionado !== null"
   >
     <section class="panel panel-busqueda" aria-labelledby="titulo-busqueda">
-      <h2 id="titulo-busqueda">Buscar en Google Books</h2>
+      <h2 id="titulo-busqueda">Buscar libro</h2>
 
       <div class="campo-busqueda">
         <label for="isbn">Buscar por ISBN</label>

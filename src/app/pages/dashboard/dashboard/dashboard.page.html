@@ -15,13 +15,13 @@
       </ion-content>
 
       <div class="ion-padding">
-        <ion-button expand="block" class="boton-logout" (click)="logout()">
-          <ion-icon
-            name="log-out-outline"
-            style="margin-right: 10px"
-          ></ion-icon>
-          Cerrar sesión
-        </ion-button>
+        <app-boton-accion
+          texto="Cerrar sesión"
+          icono="log-out-outline"
+          (accion)="logout()"
+          size="grande"
+          [anchoCompleto]="true"
+        ></app-boton-accion>
       </div>
     </ion-menu>
 

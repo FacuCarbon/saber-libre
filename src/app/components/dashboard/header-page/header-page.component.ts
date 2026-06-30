@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { BotonAccionComponent } from 'src/app/components/botones/boton-accion/boton-accion.component';
+import {
+  BotonAccionComponent,
+  SizeBotton,
+} from 'src/app/components/botones/boton-accion/boton-accion.component';
 import type { IconosAppType } from 'src/app/iconos.config';
 
 @Component({
@@ -14,6 +17,9 @@ export class HeaderPageComponent {
   @Input() subtitulo = '';
   @Input() textoBoton?: string;
   @Input() icono?: IconosAppType;
+  @Input() botonDeshabilitado = false;
+  @Input() sizeBoton: SizeBotton = 'mediano';
+  @Input() botonAnchoCompleto = false;
 
   @Output() accion = new EventEmitter<void>();
 }

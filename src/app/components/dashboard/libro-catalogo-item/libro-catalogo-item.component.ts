@@ -23,5 +23,6 @@ export class LibroCatalogoItemComponent {
   @Output() verDetalles = new EventEmitter<string>();
   @Output() editarLibro = new EventEmitter<string>();
   @Output() gestionarEjemplares = new EventEmitter<string>();
-  @Output() eliminarLibro = new EventEmitter<string>();
+  @Output() darDeBajaLibro = new EventEmitter<string>();
+  @Output() reactivarLibro = new EventEmitter<string>();
 }

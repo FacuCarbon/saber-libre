@@ -1,9 +1,14 @@
-<ion-split-pane contentId="main-content">
-  <ion-menu contentId="main-content" type="overlay" class="menu-sidebar">
+<ion-split-pane [when]="esDesktop" contentId="main-content">
+  <ion-menu
+    contentId="main-content"
+    type="overlay"
+    class="menu-sidebar"
+    [disabled]="!esDesktop"
+  >
     <div>
       <logo-app></logo-app>
     </div>
-    <!--Mostramos el rol del usuario actual-->
+
     @if (rol) {
     <div class="ion-padding container-rol">
       <ion-label class="rol">{{ rol }}</ion-label>
@@ -39,50 +44,52 @@
       <router-outlet (activate)="actualizarPaginaActual()"></router-outlet>
     </ion-content>
 
-    <ion-footer class="ion-hide-lg-up">
-      <ion-tab-bar>
-        @for (item of rutasTabs; track item.url) {
-        <ion-tab-button
-          [routerLink]="item.url"
-          routerLinkActive="route-active"
-          [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
-        >
-          <ion-icon [name]="item.icon"></ion-icon>
-          <ion-label>{{ item.title }}</ion-label>
-        </ion-tab-button>
-        }
+    @if (!esDesktop) {
+      <ion-footer>
+        <ion-tab-bar>
+          @for (item of rutasTabs; track item.url) {
+          <ion-tab-button
+            [routerLink]="item.url"
+            routerLinkActive="route-active"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
+          >
+            <ion-icon [name]="item.icon"></ion-icon>
+            <ion-label>{{ item.title }}</ion-label>
+          </ion-tab-button>
+          }
 
-        <ion-tab-button
-          id="mobile-more-trigger"
-          [class.route-active]="masActivo"
-        >
-          <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
-          <ion-label>Más</ion-label>
-        </ion-tab-button>
-      </ion-tab-bar>
+          <ion-tab-button
+            id="mobile-more-trigger"
+            [class.route-active]="masActivo"
+          >
+            <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+            <ion-label>Más</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
 
-      <ion-popover
-        trigger="mobile-more-trigger"
-        triggerAction="click"
-        [dismissOnSelect]="true"
-        class="more-popover"
-      >
-        <ng-template>
-          <ion-list lines="none">
-            @for (item of rutasMas; track item.url) {
-            <ion-item
-              button
-              [routerLink]="item.url"
-              routerLinkActive="route-active"
-              [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
-            >
-              <ion-icon [name]="item.icon" slot="start"></ion-icon>
-              <ion-label>{{ item.title }}</ion-label>
-            </ion-item>
-            }
-          </ion-list>
-        </ng-template>
-      </ion-popover>
-    </ion-footer>
+        <ion-popover
+          trigger="mobile-more-trigger"
+          triggerAction="click"
+          [dismissOnSelect]="true"
+          class="more-popover"
+        >
+          <ng-template>
+            <ion-list lines="none">
+              @for (item of rutasMas; track item.url) {
+              <ion-item
+                button
+                [routerLink]="item.url"
+                routerLinkActive="route-active"
+                [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
+              >
+                <ion-icon [name]="item.icon" slot="start"></ion-icon>
+                <ion-label>{{ item.title }}</ion-label>
+              </ion-item>
+              }
+            </ion-list>
+          </ng-template>
+        </ion-popover>
+      </ion-footer>
+    }
   </div>
 </ion-split-pane>

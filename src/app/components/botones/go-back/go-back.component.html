@@ -1,4 +1,19 @@
-<ion-button class="boton-back" fill="clear" (click)="onAction()">
-  <ion-icon [name]="icono" aria-hidden="true"></ion-icon>
+<ion-button type="button" class="boton-back" fill="clear" (click)="onAction()">
+  <svg
+    class="boton-back-icono"
+    slot="start"
+    viewBox="0 0 512 512"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M244 400L100 256l144-144M120 256h292"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="48"
+    />
+  </svg>
   {{ texto }}
 </ion-button>

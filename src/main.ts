@@ -20,6 +20,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from './environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
+registrarIconos();
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -31,4 +33,3 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
   ],
 });
-registrarIconos();

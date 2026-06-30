@@ -5,6 +5,7 @@ import {
   IonButton,
   IonIcon,
   IonInput,
+  IonLabel,
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
@@ -24,6 +25,7 @@ import { LibroService } from 'src/app/services/libro.service';
     IonButton,
     IonIcon,
     IonInput,
+    IonLabel,
     IonSelect,
     IonSelectOption,
     GoBackComponent,

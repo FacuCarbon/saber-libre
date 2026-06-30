@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 import {
   Router,
@@ -7,7 +7,22 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
+import {
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenu,
+  IonPopover,
+  IonSplitPane,
+  IonTabBar,
+  IonTabButton,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
 import { BotonAccionComponent } from 'src/app/components/botones/boton-accion/boton-accion.component';
 import { SidebarMenuComponent } from 'src/app/components/dashboard/sidebar-menu/sidebar-menu.component';
 import { LogoAppComponent } from 'src/app/components/logo-app/logo-app.component';
@@ -24,7 +39,20 @@ import {
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
   imports: [
-    IonicModule,
+    IonContent,
+    IonFooter,
+    IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonMenu,
+    IonPopover,
+    IonSplitPane,
+    IonTabBar,
+    IonTabButton,
+    IonTitle,
+    IonToolbar,
     SidebarMenuComponent,
     RouterLink,
     RouterLinkActive,
@@ -47,10 +75,16 @@ export class DashboardPage {
   rutasTabs = this.rutas.filter((item) => item.mobile === 'tab');
   rutasMas = this.rutas.filter((item) => item.mobile === 'more');
   masActivo = false;
+  esDesktop = window.innerWidth >= 992;
 
-  async ionViewWillEnter() {
+  async ionViewWillEnter(): Promise<void> {
     this.usuario = await this._authService.usuarioActual();
     this.rol = await this._authService.rolUsuarioActual();
+  }
+
+  @HostListener('window:resize')
+  actualizarVistaResponsive(): void {
+    this.esDesktop = window.innerWidth >= 992;
   }
 
   actualizarPaginaActual(): void {

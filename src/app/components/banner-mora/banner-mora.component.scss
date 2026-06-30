@@ -1,66 +1,69 @@
 .banner-mora {
-    background-color: #FFF4EF;
-    border: 1 px solid #F3C6B8;
-    border-radius: 14px;
-    box-shadow: none;
+  margin: 0;
+  background-color: #fff4ef;
+  border: 1px solid #f3c6b8;
+  border-radius: 0.9rem;
+  box-shadow: none;
 }
 
 .contenido-banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
 }
 
-.info.banner {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: 1;
+.info-banner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  gap: 1rem;
 }
 
 .icono {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: white;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: #E85A26;
-    font-size: 22px;
-
-    flex-shrink: 0;
+  display: flex;
+  flex: 0 0 40px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  color: #e85a26;
+  font-size: 1.35rem;
 }
 
 .texto h3 {
-    margin: 0;
-    color: #2A2520;
-    font-size: 1rem;
-    font-weight: 700;
+  margin: 0;
+  color: #2a2520;
+  font: 800 1rem var(--font-display);
 }
 
 .texto p {
-    margin: 4px 0 0;
-    color: #6B6560;
-    font-size: .9rem;
+  margin: 0.25rem 0 0;
+  color: #6b6560;
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
 ion-button {
-    --color: #E85A26;
-    font-weight: 600;
+  --color: #c94517;
+
+  flex: 0 0 auto;
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
 }
 
 @media (max-width: 768px) {
+  .contenido-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-    .contenido-banner {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .ion-button {
-        align-self: flex-end;
-    }
+  ion-button {
+    align-self: flex-end;
+  }
 }

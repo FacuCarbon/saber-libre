@@ -1,3 +1,137 @@
-<div class="ion-padding">
-  <h1>Prestamos!</h1>
-</div>
+<main class="prestamos-contenido">
+  <app-header-page
+    titulo="Gestión de préstamos"
+    subtitulo="Administrá préstamos, vencimientos y devoluciones."
+    textoBoton="Registrar préstamo"
+    icono="add"
+    [botonAnchoCompleto]="true"
+    (accion)="registrarPrestamo()"
+  ></app-header-page>
+
+  @if (mensaje) {
+  <p class="mensaje" [class.mensaje--error]="mensajeEsError">{{ mensaje }}</p>
+  }
+
+  @if (mostrarConfirmacionDatos) {
+  <section class="confirmar-datos" aria-labelledby="titulo-confirmar-datos">
+    <div>
+      <p class="confirmar-datos-eyebrow">Datos de prueba</p>
+      <h2 id="titulo-confirmar-datos">Cargar escenarios de préstamos</h2>
+      <p>
+        Se crearán préstamos de ejemplo usando lectores y ejemplares existentes.
+        Los datos actuales no se reemplazarán.
+      </p>
+    </div>
+    <div class="confirmar-datos-acciones">
+      <ion-button
+        fill="outline"
+        [disabled]="procesandoDatosPrueba"
+        (click)="cancelarDatosPrueba()"
+      >
+        Cancelar
+      </ion-button>
+      <ion-button
+        [disabled]="procesandoDatosPrueba"
+        (click)="confirmarDatosPrueba()"
+      >
+        @if (procesandoDatosPrueba) {
+        <ion-spinner name="crescent" slot="start"></ion-spinner>
+        }
+        Cargar datos
+      </ion-button>
+    </div>
+  </section>
+  }
+
+  <section class="resumen" aria-label="Resumen de préstamos">
+    <article class="resumen-item resumen-item--activos">
+      <div class="resumen-icono"><ion-icon name="book-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadActivos }}</strong>
+        <span>Préstamos activos</span>
+      </div>
+    </article>
+    <article class="resumen-item resumen-item--vencidos">
+      <div class="resumen-icono"><ion-icon name="time-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadVencidos }}</strong>
+        <span>Vencidos</span>
+      </div>
+    </article>
+    <article class="resumen-item resumen-item--devueltos">
+      <div class="resumen-icono"><ion-icon name="checkmark-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadDevueltos }}</strong>
+        <span>Devueltos</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="listado-prestamos">
+    <div class="listado-encabezado">
+      <div>
+        <h2>Historial de préstamos</h2>
+        <p>Consultá el estado actual de cada operación.</p>
+      </div>
+      <div class="acciones-secundarias">
+        <ion-button fill="outline" (click)="procesarDevolucion()">
+          <ion-icon name="swap-horizontal" slot="start"></ion-icon>
+          Procesar devolución
+        </ion-button>
+        <ion-button fill="clear" (click)="solicitarDatosPrueba()">
+          Cargar datos de prueba
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <app-buscador-libros
+        placeholder="Buscar por lector, libro o código..."
+        (busqueda)="filtrarPrestamos($event)"
+      ></app-buscador-libros>
+
+      <ion-select
+        label="Estado"
+        labelPlacement="stacked"
+        interface="popover"
+        [(ngModel)]="filtroEstado"
+        (ionChange)="cambiarFiltroEstado()"
+      >
+        <ion-select-option value="todos">Todos</ion-select-option>
+        <ion-select-option value="activo">Vigentes</ion-select-option>
+        <ion-select-option value="vencido">Vencidos</ion-select-option>
+        <ion-select-option value="devuelto">Devueltos</ion-select-option>
+      </ion-select>
+    </div>
+
+    @if (cargando) {
+    <div class="estado-listado">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando préstamos...</p>
+    </div>
+    } @else {
+    <div class="prestamos-columnas" aria-hidden="true">
+      <span>Libro y lector</span>
+      <span>Código</span>
+      <span>Préstamo</span>
+      <span>Devolución</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="prestamos-lista">
+      @for (detalle of prestamosFiltrados; track detalle.prestamo.id) {
+      <app-item-prestamo
+        [detalle]="detalle"
+        (procesarDevolucion)="procesarDevolucion($event)"
+      ></app-item-prestamo>
+      } @empty {
+      <div class="estado-listado">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <p>No se encontraron préstamos.</p>
+      </div>
+      }
+    </div>
+    }
+  </section>
+</main>

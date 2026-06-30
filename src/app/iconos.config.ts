@@ -31,6 +31,12 @@ import {
   mailOutline,
   notificationsOutline,
   arrowForwardOutline,
+  scanOutline,
+  calendarOutline,
+  returnDownBackOutline,
+  reloadOutline,
+  filterOutline,
+  warningOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -65,6 +71,12 @@ export const iconosApp = {
   'mail-outline': mailOutline,
   'notifications-outline': notificationsOutline,
   'arrow-forward-outline': arrowForwardOutline,
+  'scan-outline': scanOutline,
+  'calendar-outline': calendarOutline,
+  'return-down-back-outline': returnDownBackOutline,
+  'reload-outline': reloadOutline,
+  'filter-outline': filterOutline,
+  'warning-outline': warningOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

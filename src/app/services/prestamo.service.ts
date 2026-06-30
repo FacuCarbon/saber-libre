@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Ejemplar, Prestamo } from '../models';
 import { EjemplarService } from './ejemplar.service';
 import { LibroService } from './libro.service';
+import { MultaService } from './multa.service';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -12,148 +13,148 @@ export class PrestamoService {
   private _storageService = inject(StorageService);
   private _ejemplarService = inject(EjemplarService);
   private _libroService = inject(LibroService);
+  private _multaService = inject(MultaService);
 
-  /**
-   * Obtiene todos los prestamos.
-   * @returns Lista de prestamos.
-   */
+  /** Obtiene todos los prestamos. */
   obtenerPrestamos(): Promise<Prestamo[]> {
     return this._storageService.obtenerLista<Prestamo>('prestamos');
   }
 
-  /**
-   * Obtiene un prestamo por su ID.
-   * @param idPrestamo El ID del prestamo.
-   * @returns El prestamo encontrado o null.
-   */
+  /** Obtiene un prestamo por su ID. */
   obtenerPrestamoPorId(idPrestamo: string): Promise<Prestamo | null> {
     return this._storageService.obtenerPorId<Prestamo>('prestamos', idPrestamo);
   }
 
-  /**
-   * Obtiene los prestamos de un usuario.
-   * @param idUsuario El ID del usuario.
-   * @returns Lista de prestamos del usuario.
-   */
+  /** Obtiene los prestamos de un usuario. */
   async obtenerPrestamosPorUsuario(idUsuario: string): Promise<Prestamo[]> {
     const prestamos = await this.obtenerPrestamos();
     return prestamos.filter((prestamo) => prestamo.idUsuario === idUsuario);
   }
 
-  /**
-   * Obtiene los prestamos activos.
-   * @returns Lista de prestamos activos.
-   */
+  /** Obtiene los prestamos activos, incluidos los vencidos. */
   async obtenerPrestamosActivos(): Promise<Prestamo[]> {
     const prestamos = await this.obtenerPrestamos();
     return prestamos.filter((prestamo) => !prestamo.fechaDevReal);
   }
 
-  /**
-   * Obtiene los prestamos vencidos.
-   * @returns Lista de prestamos vencidos.
-   */
+  /** Obtiene los prestamos activos que superaron su fecha estimada. */
   async obtenerPrestamosVencidos(): Promise<Prestamo[]> {
     const prestamosActivos = await this.obtenerPrestamosActivos();
-    const hoy = new Date();
-
+    const ahora = new Date();
     return prestamosActivos.filter(
-      (prestamo) => new Date(prestamo.fechaDevEstimada) < hoy,
+      (prestamo) => new Date(prestamo.fechaDevEstimada) < ahora,
+    );
+  }
+
+  /** Obtiene los prestamos que ya fueron devueltos. */
+  async obtenerPrestamosDevueltos(): Promise<Prestamo[]> {
+    const prestamos = await this.obtenerPrestamos();
+    return prestamos.filter((prestamo) => Boolean(prestamo.fechaDevReal));
+  }
+
+  /** Obtiene el prestamo activo de un ejemplar. */
+  async obtenerPrestamoActivoPorEjemplar(
+    idEjemplar: string,
+  ): Promise<Prestamo | null> {
+    const prestamosActivos = await this.obtenerPrestamosActivos();
+    return (
+      prestamosActivos.find(
+        (prestamo) => prestamo.idEjemplar === idEjemplar,
+      ) ?? null
     );
   }
 
   /**
-   * Crea un prestamo para un libro, asignando un ejemplar disponible.
-   * @param idUsuario El ID del usuario.
-   * @param idLibro El ID del libro.
-   * @param idBibliotecario El ID del bibliotecario.
-   * @param diasPrestamo Cantidad de dias del prestamo.
-   * @returns El prestamo creado o null si no fue posible.
+   * Crea un prestamo para un ejemplar concreto.
+   * @param idUsuario El ID del usuario lector.
+   * @param idEjemplar El ID del ejemplar.
+   * @param idBibliotecario El ID del bibliotecario responsable.
+   * @param fechaDevEstimada La fecha estimada de devolucion.
    */
   async crearPrestamo(
     idUsuario: string,
-    idLibro: string,
+    idEjemplar: string,
     idBibliotecario: string,
-    diasPrestamo = 7,
+    fechaDevEstimada: string,
   ): Promise<Prestamo | null> {
-    const libro = await this._libroService.obtenerLibroPorId(idLibro);
+    if (!idUsuario.trim() || !idEjemplar.trim() || !idBibliotecario.trim()) {
+      return null;
+    }
 
+    const fechaDevolucion = this.normalizarFechaDevolucion(fechaDevEstimada);
+    const inicioHoy = new Date();
+    inicioHoy.setHours(0, 0, 0, 0);
+
+    if (!fechaDevolucion || fechaDevolucion < inicioHoy) {
+      return null;
+    }
+
+    const ejemplar = await this._ejemplarService.obtenerEjemplarPorId(idEjemplar);
+    if (!ejemplar || ejemplar.estadoEjemplar !== 'disponible') {
+      return null;
+    }
+
+    const libro = await this._libroService.obtenerLibroPorId(ejemplar.idLibro);
     if (!libro || libro.activo === false) {
       return null;
     }
 
-    const ejemplarDisponible =
-      await this._ejemplarService.obtenerPrimerDisponiblePorLibro(idLibro);
-
-    if (!ejemplarDisponible) {
+    const [prestamoDuplicado, tieneMultaPendiente] = await Promise.all([
+      this.obtenerPrestamoActivoPorEjemplar(idEjemplar),
+      this._multaService.tieneMultaPendiente(idUsuario),
+    ]);
+    if (prestamoDuplicado || tieneMultaPendiente) {
       return null;
     }
-
-    const ejemplarReservado: Ejemplar = {
-      ...ejemplarDisponible,
-      estadoEjemplar: 'prestado',
-    };
-
-    const ejemplarActualizado =
-      await this._ejemplarService.actualizarEstadoEjemplar(
-        ejemplarReservado.id,
-        ejemplarReservado.estadoEjemplar,
-      );
-
-    if (!ejemplarActualizado) {
-      return null;
-    }
-
-    const fechaPrestamo = new Date();
-    const fechaDevEstimada = new Date(fechaPrestamo);
-    fechaDevEstimada.setDate(fechaDevEstimada.getDate() + diasPrestamo);
 
     const prestamo: Prestamo = {
       id: crypto.randomUUID(),
       idUsuario,
-      idEjemplar: ejemplarReservado.id,
-      fechaPrestamo: fechaPrestamo.toISOString(),
-      fechaDevEstimada: fechaDevEstimada.toISOString(),
+      idEjemplar,
+      fechaPrestamo: new Date().toISOString(),
+      fechaDevEstimada: fechaDevolucion.toISOString(),
       idBibliotecario,
     };
 
-    const guardado = await this._storageService.guardar<Prestamo>(
-      'prestamos',
-      prestamo,
-    );
+    try {
+      const ejemplarReservado =
+        await this._ejemplarService.actualizarEstadoEjemplar(
+          idEjemplar,
+          'prestado',
+        );
+      if (!ejemplarReservado) {
+        return null;
+      }
 
-    if (!guardado) {
-      await this._ejemplarService.actualizarEstadoEjemplar(
-        ejemplarReservado.id,
-        'disponible',
+      const prestamoGuardado = await this._storageService.guardar<Prestamo>(
+        'prestamos',
+        prestamo,
       );
+      if (!prestamoGuardado) {
+        await this.restaurarAltaFallida(prestamo, ejemplar);
+        return null;
+      }
+
+      const libroSincronizado =
+        await this._libroService.sincronizarCantidadesDesdeEjemplares(
+          ejemplar.idLibro,
+        );
+      if (!libroSincronizado) {
+        await this.restaurarAltaFallida(prestamo, ejemplar);
+        return null;
+      }
+
+      return prestamo;
+    } catch (error) {
+      console.error(error);
+      await this.restaurarAltaFallida(prestamo, ejemplar);
       return null;
     }
-
-    const libroActualizado = await this._libroService.descontarCantidadDisponible(
-      idLibro,
-    );
-
-    if (!libroActualizado) {
-      await this._storageService.eliminarPorId<Prestamo>('prestamos', prestamo.id);
-      await this._ejemplarService.actualizarEstadoEjemplar(
-        ejemplarReservado.id,
-        'disponible',
-      );
-      return null;
-    }
-
-    return prestamo;
   }
 
-  /**
-   * Registra la devolucion de un prestamo.
-   * @param idPrestamo El ID del prestamo.
-   * @returns true si se actualizo correctamente, false en caso contrario.
-   */
+  /** Registra la devolucion de un prestamo. */
   async devolverPrestamo(idPrestamo: string): Promise<boolean> {
     const prestamo = await this.obtenerPrestamoPorId(idPrestamo);
-
     if (!prestamo || prestamo.fechaDevReal) {
       return false;
     }
@@ -161,62 +162,90 @@ export class PrestamoService {
     const ejemplar = await this._ejemplarService.obtenerEjemplarPorId(
       prestamo.idEjemplar,
     );
-
-    if (!ejemplar) {
+    if (!ejemplar || ejemplar.estadoEjemplar !== 'prestado') {
       return false;
     }
-
-    const fechaDevReal = new Date().toISOString();
 
     const prestamoActualizado: Prestamo = {
       ...prestamo,
-      fechaDevReal,
+      fechaDevReal: new Date().toISOString(),
     };
 
-    const prestamoGuardado = await this._storageService.actualizar<Prestamo>(
-      'prestamos',
-      prestamoActualizado,
-    );
-
-    if (!prestamoGuardado) {
-      return false;
-    }
-
-    const ejemplarLiberado = await this._ejemplarService.actualizarEstadoEjemplar(
-      ejemplar.id,
-      'disponible',
-    );
-
-    if (!ejemplarLiberado) {
-      await this._storageService.actualizar<Prestamo>(
+    try {
+      const prestamoGuardado = await this._storageService.actualizar<Prestamo>(
         'prestamos',
-        prestamo,
+        prestamoActualizado,
       );
+      if (!prestamoGuardado) {
+        return false;
+      }
+
+      const ejemplarLiberado =
+        await this._ejemplarService.actualizarEstadoEjemplar(
+          ejemplar.id,
+          'disponible',
+        );
+      if (!ejemplarLiberado) {
+        await this._storageService.actualizar<Prestamo>('prestamos', prestamo);
+        return false;
+      }
+
+      const libroSincronizado =
+        await this._libroService.sincronizarCantidadesDesdeEjemplares(
+          ejemplar.idLibro,
+        );
+      if (!libroSincronizado) {
+        await this.restaurarDevolucionFallida(prestamo, ejemplar);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      await this.restaurarDevolucionFallida(prestamo, ejemplar);
       return false;
     }
-
-    const libroActualizado = await this._libroService.incrementarCantidadDisponible(
-      ejemplar.idLibro,
-    );
-
-    if (!libroActualizado) {
-      await this._storageService.actualizar<Prestamo>(
-        'prestamos',
-        prestamo,
-      );
-      await this._ejemplarService.actualizarEstadoEjemplar(ejemplar.id, 'prestado');
-      return false;
-    }
-
-    return true;
   }
 
-  /**
-   * Alias semantico para registrar una devolucion.
-   * @param idPrestamo El ID del prestamo.
-   * @returns true si se registro correctamente, false en caso contrario.
-   */
+  /** Alias semantico para registrar una devolucion. */
   registrarDevolucion(idPrestamo: string): Promise<boolean> {
     return this.devolverPrestamo(idPrestamo);
+  }
+
+  private normalizarFechaDevolucion(fecha: string): Date | null {
+    const fechaNormalizada = /^\d{4}-\d{2}-\d{2}$/.test(fecha)
+      ? new Date(`${fecha}T23:59:59.999`)
+      : new Date(fecha);
+    if (Number.isNaN(fechaNormalizada.getTime())) {
+      return null;
+    }
+
+    fechaNormalizada.setHours(23, 59, 59, 999);
+    return fechaNormalizada;
+  }
+
+  private async restaurarAltaFallida(
+    prestamo: Prestamo,
+    ejemplar: Ejemplar,
+  ): Promise<void> {
+    await this._storageService.eliminarPorId<Prestamo>(
+      'prestamos',
+      prestamo.id,
+    );
+    await this._ejemplarService.actualizarEjemplar(ejemplar);
+    await this._libroService.sincronizarCantidadesDesdeEjemplares(
+      ejemplar.idLibro,
+    );
+  }
+
+  private async restaurarDevolucionFallida(
+    prestamo: Prestamo,
+    ejemplar: Ejemplar,
+  ): Promise<void> {
+    await this._storageService.actualizar<Prestamo>('prestamos', prestamo);
+    await this._ejemplarService.actualizarEjemplar(ejemplar);
+    await this._libroService.sincronizarCantidadesDesdeEjemplares(
+      ejemplar.idLibro,
+    );
   }
 }

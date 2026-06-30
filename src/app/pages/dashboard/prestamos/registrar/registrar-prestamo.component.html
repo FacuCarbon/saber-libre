@@ -1,0 +1,203 @@
+<main class="container-registrar">
+  <app-go-back
+    texto="Volver a préstamos"
+    ruta="/dashboard/prestamos"
+  ></app-go-back>
+
+  <app-header-page
+    titulo="Registrar préstamo"
+    subtitulo="Identificá al lector y el ejemplar antes de confirmar la entrega."
+  />
+
+  @if (mensaje) {
+    <p class="mensaje" [class.mensaje--error]="mensajeEsError" role="status">
+      {{ mensaje }}
+    </p>
+  }
+
+  @if (tieneMultaPendiente) {
+    <app-banner-mora-component
+      titulo="Lector con multa pendiente"
+      mensaje="No se puede registrar un nuevo préstamo hasta que la multa figure como pagada."
+    />
+  }
+
+  <form
+    #formularioPrestamo="ngForm"
+    class="prestamo-layout"
+    (ngSubmit)="registrarPrestamo()"
+  >
+    <section class="panel formulario-prestamo" aria-labelledby="titulo-datos">
+      <div class="panel-encabezado">
+        <div>
+          <p class="eyebrow">Datos del préstamo</p>
+          <h2 id="titulo-datos">Lector y ejemplar</h2>
+        </div>
+        <span>Los campos son obligatorios.</span>
+      </div>
+
+      <div class="campos-formulario">
+        <div class="campo campo-completo">
+          <ion-label position="stacked">Lector</ion-label>
+          <ion-select
+            id="lector"
+            name="idUsuario"
+            mode="md"
+            fill="outline"
+            interface="popover"
+            placeholder="Seleccioná un lector"
+            required
+            [disabled]="cargando"
+            [(ngModel)]="idUsuario"
+            (ionChange)="seleccionarLector()"
+          >
+            @for (lector of lectores; track lector.id) {
+              <ion-select-option [value]="lector.id">
+                {{ lector.nombreCompleto }}
+              </ion-select-option>
+            }
+          </ion-select>
+          @if (!cargando && lectores.length === 0) {
+            <small class="campo-error">No hay lectores disponibles.</small>
+          }
+        </div>
+
+        <div class="campo campo-codigo">
+          <ion-label position="stacked">Código de barras</ion-label>
+          <div class="entrada-codigo">
+            <ion-input
+              id="codigoBarras"
+              name="codigoBarras"
+              mode="md"
+              fill="outline"
+              placeholder="Ej. EX-1234"
+              required
+              [(ngModel)]="codigoBarras"
+              (ngModelChange)="cambiarCodigoBarras()"
+              (keyup.enter)="buscarEjemplar()"
+            />
+            <ion-button
+              type="button"
+              fill="outline"
+              class="boton-secundario"
+              [disabled]="buscando || !codigoBarras.trim()"
+              (click)="buscarEjemplar()"
+            >
+              <ion-icon name="search-outline" slot="start" />
+              {{ buscando ? "Buscando..." : "Buscar" }}
+            </ion-button>
+          </div>
+          <small class="campo-ayuda">
+            También podés leerlo con una pistola USB y presionar Enter.
+          </small>
+        </div>
+
+        @if (escanerDisponible) {
+          <div class="campo campo-escaner">
+            <ion-label position="stacked">Cámara del dispositivo</ion-label>
+            <ion-button
+              type="button"
+              expand="block"
+              fill="outline"
+              class="boton-secundario"
+              [disabled]="escaneando"
+              (click)="escanearCodigo()"
+            >
+              <ion-icon name="scan-outline" slot="start" />
+              {{ escaneando ? "Abriendo cámara..." : "Escanear código" }}
+            </ion-button>
+          </div>
+        }
+
+        <div class="campo">
+          <ion-label position="stacked">Devolución estimada</ion-label>
+          <ion-input
+            id="fechaDevEstimada"
+            name="fechaDevEstimada"
+            mode="md"
+            fill="outline"
+            type="date"
+            required
+            [min]="fechaMinima"
+            [(ngModel)]="fechaDevEstimada"
+          />
+        </div>
+      </div>
+
+      <div class="acciones-formulario">
+        <ion-button
+          type="button"
+          fill="outline"
+          class="boton-cancelar"
+          routerLink="/dashboard/prestamos"
+        >
+          Cancelar
+        </ion-button>
+        <ion-button
+          type="submit"
+          class="boton-confirmar"
+          [disabled]="
+            formularioPrestamo.invalid || !puedeRegistrar || guardando
+          "
+        >
+          <ion-icon name="checkmark-outline" slot="start" />
+          {{ guardando ? "Registrando..." : "Confirmar préstamo" }}
+        </ion-button>
+      </div>
+    </section>
+
+    <aside class="panel resumen" aria-labelledby="titulo-resumen">
+      <p class="eyebrow">Comprobación</p>
+      <h2 id="titulo-resumen">Resumen de la entrega</h2>
+
+      @if (libroSeleccionado && ejemplarSeleccionado) {
+        <article class="libro">
+          @if (libroSeleccionado.imagenPortada; as portada) {
+            <img [src]="portada" [alt]="libroSeleccionado.titulo" />
+          } @else {
+            <div class="portada-placeholder" aria-hidden="true">
+              <ion-icon name="book" />
+            </div>
+          }
+
+          <div>
+            <h3>{{ libroSeleccionado.titulo }}</h3>
+            <p>{{ libroSeleccionado.autores.join(", ") || "Sin autor" }}</p>
+            <span>{{ ejemplarSeleccionado.codigoBarras }}</span>
+          </div>
+        </article>
+
+        <dl class="datos-resumen">
+          <div>
+            <dt>Estado</dt>
+            <dd [class.disponible]="ejemplarDisponible">
+              {{ ejemplarSeleccionado.estadoEjemplar }}
+            </dd>
+          </div>
+          <div>
+            <dt>Ubicación</dt>
+            <dd>{{ ejemplarSeleccionado.ubicacion }}</dd>
+          </div>
+          <div>
+            <dt>Lector</dt>
+            <dd>
+              {{ lectorSeleccionado?.nombreCompleto || "Sin seleccionar" }}
+            </dd>
+          </div>
+          <div>
+            <dt>Responsable</dt>
+            <dd>
+              {{ bibliotecarioActual?.nombreCompleto || "No identificado" }}
+            </dd>
+          </div>
+        </dl>
+      } @else {
+        <div class="estado-vacio">
+          <ion-icon name="scan-outline" aria-hidden="true" />
+          <h3>Esperando un ejemplar</h3>
+          <p>Ingresá o escaneá el código para revisar el libro y su estado.</p>
+        </div>
+      }
+    </aside>
+  </form>
+</main>

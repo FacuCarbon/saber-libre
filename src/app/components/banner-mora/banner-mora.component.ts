@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { IonButton, IonCard, IonCardContent, IonIcon } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { warningOutline } from 'ionicons/icons';
-
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonIcon,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-banner-mora-component',
@@ -13,13 +15,9 @@ import { warningOutline } from 'ionicons/icons';
 
 })
 export class BannerMoraComponent {
+  @Input() titulo = '';
+  @Input() mensaje = '';
+  @Input() textoBoton = '';
 
-  @Input() titulo = ' ';
-  @Input() mensaje = ' ';
-  @Input() textoBoton = ' ';
-
-  constructor() {
-    addIcons({ 'warning-outline': warningOutline });
-  }
-
+  @Output() accion = new EventEmitter<void>();
 }

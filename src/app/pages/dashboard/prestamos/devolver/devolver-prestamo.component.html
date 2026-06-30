@@ -1,0 +1,159 @@
+<main class="container-devolver">
+  <app-go-back
+    texto="Volver a préstamos"
+    ruta="/dashboard/prestamos"
+  ></app-go-back>
+
+  <app-header-page
+    titulo="Procesar devolución"
+    subtitulo="Buscá el ejemplar prestado, revisá los datos y confirmá la recepción."
+  />
+
+  @if (mensaje) {
+    <p
+      class="mensaje"
+      [class.mensaje--error]="mensajeEsError"
+      role="status"
+    >
+      {{ mensaje }}
+    </p>
+  }
+
+  <div class="devolucion-layout">
+    <section class="panel panel-busqueda" aria-labelledby="titulo-busqueda">
+      <div class="panel-encabezado">
+        <div>
+          <p class="eyebrow">Paso 1</p>
+          <h2 id="titulo-busqueda">Identificar ejemplar</h2>
+        </div>
+        <span>Usá el código pegado en la copia física.</span>
+      </div>
+
+      <div class="campo">
+        <ion-label position="stacked">Código de barras</ion-label>
+        <div class="entrada-codigo">
+          <ion-input
+            id="codigoBarras"
+            name="codigoBarras"
+            mode="md"
+            fill="outline"
+            placeholder="Ej. EX-1234"
+            [(ngModel)]="codigoBarras"
+            (ngModelChange)="cambiarCodigoBarras()"
+            (keyup.enter)="buscarPrestamo()"
+          />
+          <ion-button
+            type="button"
+            class="boton-buscar"
+            [disabled]="buscando || !codigoBarras.trim()"
+            (click)="buscarPrestamo()"
+          >
+            <ion-icon name="search-outline" slot="start" />
+            {{ buscando ? "Buscando..." : "Buscar préstamo" }}
+          </ion-button>
+        </div>
+        <small>Una pistola USB puede completar este campo directamente.</small>
+      </div>
+
+      @if (escanerDisponible) {
+        <div class="separador" role="separator"><span></span><small>o</small><span></span></div>
+        <ion-button
+          type="button"
+          expand="block"
+          fill="outline"
+          class="boton-escanear"
+          [disabled]="escaneando"
+          (click)="escanearCodigo()"
+        >
+          <ion-icon name="scan-outline" slot="start" />
+          {{ escaneando ? "Abriendo cámara..." : "Escanear con cámara" }}
+        </ion-button>
+      }
+    </section>
+
+    <section class="panel panel-confirmacion" aria-labelledby="titulo-confirmacion">
+      <div class="panel-encabezado">
+        <div>
+          <p class="eyebrow">Paso 2</p>
+          <h2 id="titulo-confirmacion">Confirmar recepción</h2>
+        </div>
+      </div>
+
+      @if (prestamoSeleccionado && ejemplarSeleccionado) {
+        <article class="libro-prestado">
+          @if (libroSeleccionado?.imagenPortada; as portada) {
+            <img [src]="portada" [alt]="libroSeleccionado?.titulo || 'Libro'" />
+          } @else {
+            <div class="portada-placeholder" aria-hidden="true">
+              <ion-icon name="book" />
+            </div>
+          }
+
+          <div class="libro-info">
+            <span class="estado" [class.estado--vencido]="prestamoVencido">
+              {{ prestamoVencido ? "Préstamo vencido" : "Préstamo vigente" }}
+            </span>
+            <h3>{{ libroSeleccionado?.titulo || "Libro no encontrado" }}</h3>
+            <p>{{ libroSeleccionado?.autores?.join(", ") || "Sin autor" }}</p>
+            <small>{{ ejemplarSeleccionado.codigoBarras }}</small>
+          </div>
+        </article>
+
+        <dl class="datos-prestamo">
+          <div>
+            <dt>Lector</dt>
+            <dd>{{ lectorSeleccionado?.nombreCompleto || "Usuario no encontrado" }}</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>{{ lectorSeleccionado?.email || "Sin información" }}</dd>
+          </div>
+          <div>
+            <dt>Fecha del préstamo</dt>
+            <dd>{{ formatearFecha(prestamoSeleccionado.fechaPrestamo) }}</dd>
+          </div>
+          <div>
+            <dt>Devolución estimada</dt>
+            <dd [class.fecha-vencida]="prestamoVencido">
+              {{ formatearFecha(prestamoSeleccionado.fechaDevEstimada) }}
+            </dd>
+          </div>
+        </dl>
+
+        <div class="aviso-devolucion">
+          <ion-icon name="return-down-back-outline" aria-hidden="true" />
+          <p>
+            Al confirmar, el préstamo quedará cerrado y el ejemplar volverá a
+            estar disponible.
+          </p>
+        </div>
+
+        <div class="acciones">
+          <ion-button
+            type="button"
+            fill="outline"
+            class="boton-cancelar"
+            routerLink="/dashboard/prestamos"
+          >
+            Cancelar
+          </ion-button>
+          <ion-button
+            type="button"
+            class="boton-confirmar"
+            [disabled]="procesando"
+            (click)="confirmarDevolucion()"
+          >
+            <ion-icon name="checkmark-outline" slot="start" />
+            {{ procesando ? "Procesando..." : "Confirmar devolución" }}
+          </ion-button>
+        </div>
+      } @else {
+        <div class="estado-vacio">
+          <ion-icon name="return-down-back-outline" aria-hidden="true" />
+          <h3>Sin préstamo seleccionado</h3>
+          <p>Buscá el ejemplar para ver quién lo tiene y cuándo debía devolverlo.</p>
+        </div>
+      }
+    </section>
+  </div>
+</main>

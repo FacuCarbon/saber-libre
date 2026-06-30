@@ -1,0 +1,72 @@
+<article
+  class="prestamo-item"
+  [class.prestamo-item--activo]="detalle.estado === 'activo'"
+  [class.prestamo-item--vencido]="detalle.estado === 'vencido'"
+  [class.prestamo-item--devuelto]="detalle.estado === 'devuelto'"
+>
+  <div class="prestamo-identidad">
+    <div class="icono-libro" aria-hidden="true">
+      <ion-icon name="book-outline"></ion-icon>
+    </div>
+
+    <div class="prestamo-info">
+      <h3 [title]="detalle.libro?.titulo || 'Libro no encontrado'">
+        {{ detalle.libro?.titulo || "Libro no encontrado" }}
+      </h3>
+      <p [title]="detalle.usuario?.nombreCompleto || 'Lector no encontrado'">
+        {{ detalle.usuario?.nombreCompleto || "Lector no encontrado" }}
+      </p>
+    </div>
+  </div>
+
+  <div class="dato codigo">
+    <span class="etiqueta-mobile">Código:</span>
+    <span>{{ detalle.ejemplar?.codigoBarras || "Sin código" }}</span>
+  </div>
+
+  <div class="dato fecha-prestamo">
+    <span class="etiqueta-mobile">Préstamo:</span>
+    <span>{{ detalle.prestamo.fechaPrestamo | date: "dd/MM/yyyy" }}</span>
+  </div>
+
+  <div class="dato fecha-devolucion">
+    <span class="etiqueta-mobile">
+      {{ detalle.estado === "devuelto" ? "Devuelto:" : "Devolución:" }}
+    </span>
+    <span>
+      {{
+        (detalle.prestamo.fechaDevReal || detalle.prestamo.fechaDevEstimada)
+          | date: "dd/MM/yyyy"
+      }}
+    </span>
+  </div>
+
+  <div class="estado">
+    <span class="etiqueta-mobile">Estado:</span>
+    <span class="estado-badge">
+      {{
+        detalle.estado === "activo"
+          ? "Vigente"
+          : detalle.estado === "vencido"
+            ? "Vencido"
+            : "Devuelto"
+      }}
+    </span>
+  </div>
+
+  <div class="acciones">
+    @if (detalle.estado !== "devuelto") {
+    <ion-button
+      fill="outline"
+      size="small"
+      (click)="procesarDevolucion.emit(detalle.ejemplar?.codigoBarras || '')"
+      [disabled]="!detalle.ejemplar?.codigoBarras"
+    >
+      <ion-icon name="swap-horizontal" slot="start"></ion-icon>
+      Devolver
+    </ion-button>
+    } @else {
+    <span class="sin-accion">Finalizado</span>
+    }
+  </div>
+</article>

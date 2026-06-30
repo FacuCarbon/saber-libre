@@ -1,0 +1,328 @@
+:host {
+  display: block;
+}
+
+.mensaje {
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem;
+  background: #eef6f2;
+  border: 1px solid #cde4d9;
+  border-radius: 0.75rem;
+  color: #245e4a;
+  font-size: 0.82rem;
+}
+
+.mensaje--error {
+  background: #fff4ef;
+  border-color: #f3c6b8;
+  color: #a33816;
+}
+
+.devolucion-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  min-width: 0;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid #e9e3dd;
+  border-radius: 1rem;
+}
+
+.panel h2 {
+  margin: 0;
+  color: #29231f;
+  font: 900 1.15rem var(--font-display);
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: #ce3f0b;
+  font: 900 0.7rem var(--font-display);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.panel-encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #eee8e2;
+}
+
+.panel-encabezado span {
+  max-width: 220px;
+  color: #918981;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.campo {
+  display: grid;
+  gap: 0.5rem;
+}
+
+ion-label {
+  color: #5f5751;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+ion-input {
+  --background: #fffdfa;
+  --border-color: #e9e3dd;
+  --border-radius: 0.75rem;
+  --highlight-color-focused: #ff6b35;
+  --padding-end: 0.9rem;
+  --padding-start: 0.9rem;
+
+  min-height: 44px;
+  font-size: 0.88rem;
+}
+
+.entrada-codigo {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.campo > small {
+  color: #918981;
+  font-size: 0.68rem;
+}
+
+.boton-buscar,
+.boton-escanear,
+.boton-cancelar,
+.boton-confirmar {
+  --border-radius: 0.75rem;
+  --box-shadow: none;
+
+  min-height: 44px;
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.boton-buscar,
+.boton-confirmar {
+  --background: #ff6b35;
+  --background-hover: #e85a26;
+}
+
+.boton-escanear,
+.boton-cancelar {
+  --background-hover: #fff0e9;
+  --border-color: #e2d7cf;
+  --color: #9f3512;
+}
+
+.separador {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.1rem 0;
+  color: #918981;
+}
+
+.separador span {
+  height: 1px;
+  background: #eee8e2;
+}
+
+.libro-prestado {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #eee8e2;
+}
+
+.libro-prestado img,
+.portada-placeholder {
+  width: 86px;
+  height: 122px;
+  border-radius: 0.7rem;
+}
+
+.libro-prestado img {
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(67, 49, 36, 0.14);
+}
+
+.portada-placeholder {
+  display: grid;
+  background: #fff0e9;
+  color: #ce3f0b;
+  font-size: 1.5rem;
+  place-items: center;
+}
+
+.libro-info {
+  min-width: 0;
+}
+
+.estado {
+  display: inline-flex;
+  padding: 0.3rem 0.5rem;
+  background: #e8f5ef;
+  border-radius: 999px;
+  color: #27775b;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.estado--vencido {
+  background: #fff0e9;
+  color: #b23b18;
+}
+
+.libro-info h3 {
+  margin: 0.55rem 0 0;
+  color: #29231f;
+  font: 900 1.1rem var(--font-display);
+}
+
+.libro-info p {
+  margin: 0.3rem 0 0.6rem;
+  color: #746b65;
+  font-size: 0.75rem;
+}
+
+.libro-info small {
+  color: #918981;
+  font-size: 0.68rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.datos-prestamo {
+  margin: 1rem 0;
+}
+
+.datos-prestamo div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #eee8e2;
+  font-size: 0.72rem;
+}
+
+.datos-prestamo dt {
+  color: #918981;
+}
+
+.datos-prestamo dd {
+  margin: 0;
+  color: #29231f;
+  font-weight: 700;
+  text-align: right;
+}
+
+.datos-prestamo .fecha-vencida {
+  color: #b23b18;
+}
+
+.aviso-devolucion {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.85rem;
+  background: #fff0e9;
+  border-radius: 0.75rem;
+  color: #9f3512;
+}
+
+.aviso-devolucion ion-icon {
+  margin-top: 0.1rem;
+}
+
+.aviso-devolucion p {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.acciones {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1.2rem;
+}
+
+.estado-vacio {
+  display: grid;
+  min-height: 300px;
+  color: #746b65;
+  font-size: 0.75rem;
+  text-align: center;
+  place-content: center;
+}
+
+.estado-vacio ion-icon {
+  margin: 0 auto;
+  color: #ce3f0b;
+  font-size: 2rem;
+}
+
+.estado-vacio h3 {
+  margin: 0.8rem 0 0;
+  color: #29231f;
+}
+
+.estado-vacio p {
+  max-width: 290px;
+  margin: 0.45rem 0 0;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .entrada-codigo {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .acciones {
+    grid-template-columns: auto auto;
+    justify-content: end;
+  }
+}
+
+@media (min-width: 900px) {
+  .devolucion-layout {
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.35fr);
+    align-items: start;
+  }
+
+  .panel-busqueda {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .panel {
+    padding: 1rem;
+  }
+
+  .panel-encabezado {
+    display: block;
+  }
+
+  .panel-encabezado span {
+    display: block;
+    margin-top: 0.4rem;
+    text-align: left;
+  }
+
+  .boton-confirmar {
+    grid-row: 1;
+  }
+}

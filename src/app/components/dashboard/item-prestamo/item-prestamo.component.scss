@@ -1,0 +1,171 @@
+:host {
+  display: block;
+}
+
+.prestamo-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "identidad identidad"
+    "codigo codigo"
+    "prestamo devolucion"
+    "estado acciones";
+  align-items: center;
+  gap: 0.85rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9e3dd;
+  color: #29231f;
+}
+
+:host(:last-child) .prestamo-item {
+  border-bottom: 0;
+}
+
+.prestamo-identidad {
+  grid-area: identidad;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.icono-libro {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 48px;
+  background: #fff0e9;
+  border-radius: 0.65rem;
+  color: #ce3f0b;
+  font-size: 1.2rem;
+}
+
+.prestamo-info {
+  min-width: 0;
+}
+
+.prestamo-info h3,
+.prestamo-info p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prestamo-info h3 {
+  margin: 0;
+  color: #29231f;
+  font: 800 0.95rem var(--font-display);
+}
+
+.prestamo-info p {
+  margin: 0.25rem 0 0;
+  color: #746b65;
+  font-size: 0.78rem;
+}
+
+.dato,
+.estado {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 0.35rem;
+  color: #5f5751;
+  font-size: 0.8rem;
+}
+
+.codigo {
+  grid-area: codigo;
+}
+
+.fecha-prestamo {
+  grid-area: prestamo;
+}
+
+.fecha-devolucion {
+  grid-area: devolucion;
+  justify-self: end;
+}
+
+.estado {
+  grid-area: estado;
+}
+
+.etiqueta-mobile {
+  color: #918981;
+  font-size: 0.72rem;
+}
+
+.estado-badge {
+  padding: 0.3rem 0.55rem;
+  background: #eef6f2;
+  border-radius: 999px;
+  color: #27775b;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.prestamo-item--vencido .estado-badge {
+  background: #fcecea;
+  color: #b53c36;
+}
+
+.prestamo-item--devuelto .estado-badge {
+  background: #f2efec;
+  color: #746b65;
+}
+
+.acciones {
+  grid-area: acciones;
+  justify-self: end;
+}
+
+.acciones ion-button {
+  --border-color: #e2d7cf;
+  --border-radius: 0.65rem;
+  --box-shadow: none;
+  --color: #9f3512;
+
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.sin-accion {
+  color: #918981;
+  font-size: 0.72rem;
+}
+
+@media (min-width: 992px) {
+  .prestamo-item {
+    grid-template-columns: var(
+      --columnas-prestamos,
+      minmax(220px, 1.8fr) minmax(120px, 1fr) 100px 100px 90px 110px
+    );
+    grid-template-areas: "identidad codigo prestamo devolucion estado acciones";
+    gap: 1rem;
+    min-height: 72px;
+    padding: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .prestamo-item:hover {
+    background: #fffaf7;
+  }
+
+  .dato {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fecha-devolucion {
+    justify-self: initial;
+  }
+
+  .etiqueta-mobile {
+    display: none;
+  }
+}

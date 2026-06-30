@@ -1,0 +1,157 @@
+.tarjeta-usuario {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1rem;
+
+
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+
+
+
+
+
+    ion-card {
+        border-radius: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+}
+
+
+ion-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1A1A1A;
+}
+
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+
+@media (max-width: 768px) {
+    .encabezado {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    background: #FFF1EA;
+    color: #D15A2D;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    span {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+}
+
+
+.info-principal {
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+
+
+    h2 {
+        margin: 0;
+        font-size: 1.55rem;
+        font-weight: 700;
+        color: #1A1A1A;
+        line-height: 1.2;
+    }
+
+
+    p {
+        margin-top: 0.25rem;
+        font-size: 0.85rem;
+        color: #8D8D8D;
+        text-transform: capitalize;
+    }
+}
+
+
+.formulario {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+
+
+
+
+    label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #444;
+    }
+}
+
+
+.campo-completo {
+    grid-column: 1 / -1;
+}
+
+
+ion-input {
+    --border-radius: 12px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    min-height: 48px;
+}
+
+
+.mensaje-rol {
+    margin-top: 0.35rem;
+    margin-left: 0.2rem;
+    font-size: 0.75rem;
+    color: #9A9A9A;
+}
+
+
+@media (max-width: 768px) {
+    .formulario {
+        grid-template-columns: 1fr;
+    }
+
+
+    .campo-completo {
+        grid-column: auto;
+    }
+
+
+    .info-principal {
+        align-items: center;
+    }
+}
+
+
+.ayuda{
+    margin-top:.35rem;
+    font-size:.75rem;
+    color: var(--ion-color-medium);
+}

@@ -4,9 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonItem,
   IonLabel,
   IonInput,
@@ -22,9 +19,6 @@ import { AuthService } from 'src/app/services/auth.service';
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     IonItem,
     IonLabel,
     IonInput,

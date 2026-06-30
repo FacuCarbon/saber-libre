@@ -1,20 +1,123 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="home-content">
+  <nav class="nav">
+    <div class="nav-inner">
+      <logo-app class="logo-grande"></logo-app>
+      <div class="nav-links">
+        <a routerLink="/" class="nav-link nav-link--active">Home</a>
+        <a routerLink="/demo" class="nav-link">Catálogo</a>
+      </div>
+      <div class="nav-actions">
+        @if (!cargando) {
+          @if (usuario) {
+            <span class="nav-user">{{ usuario.nombreCompleto }}</span>
+            <ion-button (click)="cerrarSesion()" fill="clear" class="btn-ghost">
+              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+            </ion-button>
+          } @else {
+            <ion-button routerLink="/auth/login" fill="clear" class="btn-ghost">Iniciar sesión</ion-button>
+            <ion-button routerLink="/auth/register" class="btn-primary btn-primary--sm">Registrarse</ion-button>
+          }
+        }
+      </div>
+    </div>
+  </nav>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-chip">
+        <ion-icon name="book-outline"></ion-icon>
+        Sistema de gestión bibliotecaria
+      </div>
+      <h1 class="hero-title">Saber<br><span class="hero-accent">Libre</span></h1>
+      <p class="hero-desc">Una plataforma digital que conecta lectores con libros, simplifica la gestión y pone el conocimiento al alcance de todos.</p>
+      <div class="hero-actions">
+        <ion-button routerLink="/demo" class="btn-primary btn-primary--lg">
+          <ion-icon slot="start" name="search-outline"></ion-icon>
+          Explorar catálogo
+        </ion-button>
+        <ion-button routerLink="/auth/register" fill="outline" class="btn-outline">
+          <ion-icon slot="start" name="person-add-outline"></ion-icon>
+          Crear cuenta
+        </ion-button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/icon/app-logo-naranja.png" alt="Saber Libre" class="hero-logo" />
+    </div>
+  </section>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <section class="stats">
+    <div class="stat"><span class="stat-num">+2,500</span><span class="stat-lbl">Libros</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num">+480</span><span class="stat-lbl">Lectores</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num">+1,200</span><span class="stat-lbl">Préstamos</span></div>
+  </section>
+
+  <section class="features">
+    <div class="features-inner">
+      <h2 class="section-eyebrow">Servicios</h2>
+      <p class="section-title">Todo lo que necesitás<br>en un solo lugar</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><ion-icon name="book-outline"></ion-icon></div>
+          <h3>Catálogo en línea</h3>
+          <p>Explorá el fondo bibliográfico desde cualquier dispositivo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><ion-icon name="swap-horizontal"></ion-icon></div>
+          <h3>Préstamos ágiles</h3>
+          <p>Gestioná tus préstamos de forma rápida y sin papeles.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><ion-icon name="notifications-outline"></ion-icon></div>
+          <h3>Alertas y multas</h3>
+          <p>Recibí notificaciones de vencimiento de devoluciones.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><ion-icon name="people-outline"></ion-icon></div>
+          <h3>Perfil personal</h3>
+          <p>Seguí tus préstamos e historial desde tu cuenta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="how-inner">
+      <h2 class="section-eyebrow section-eyebrow--light">Cómo funciona</h2>
+      <p class="section-title section-title--light">Tres pasos simples</p>
+      <div class="how-track">
+        <div class="how-step"><div class="how-step-num">1</div><h3>Explorá</h3><p>Navegá el catálogo y encontrá el libro que buscás.</p></div>
+        <div class="how-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
+        <div class="how-step"><div class="how-step-num">2</div><h3>Solicitá</h3><p>Pedí el préstamo en línea o acercate a la biblioteca.</p></div>
+        <div class="how-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
+        <div class="how-step"><div class="how-step-num">3</div><h3>Disfrutá</h3><p>Llevate el libro y devolvelo cuando corresponda.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <h2 class="cta-title">¿Ya tenés cuenta?</h2>
+      <p class="cta-desc">Iniciá sesión y accedé a todos los servicios.</p>
+      <ion-button routerLink="/auth/login" class="btn-primary btn-primary--lg">
+        <ion-icon slot="start" name="log-in-outline"></ion-icon>
+        Iniciar sesión
+      </ion-button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand"><logo-app></logo-app></div>
+      <div class="footer-info">
+        <div class="footer-item"><ion-icon name="time-outline"></ion-icon><span>Lun a Vie 9:00–18:00 | Sáb 9:00–13:00</span></div>
+        <div class="footer-item"><ion-icon name="location-outline"></ion-icon><span>Av. Siempre Viva 123, Ciudad</span></div>
+        <div class="footer-item"><ion-icon name="mail-outline"></ion-icon><span>contacto@sabrelibre.com</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Saber Libre — Biblioteca Popular. Todos los derechos reservados.</p></div>
+  </footer>
 </ion-content>

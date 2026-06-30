@@ -118,4 +118,8 @@ export class AuthService {
       await this._perfilUsuarioService.crearPerfil(nuevoUsuario);
     }
   }
+
+  async obtenerUsuarios(): Promise<Usuario[]> {
+    return this._perfilUsuarioService.obtenerPerfiles();
+  }
 }

@@ -28,7 +28,10 @@ export const routes: Routes = [
       import('./pages/dashboard/dashboard/dashboard.page').then(
         (m) => m.DashboardPage,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      rolesPermitidos: ['administrador', 'bibliotecario'],
+    },
     children: [
       {
         path: '',
@@ -85,7 +88,29 @@ export const routes: Routes = [
           ),
         canActivate: [roleGuard],
         data: {
-          rolesPermitidos: ['administrador', 'bibliotecario', 'lector'],
+          rolesPermitidos: ['administrador', 'bibliotecario'],
+        },
+      },
+      {
+        path: 'prestamos/registrar',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/prestamos/registrar/registrar-prestamo.component'
+          ).then((m) => m.RegistrarPrestamoComponent),
+        canActivate: [roleGuard],
+        data: {
+          rolesPermitidos: ['administrador', 'bibliotecario'],
+        },
+      },
+      {
+        path: 'prestamos/devolver',
+        loadComponent: () =>
+          import(
+            './pages/dashboard/prestamos/devolver/devolver-prestamo.component'
+          ).then((m) => m.DevolverPrestamoComponent),
+        canActivate: [roleGuard],
+        data: {
+          rolesPermitidos: ['administrador', 'bibliotecario'],
         },
       },
       {

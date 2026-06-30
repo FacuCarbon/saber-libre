@@ -37,7 +37,7 @@ export class NavegacionService {
       url: '/dashboard/prestamos',
       icon: 'swap-horizontal',
       mobile: 'tab',
-      exact: true,
+      exact: false,
     },
     {
       title: 'Multas',

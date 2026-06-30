@@ -27,6 +27,28 @@ export class EjemplarService {
   }
 
   /**
+   * Obtiene un ejemplar por su codigo de barras.
+   * @param codigoBarras El codigo de barras del ejemplar.
+   * @returns El ejemplar encontrado o null.
+   */
+  async obtenerEjemplarPorCodigoBarras(
+    codigoBarras: string,
+  ): Promise<Ejemplar | null> {
+    const codigoBuscado = codigoBarras.trim().toLowerCase();
+
+    if (!codigoBuscado) {
+      return null;
+    }
+
+    const ejemplares = await this.obtenerEjemplares();
+    return (
+      ejemplares.find(
+        (ejemplar) => ejemplar.codigoBarras.toLowerCase() === codigoBuscado,
+      ) ?? null
+    );
+  }
+
+  /**
    * Obtiene todos los ejemplares de un libro.
    * @param idLibro El ID del libro.
    * @returns Lista de ejemplares asociados al libro.

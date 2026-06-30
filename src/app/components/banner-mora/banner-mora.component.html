@@ -1,24 +1,20 @@
 <ion-card class="banner-mora">
   <ion-card-content class="contenido-banner">
-    
-    <div class="info.banner">
-        <div class="icono">
-            <ion-icon name="warning-outline"></ion-icon>
-        </div>
+    <div class="info-banner">
+      <div class="icono" aria-hidden="true">
+        <ion-icon name="warning-outline"></ion-icon>
+      </div>
 
-        <div class="texto">
-            <h3>{{ titulo }}</h3>
-            <p> {{ mensaje }} </p>
-        </div>
-
+      <div class="texto">
+        <h3>{{ titulo }}</h3>
+        <p>{{ mensaje }}</p>
+      </div>
     </div>
 
     @if (textoBoton) {
-      <ion-button fill="clear">
-        {{ textoBoton }}
-      </ion-button>
+    <ion-button fill="clear" (click)="accion.emit()">
+      {{ textoBoton }}
+    </ion-button>
     }
-    
   </ion-card-content>
-
 </ion-card>

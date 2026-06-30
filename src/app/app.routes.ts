@@ -76,9 +76,9 @@ export const routes: Routes = [
       {
         path: 'catalogo/:id/ejemplares',
         loadComponent: () =>
-          import(
-            './pages/dashboard/catalogo/ejemplares/ejemplares.component'
-          ).then((m) => m.EjemplaresComponent),
+          import('./pages/dashboard/catalogo/ejemplares/ejemplares.component').then(
+            (m) => m.EjemplaresComponent,
+          ),
       },
       {
         path: 'prestamos',
@@ -86,32 +86,20 @@ export const routes: Routes = [
           import('./pages/dashboard/prestamos/prestamos.page').then(
             (m) => m.PrestamosPage,
           ),
-        canActivate: [roleGuard],
-        data: {
-          rolesPermitidos: ['administrador', 'bibliotecario'],
-        },
       },
       {
         path: 'prestamos/registrar',
         loadComponent: () =>
-          import(
-            './pages/dashboard/prestamos/registrar/registrar-prestamo.component'
-          ).then((m) => m.RegistrarPrestamoComponent),
-        canActivate: [roleGuard],
-        data: {
-          rolesPermitidos: ['administrador', 'bibliotecario'],
-        },
+          import('./pages/dashboard/prestamos/registrar/registrar-prestamo.component').then(
+            (m) => m.RegistrarPrestamoComponent,
+          ),
       },
       {
         path: 'prestamos/devolver',
         loadComponent: () =>
-          import(
-            './pages/dashboard/prestamos/devolver/devolver-prestamo.component'
-          ).then((m) => m.DevolverPrestamoComponent),
-        canActivate: [roleGuard],
-        data: {
-          rolesPermitidos: ['administrador', 'bibliotecario'],
-        },
+          import('./pages/dashboard/prestamos/devolver/devolver-prestamo.component').then(
+            (m) => m.DevolverPrestamoComponent,
+          ),
       },
       {
         path: 'multas',
@@ -119,10 +107,6 @@ export const routes: Routes = [
           import('./pages/dashboard/multas/multas.page').then(
             (m) => m.MultasPage,
           ),
-        canActivate: [roleGuard],
-        data: {
-          rolesPermitidos: ['administrador', 'bibliotecario'],
-        },
       },
       {
         path: 'perfil',
@@ -137,10 +121,6 @@ export const routes: Routes = [
           import('./pages/dashboard/gestion/gestion.page').then(
             (m) => m.GestionPage,
           ),
-        canActivate: [roleGuard],
-        data: {
-          rolesPermitidos: ['administrador', 'bibliotecario'],
-        },
       },
     ],
   },

@@ -1,0 +1,39 @@
+<article class="panel inventario">
+  <div class="panel-titulo">
+    <div>
+      <p class="eyebrow">{{ eyebrow }}</p>
+      <h3>{{ titulo }}</h3>
+    </div>
+  </div>
+
+  <dl class="resumen-cantidades">
+    <div>
+      <dt>Total</dt>
+      <dd>{{ total }}</dd>
+    </div>
+
+    <div class="cantidad-disponible">
+      <dt>Disponibles</dt>
+      <dd>{{ disponibles }}</dd>
+    </div>
+
+    <div>
+      <dt>Prestados</dt>
+      <dd>{{ prestados }}</dd>
+    </div>
+
+    <div>
+      <dt>Mantenimiento</dt>
+      <dd>{{ mantenimiento }}</dd>
+    </div>
+
+    <div>
+      <dt>Baja</dt>
+      <dd>{{ baja }}</dd>
+    </div>
+  </dl>
+
+  @if (nota) {
+    <p class="nota-inventario">{{ nota }}</p>
+  }
+</article>

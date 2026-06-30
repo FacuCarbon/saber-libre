@@ -1,0 +1,53 @@
+<article class="libro-resumen">
+  <div class="cabecera-portada">
+    @if (imagenPortada) {
+      <img class="libro-portada" [src]="imagenPortada" [alt]="titulo" />
+    } @else {
+      <div class="libro-portada libro-portada--placeholder" aria-hidden="true">
+        <ion-icon name="book"></ion-icon>
+      </div>
+    }
+  </div>
+
+  <div class="cabecera-info">
+    <div class="cabecera-titulos">
+      <div>
+        <p class="eyebrow">{{ eyebrow }}</p>
+        <h2>{{ titulo }}</h2>
+      </div>
+
+      @if (estadoTexto) {
+        <span
+          class="estado-libro"
+          [class.estado-libro--inactivo]="estadoInactivo"
+        >
+          {{ estadoTexto }}
+        </span>
+      }
+    </div>
+
+    <p class="autores">
+      {{ autores.length > 0 ? autores.join(", ") : "Sin autor" }}
+    </p>
+
+    @if (descripcion) {
+      <p class="descripcion">{{ descripcion }}</p>
+    }
+
+    <div class="meta">
+      <div>
+        <span>ISBN</span>
+        <strong>{{ isbn }}</strong>
+      </div>
+
+      <div>
+        <span>Categorías</span>
+        @if (categorias.length > 0) {
+          <strong>{{ categorias.join(", ") }}</strong>
+        } @else {
+          <strong>Sin categorías</strong>
+        }
+      </div>
+    </div>
+  </div>
+</article>

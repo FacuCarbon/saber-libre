@@ -1,3 +1,272 @@
-<p>
-  detalle works!
-</p>
+<main class="container-detalle">
+  <app-go-back texto="Volver al catálogo" ruta="/dashboard/catalogo"></app-go-back>
+
+  <app-header-page
+    titulo="Detalle del libro"
+    subtitulo="Vista completa de la ficha bibliográfica y de su inventario real."
+    textoBoton="Editar libro"
+    icono="create-outline"
+    [botonDeshabilitado]="!libroActual || libroActual.activo === false"
+    (accion)="editarLibro()"
+  />
+
+  @if (cargando) {
+    <section class="estado-carga">
+      <p>Cargando información del libro...</p>
+    </section>
+  }
+
+  @if (mensaje) {
+    <p class="mensaje" [class.mensaje--error]="mensajeEsError">
+      {{ mensaje }}
+    </p>
+  }
+
+  @if (libroActual) {
+    <section class="cabecera-libro panel">
+      <div class="cabecera-portada">
+        @if (libroActual.imagenPortada; as portada) {
+          <img
+            class="libro-portada"
+            [src]="portada"
+            [alt]="libroActual.titulo"
+          />
+        } @else {
+          <div class="libro-portada libro-portada--placeholder" aria-hidden="true">
+            <ion-icon name="book"></ion-icon>
+          </div>
+        }
+      </div>
+
+      <div class="cabecera-info">
+        <div class="cabecera-titulos">
+          <div>
+            <p class="eyebrow">Ficha bibliográfica</p>
+            <h2>{{ libroActual.titulo }}</h2>
+          </div>
+
+          <span
+            class="estado-libro"
+            [class.estado-libro--inactivo]="libroActual.activo === false"
+          >
+            {{ obtenerTextoEstadoLibro() }}
+          </span>
+        </div>
+
+        <p class="autores">{{ libroActual.autores.join(', ') }}</p>
+
+        @if (libroActual.descripcion) {
+          <p class="descripcion">{{ libroActual.descripcion }}</p>
+        } @else {
+          <p class="descripcion descripcion--vacia">
+            No hay descripción cargada para este libro.
+          </p>
+        }
+
+        <div class="meta">
+          <div>
+            <span>ISBN</span>
+            <strong>{{ libroActual.isbn }}</strong>
+          </div>
+
+          <div>
+            <span>Categorías</span>
+            <strong>
+              @if (libroActual.categorias.length > 0) {
+                {{ libroActual.categorias.join(', ') }}
+              } @else {
+                Sin categorías
+              }
+            </strong>
+          </div>
+        </div>
+
+        <div class="acciones-libro">
+          @if (libroActual.activo === false) {
+            <ion-button
+              type="button"
+              class="boton-primario"
+              [disabled]="procesando"
+              (click)="cambiarEstadoLibro()"
+            >
+              <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+              {{ procesando ? 'Reactivando...' : 'Reactivar libro' }}
+            </ion-button>
+            <p class="aviso-bloqueo">
+              Este libro está dado de baja. Reactivalo para editarlo o gestionar
+              sus ejemplares.
+            </p>
+          } @else {
+            <ion-button
+              type="button"
+              fill="outline"
+              class="boton-secundario"
+              (click)="gestionarEjemplares()"
+            >
+              <ion-icon name="library-outline" slot="start"></ion-icon>
+              Gestionar ejemplares
+            </ion-button>
+            <ion-button
+              type="button"
+              color="danger"
+              class="boton-peligro"
+              [disabled]="procesando"
+              (click)="cambiarEstadoLibro()"
+            >
+              <ion-icon name="trash" slot="start"></ion-icon>
+              {{ procesando ? 'Procesando...' : 'Dar de baja' }}
+            </ion-button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="detalle-grid">
+      <article class="panel ficha">
+        <div class="panel-titulo">
+          <div>
+            <p class="eyebrow">Datos del libro</p>
+            <h3>Información principal</h3>
+          </div>
+        </div>
+
+        <dl class="lista-datos">
+          <div>
+            <dt>Título</dt>
+            <dd>{{ libroActual.titulo }}</dd>
+          </div>
+
+          <div>
+            <dt>Autores</dt>
+            <dd>{{ libroActual.autores.join(', ') }}</dd>
+          </div>
+
+          <div>
+            <dt>Categorías</dt>
+            <dd>
+              @if (libroActual.categorias.length > 0) {
+                {{ libroActual.categorias.join(', ') }}
+              } @else {
+                Sin categorías
+              }
+            </dd>
+          </div>
+
+          <div>
+            <dt>ISBN</dt>
+            <dd>{{ libroActual.isbn }}</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="panel inventario-resumen">
+        <div class="panel-titulo">
+          <div>
+            <p class="eyebrow">Inventario real</p>
+            <h3>Resumen de ejemplares</h3>
+          </div>
+        </div>
+
+        <dl class="resumen-cantidades">
+          <div>
+            <dt>Total</dt>
+            <dd>{{ cantidadTotal }}</dd>
+          </div>
+
+          <div class="cantidad-disponible">
+            <dt>Disponibles</dt>
+            <dd>{{ cantidadDisponible }}</dd>
+          </div>
+
+          <div>
+            <dt>Prestados</dt>
+            <dd>{{ cantidadPrestada }}</dd>
+          </div>
+
+          <div>
+            <dt>Mantenimiento</dt>
+            <dd>{{ cantidadMantenimiento }}</dd>
+          </div>
+
+          <div>
+            <dt>Baja</dt>
+            <dd>{{ cantidadBaja }}</dd>
+          </div>
+        </dl>
+
+        <p class="nota-inventario">
+          Las cantidades se calculan desde los ejemplares registrados.
+        </p>
+      </article>
+    </section>
+
+    <section class="panel ejemplares">
+      <div class="panel-titulo">
+        <div>
+          <p class="eyebrow">Ejemplares asociados</p>
+          <h3>Listado físico</h3>
+        </div>
+
+        <span class="contador">
+          {{ ejemplares.length }} ejemplares
+        </span>
+      </div>
+
+      <div class="ejemplares-columnas" aria-hidden="true">
+        <span>Código de barras</span>
+        <span>Estado</span>
+        <span>Ubicación</span>
+      </div>
+
+      <div class="ejemplares-lista">
+        @for (ejemplar of ejemplares; track ejemplar.id) {
+          <article
+            class="ejemplar-item"
+            [class.ejemplar-item--baja]="ejemplar.estadoEjemplar === 'baja'"
+          >
+            <div class="codigo">
+              <span class="etiqueta-mobile">Código</span>
+              <strong>{{ ejemplar.codigoBarras }}</strong>
+            </div>
+
+            <div class="estado">
+              <span class="etiqueta-mobile">Estado</span>
+              <span
+                class="estado-badge"
+                [class.estado-badge--disponible]="
+                  ejemplar.estadoEjemplar === 'disponible'
+                "
+                [class.estado-badge--prestado]="
+                  ejemplar.estadoEjemplar === 'prestado'
+                "
+                [class.estado-badge--mantenimiento]="
+                  ejemplar.estadoEjemplar === 'mantenimiento'
+                "
+                [class.estado-badge--baja]="ejemplar.estadoEjemplar === 'baja'"
+              >
+                {{ obtenerTextoEstadoEjemplar(ejemplar.estadoEjemplar) }}
+              </span>
+            </div>
+
+            <div class="ubicacion">
+              <span class="etiqueta-mobile">Ubicación</span>
+              <span>{{ ejemplar.ubicacion }}</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="estado-vacio">
+            <ion-icon name="library-outline"></ion-icon>
+            <h3>No hay ejemplares asociados</h3>
+            <p>Podés crear las copias físicas desde la gestión de ejemplares.</p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  @if (!cargando && !libroActual && !mensaje) {
+    <section class="estado-carga">
+      <p>No se encontró el libro.</p>
+    </section>
+  }
+</main>

@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.panel {
+  padding: 1.1rem;
+  background: #fff;
+  border: 1px solid #e9e3dd;
+  border-radius: 1rem;
+}
+
+.panel-titulo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: #ce3f0b;
+  font: 900 0.68rem var(--font-display);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+h3 {
+  margin: 0;
+  color: #29231f;
+  font: 900 1rem var(--font-display);
+  line-height: 1.15;
+}
+
+.resumen-cantidades {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.resumen-cantidades div {
+  padding: 0.75rem;
+  background: #fffdfa;
+  border: 1px solid #eee8e2;
+  border-radius: 0.75rem;
+}
+
+.resumen-cantidades dt {
+  color: #918981;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.resumen-cantidades dd {
+  margin: 0.25rem 0 0;
+  color: #29231f;
+  font: 900 1.05rem var(--font-display);
+}
+
+.resumen-cantidades .cantidad-disponible {
+  background: #eef6f2;
+  border-color: #cde4d9;
+}
+
+.resumen-cantidades .cantidad-disponible dt,
+.resumen-cantidades .cantidad-disponible dd {
+  color: #27775b;
+}
+
+.nota-inventario {
+  margin: 0.85rem 0 0;
+  color: #746b65;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .resumen-cantidades {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .resumen-cantidades {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

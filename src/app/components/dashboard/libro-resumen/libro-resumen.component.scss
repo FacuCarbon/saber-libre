@@ -1,0 +1,148 @@
+:host {
+  display: block;
+}
+
+.libro-resumen {
+  display: grid;
+  gap: 1rem;
+}
+
+.cabecera-portada {
+  width: 100%;
+}
+
+.libro-portada {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 3 / 4;
+  display: block;
+  object-fit: cover;
+  border-radius: 0.9rem;
+  box-shadow: 0 10px 26px rgba(67, 49, 36, 0.12);
+}
+
+.libro-portada--placeholder {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #fff0e9, #fff7f3);
+  color: #ce3f0b;
+  font-size: 2rem;
+}
+
+.cabecera-info {
+  min-width: 0;
+}
+
+.cabecera-titulos {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: #ce3f0b;
+  font: 900 0.68rem var(--font-display);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  color: #29231f;
+  font: 900 1.25rem var(--font-display);
+  line-height: 1.15;
+}
+
+.estado-libro {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: #eef6f2;
+  color: #27775b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.estado-libro--inactivo {
+  background: #f2efec;
+  color: #746b65;
+}
+
+.autores {
+  margin: 0.5rem 0 0;
+  color: #5f5751;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.descripcion {
+  margin: 0.8rem 0 0;
+  color: #746b65;
+  line-height: 1.6;
+}
+
+.meta {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.meta div {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.8rem 0.85rem;
+  background: #fffdfa;
+  border: 1px solid #eee8e2;
+  border-radius: 0.8rem;
+}
+
+.meta span {
+  color: #918981;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta strong {
+  color: #29231f;
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .libro-resumen {
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .libro-resumen {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .cabecera-titulos {
+    display: block;
+  }
+
+  .cabecera-titulos h2 {
+    margin-top: 0.25rem;
+  }
+
+  .estado-libro {
+    display: inline-flex;
+    margin-top: 0.7rem;
+  }
+}

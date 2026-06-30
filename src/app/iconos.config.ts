@@ -5,6 +5,7 @@ import {
   trash,
   create,
   book,
+  bookOutline,
   person,
   settings,
   home,
@@ -21,6 +22,14 @@ import {
   createOutline,
   searchOutline,
   checkmarkOutline,
+  logInOutline,
+  personAddOutline,
+  locationOutline,
+  timeOutline,
+  callOutline,
+  mailOutline,
+  notificationsOutline,
+  arrowForwardOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -32,6 +41,7 @@ export const iconosApp = {
   'person-circle-outline': personCircleOutline,
   settings: settings,
   'log-out-outline': logOutOutline,
+  'log-in-outline': logInOutline,
   'people-outline': peopleOutline,
   'ellipsis-horizontal-outline': ellipsisHorizontalOutline,
   home: home,
@@ -40,11 +50,19 @@ export const iconosApp = {
   trash: trash,
   create: create,
   book: book,
+  'book-outline': bookOutline,
   person: person,
+  'person-add-outline': personAddOutline,
   'eye-outline': eyeOutline,
   'create-outline': createOutline,
   'search-outline': searchOutline,
   'checkmark-outline': checkmarkOutline,
+  'location-outline': locationOutline,
+  'time-outline': timeOutline,
+  'call-outline': callOutline,
+  'mail-outline': mailOutline,
+  'notifications-outline': notificationsOutline,
+  'arrow-forward-outline': arrowForwardOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

@@ -6,6 +6,7 @@ import {
   IonButton,
   IonIcon,
   IonInput,
+  IonLabel,
   IonTextarea,
 } from '@ionic/angular/standalone';
 import { GoBackComponent } from 'src/app/components/botones/go-back/go-back.component';
@@ -25,6 +26,7 @@ import { LibroService } from 'src/app/services/libro.service';
     IonButton,
     IonIcon,
     IonInput,
+    IonLabel,
     IonTextarea,
     GoBackComponent,
     HeaderPageComponent,

@@ -2,8 +2,8 @@
   --background: transparent;
   --background-hover: transparent;
   --background-activated: transparent;
-  --padding-start: 0;
-  --padding-end: 0;
+  --padding-start: 0.15rem;
+  --padding-end: 0.15rem;
   --padding-top: 0;
   --padding-bottom: 0;
   --color: #ff6b35;
@@ -11,4 +11,31 @@
   font-weight: 800;
   text-transform: none;
   font-size: 17px;
+}
+
+.boton-back::part(native) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.boton-back ion-icon {
+  flex: 0 0 auto;
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+  min-width: 1.05rem;
+  min-height: 1.05rem;
+  font-size: 1.05rem;
+  color: currentColor;
+}
+
+.boton-back-icono {
+  flex: 0 0 auto;
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+  min-width: 1.05rem;
+  min-height: 1.05rem;
+  color: currentColor;
 }

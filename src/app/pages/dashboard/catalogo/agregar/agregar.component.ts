@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonIcon, IonInput } from '@ionic/angular/standalone';
+import { IonButton, IonIcon, IonInput, IonLabel } from '@ionic/angular/standalone';
 import { GoBackComponent } from 'src/app/components/botones/go-back/go-back.component';
 
 import { HeaderPageComponent } from 'src/app/components/dashboard/header-page/header-page.component';
@@ -17,6 +17,7 @@ import { LibroService } from 'src/app/services/libro.service';
     IonButton,
     IonIcon,
     IonInput,
+    IonLabel,
     HeaderPageComponent,
     GoBackComponent,
   ],

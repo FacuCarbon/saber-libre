@@ -1,13 +1,27 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>not-found</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="not-found-content">
+  <div class="container">
+    <logo-app class="logo"></logo-app>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">not-found</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div class="code">404</div>
+
+    <h1 class="title">Fuera de catálogo</h1>
+    <p class="subtitle">
+      Parece que esta página no existe en nuestra biblioteca.
+      <br />
+      Puede que la hayan prestado y no la devolvieron.
+    </p>
+
+    <div class="actions">
+      <app-boton-accion
+        texto="Explorar catálogo"
+        icono="library-outline"
+        (accion)="irACatalogo()"
+      ></app-boton-accion>
+      <app-boton-accion
+        texto="Volver al inicio"
+        icono="home-outline"
+        (accion)="irAInicio()"
+      ></app-boton-accion>
+    </div>
+  </div>
 </ion-content>

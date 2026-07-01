@@ -194,6 +194,12 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/home/perfil/perfil.page').then((m) => m.PerfilPage),
+    canActivate: [authGuard],
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./pages/not-found/not-found.page').then((m) => m.NotFoundPage),

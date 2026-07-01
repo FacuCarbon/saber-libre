@@ -189,6 +189,38 @@ export class AuthService {
     return this._perfilUsuarioService.obtenerPerfiles();
   }
 
+  async actualizarUsuarioActual(
+    datos: Pick<Usuario, 'nombreCompleto' | 'telefono'>,
+  ): Promise<Usuario> {
+    const perfilActual = await this.usuarioActual();
+    if (!perfilActual) {
+      throw new Error('No hay un usuario autenticado.');
+    }
+
+    const nombreCompleto = datos.nombreCompleto.trim();
+    if (!nombreCompleto) {
+      throw new Error('El nombre completo es obligatorio.');
+    }
+
+    const actualizacion = {
+      nombreCompleto,
+      telefono: datos.telefono?.trim() ?? '',
+    };
+
+    await this._perfilUsuarioService.actualizarPerfil(
+      perfilActual.id,
+      actualizacion,
+    );
+
+    const perfilActualizado: Usuario = {
+      ...perfilActual,
+      ...actualizacion,
+    };
+    this.guardarPerfilActual(perfilActualizado);
+
+    return perfilActualizado;
+  }
+
   private async cargarPerfilConReintentos(
     uid: string,
   ): Promise<Usuario | null> {

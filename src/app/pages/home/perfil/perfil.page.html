@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<ion-content>
+  <div class="perfil-page">
+    <app-header-page
+      titulo="Perfil"
+      subtitulo="Datos personales, actividad y seguridad de tu cuenta"
+    ></app-header-page>
+
+    <div class="perfil-grid">
+      @if(usuario){
+      <app-tarjeta-usuario
+        [usuario]="usuario"
+        [tituloBoton]="'Guardar cambios'"
+        [iconoBoton]="'save-outline'"
+        [botonDeshabilitado]="guardando"
+        (botonClick)="guardarCambios()"
+      >
+      </app-tarjeta-usuario>
+      }
+
+      <div class="columna">
+        <app-resumen-actividad
+          [prestamosActivos]="prestamosActivos"
+          [librosLeidos]="librosLeidos"
+          [multasPendientes]="multasPendientes"
+          [miembroDesde]="miembroDesde"
+        >
+        </app-resumen-actividad>
+      </div>
+    </div></div
+></ion-content>

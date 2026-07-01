@@ -31,7 +31,8 @@ export class GoogleBooksService {
       }),
     );
 
-    return respuesta.items?.[0]?.volumeInfo ?? null;
+    const volumen = respuesta.items?.[0]?.volumeInfo;
+    return volumen ? this.normalizarVolumen(volumen) : null;
   }
 
   /**
@@ -49,6 +50,26 @@ export class GoogleBooksService {
       }),
     );
 
-    return (respuesta.items ?? []).map((item) => item.volumeInfo);
+    return (respuesta.items ?? []).map((item) =>
+      this.normalizarVolumen(item.volumeInfo),
+    );
+  }
+
+  private normalizarVolumen(volumen: VolumenGoogleBooks): VolumenGoogleBooks {
+    if (!volumen.imageLinks) {
+      return volumen;
+    }
+
+    return {
+      ...volumen,
+      imageLinks: {
+        ...volumen.imageLinks,
+        thumbnail: this.normalizarUrlImagen(volumen.imageLinks.thumbnail),
+      },
+    };
+  }
+
+  private normalizarUrlImagen(url: string | undefined): string | undefined {
+    return url?.replace(/^http:\/\//i, 'https://');
   }
 }

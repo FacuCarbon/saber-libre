@@ -1,0 +1,78 @@
+<main class="alertas-contenido">
+  <app-header-page
+    titulo="Alertas de mora"
+    subtitulo="Revisá los préstamos vencidos que requieren seguimiento."
+  ></app-header-page>
+
+  @if (mensaje) {
+    <p class="mensaje mensaje--error" role="status">{{ mensaje }}</p>
+  }
+
+  <section class="resumen" aria-label="Resumen de alertas de mora">
+    <div class="resumen-icono">
+      <ion-icon name="notifications-outline"></ion-icon>
+    </div>
+    <div>
+      <strong>{{ alertas.length }}</strong>
+      <span>{{ alertas.length === 1 ? 'alerta activa' : 'alertas activas' }}</span>
+    </div>
+  </section>
+
+  <section class="listado-alertas" aria-labelledby="titulo-alertas">
+    <div class="listado-encabezado">
+      <div>
+        <h2 id="titulo-alertas">Préstamos en mora</h2>
+        <p>Las alertas se actualizan según la fecha de devolución y el estado del préstamo.</p>
+      </div>
+      <app-buscador-libros
+        placeholder="Buscar por lector, libro o código..."
+        (busqueda)="filtrarAlertas($event)"
+      ></app-buscador-libros>
+    </div>
+
+    @if (cargando) {
+      <div class="estado-listado">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Actualizando alertas...</p>
+      </div>
+    } @else {
+      <div class="alertas-lista">
+        @for (detalle of alertasFiltradas; track detalle.alerta.id) {
+          <article class="alerta-item">
+            <div class="alerta-principal">
+              <div class="alerta-marca" aria-hidden="true">
+                <ion-icon name="warning-outline"></ion-icon>
+              </div>
+              <div class="alerta-info">
+                <h3>{{ detalle.libro?.titulo || 'Libro no disponible' }}</h3>
+                <p>{{ detalle.usuario?.nombreCompleto || 'Lector no disponible' }}</p>
+                <span>Código {{ detalle.ejemplar?.codigoBarras || 'sin datos' }}</span>
+              </div>
+            </div>
+
+            <dl class="alerta-fechas">
+              <div>
+                <dt>Venció</dt>
+                <dd>{{ detalle.prestamo.fechaDevEstimada | date: 'dd/MM/yyyy' }}</dd>
+              </div>
+              <div>
+                <dt>Demora</dt>
+                <dd class="dias-mora">{{ detalle.diasMora }} {{ detalle.diasMora === 1 ? 'día' : 'días' }}</dd>
+              </div>
+            </dl>
+
+            <ion-button fill="outline" (click)="procesarDevolucion(detalle)">
+              <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
+              Procesar devolución
+            </ion-button>
+          </article>
+        } @empty {
+          <div class="estado-listado">
+            <ion-icon name="checkmark-outline"></ion-icon>
+            <p>No hay alertas de mora activas.</p>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</main>

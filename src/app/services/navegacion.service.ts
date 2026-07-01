@@ -42,6 +42,23 @@ export class NavegacionService {
       exact: false,
       rolesPermitidos: ['administrador', 'bibliotecario'],
     },
+    {
+      title: 'Alertas de mora',
+      url: '/dashboard/alertas-mora',
+      icon: 'notifications-outline',
+      mobile: 'more',
+      exact: true,
+      rolesPermitidos: ['administrador', 'bibliotecario'],
+    },
+
+    {
+      title: 'Usuarios',
+      url: '/dashboard/usuarios',
+      icon: 'people-outline',
+      mobile: 'more',
+      exact: false,
+      rolesPermitidos: ['administrador'],
+    },
 
     {
       title: 'Mi perfil',
@@ -49,6 +66,14 @@ export class NavegacionService {
       icon: 'person-circle-outline',
       mobile: 'more',
       exact: true,
+    },
+    {
+      title: 'Configuración',
+      url: '/dashboard/gestion',
+      icon: 'settings-outline',
+      mobile: 'more',
+      exact: true,
+      rolesPermitidos: ['administrador', 'bibliotecario'],
     },
   ];
 

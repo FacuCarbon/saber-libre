@@ -10,6 +10,222 @@
   padding-bottom: 80px;
 }
 
+.sincronizacion-local {
+  margin: 0 0 28px;
+  padding: 20px;
+  background: #fffdfa;
+  border: 1px solid #e9e3dd;
+  border-radius: 16px;
+  box-shadow: 0 18px 44px rgba(58, 44, 33, 0.08);
+}
+
+.sincronizacion-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sincronizacion-header h2,
+.sincronizacion-header p,
+.backup-panel h3,
+.backup-panel p {
+  margin: 0;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #9f3512;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sincronizacion-header h2 {
+  color: #29231f;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.sincronizacion-header p,
+.backup-panel p {
+  margin-top: 6px;
+  color: #6e625a;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.mensaje-backup {
+  padding: 10px 12px;
+  margin: 0 0 16px;
+  background: #eef6f2;
+  border: 1px solid #cde4d9;
+  border-radius: 10px;
+  color: #245e4a;
+  font-size: 0.84rem;
+}
+
+.mensaje-backup--error {
+  background: #fcecea;
+  border-color: #f0c9c5;
+  color: #9c302b;
+}
+
+.sincronizacion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.backup-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e8ded6;
+  border-radius: 12px;
+}
+
+.backup-panel--importar {
+  background: #fbfdff;
+  border-color: #d7e4ec;
+}
+
+.backup-panel h3 {
+  color: #29231f;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.backup-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.backup-acciones button,
+.archivo-backup {
+  min-height: 38px;
+  padding: 9px 12px;
+  background: #ffffff;
+  border: 1px solid #d8cbc2;
+  border-radius: 8px;
+  color: #3f342c;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.backup-acciones button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.backup-acciones .boton-principal {
+  background: #ce3f0b;
+  border-color: #ce3f0b;
+  color: #ffffff;
+}
+
+.backup-acciones .boton-peligro {
+  background: #9c302b;
+  border-color: #9c302b;
+  color: #ffffff;
+}
+
+.archivo-backup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.archivo-backup input {
+  display: none;
+}
+
+.archivo-seleccionado {
+  margin: -6px 0 0;
+  color: #5c6870;
+  font-size: 0.78rem;
+}
+
+.campo-texto {
+  display: grid;
+  gap: 6px;
+  color: #403730;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.campo-texto textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 156px;
+  padding: 10px;
+  resize: vertical;
+  background: #fffdfa;
+  border: 1px solid #d8cbc2;
+  border-radius: 10px;
+  color: #29231f;
+  font: 0.78rem/1.45 Consolas, "Liberation Mono", monospace;
+}
+
+.backup-panel--importar .campo-texto textarea {
+  background: #f8fcff;
+  border-color: #cddde8;
+}
+
+.resumen-backup {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.resumen-backup div {
+  min-width: 0;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #d7e4ec;
+  border-radius: 10px;
+}
+
+.resumen-backup dt {
+  color: #5c6870;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.resumen-backup dd {
+  margin: 4px 0 0;
+  color: #1f3745;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.confirmacion-importacion {
+  padding: 14px;
+  background: #fff7f5;
+  border: 1px solid #efc1b9;
+  border-radius: 12px;
+}
+
+.confirmacion-importacion strong {
+  color: #7d2622;
+  font-size: 0.9rem;
+}
+
+.confirmacion-importacion p {
+  margin: 5px 0 12px;
+  color: #735650;
+}
+
 .sugerencias {
   max-height: 50vh;
   overflow-y: auto;
@@ -28,4 +244,30 @@ img {
   max-width: 140px;
   height: auto;
   margin: 8px 0;
+}
+
+@media (max-width: 900px) {
+  .sincronizacion-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .sincronizacion-local {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .backup-acciones {
+    flex-direction: column;
+  }
+
+  .backup-acciones button,
+  .archivo-backup {
+    width: 100%;
+  }
+
+  .resumen-backup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

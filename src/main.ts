@@ -1,4 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { Capacitor } from '@capacitor/core';
 import {
   RouteReuseStrategy,
   provideRouter,
@@ -14,9 +15,18 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { registrarIconos } from './app/iconos.config';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
+import {
+  getApp,
+  initializeApp,
+  provideFirebaseApp,
+} from '@angular/fire/app';
+import {
+  getAuth,
+  initializeAuth,
+  provideAuth,
+} from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { indexedDBLocalPersistence } from 'firebase/auth';
 import { environment } from './environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -28,7 +38,13 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideAuth(() => getAuth()),
+    provideAuth(() =>
+      Capacitor.isNativePlatform()
+        ? initializeAuth(getApp(), {
+            persistence: indexedDBLocalPersistence,
+          })
+        : getAuth(),
+    ),
     provideFirestore(() => getFirestore()),
     provideHttpClient(),
   ],

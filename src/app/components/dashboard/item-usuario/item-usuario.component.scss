@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+.usuario-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "identidad"
+    "rol"
+    "acciones";
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9e3dd;
+  color: #29231f;
+}
+
+:host(:last-child) .usuario-item {
+  border-bottom: 0;
+}
+
+.usuario-identidad {
+  grid-area: identidad;
+  min-width: 0;
+}
+
+.usuario-info h3,
+.usuario-info p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.usuario-info h3 {
+  margin: 0;
+  color: #29231f;
+  font: 800 0.95rem var(--font-display);
+}
+
+.usuario-info p {
+  margin: 0.25rem 0 0;
+  color: #746b65;
+  font-size: 0.78rem;
+}
+
+.rol {
+  grid-area: rol;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.rol ion-select {
+  --background: #fffdfa;
+  --border-color: #e9e3dd;
+  --border-radius: 0.65rem;
+  --border-style: solid;
+  --border-width: 1px;
+  --padding-bottom: 0.35rem;
+  --padding-end: 0.7rem;
+  --padding-start: 0.7rem;
+  --padding-top: 0.35rem;
+
+  min-height: 42px;
+  font-size: 0.8rem;
+}
+
+.etiqueta-mobile {
+  color: #918981;
+  font-size: 0.72rem;
+}
+
+.ayuda {
+  color: #918981;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.acciones {
+  grid-area: acciones;
+  justify-self: start;
+}
+
+.acciones ion-button {
+  --border-color: #e2d7cf;
+  --border-radius: 0.65rem;
+  --box-shadow: none;
+  --color: #9f3512;
+
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+@media (min-width: 992px) {
+  .usuario-item {
+    grid-template-columns: minmax(220px, 1.8fr) 220px 140px;
+    grid-template-areas: "identidad rol acciones";
+    gap: 1rem;
+    min-height: 72px;
+    padding: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .usuario-item:hover {
+    background: #fffaf7;
+  }
+
+  .etiqueta-mobile {
+    display: none;
+  }
+}

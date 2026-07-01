@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-type StorageKey =
+export type StorageKey =
   | 'usuarios'
   | 'libros'
   | 'ejemplares'
   | 'prestamos'
   | 'multas'
   | 'alertasMora';
+
+export const EXPORTABLE_STORAGE_KEYS = [
+  'libros',
+  'ejemplares',
+  'prestamos',
+  'multas',
+  'alertasMora',
+] as const;
+
+export type ExportableStorageKey = (typeof EXPORTABLE_STORAGE_KEYS)[number];
 
 interface WithId {
   id: string;
@@ -92,6 +102,35 @@ export class StorageService {
       key: key,
       value: JSON.stringify(lista),
     });
+  }
+
+  /**
+   * Obtiene varias colecciones locales para exportacion o respaldo.
+   * @param keys Claves exportables a leer.
+   * @returns Colecciones encontradas, usando arrays vacios cuando no existen.
+   */
+  async obtenerColecciones(
+    keys: readonly ExportableStorageKey[],
+  ): Promise<Record<ExportableStorageKey, unknown[]>> {
+    const colecciones = {} as Record<ExportableStorageKey, unknown[]>;
+
+    for (const key of keys) {
+      colecciones[key] = await this.obtenerLista<unknown>(key);
+    }
+
+    return colecciones;
+  }
+
+  /**
+   * Reemplaza colecciones locales exportables luego de una validacion externa.
+   * @param colecciones Colecciones completas a escribir en Preferences.
+   */
+  async reemplazarColecciones(
+    colecciones: Record<ExportableStorageKey, unknown[]>,
+  ): Promise<void> {
+    for (const key of EXPORTABLE_STORAGE_KEYS) {
+      await this.reemplazarLista<unknown>(key, colecciones[key]);
+    }
   }
 
   /**

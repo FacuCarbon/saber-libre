@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "493563871632",
+    "project_id": "saber-libre-7cb1b",
+    "storage_bucket": "saber-libre-7cb1b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493563871632:android:5f67b377278b7346c97315",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493563871632-vkd9jj7188nsuk7imog8jouqrocfsfhu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "f9f39e0c922b3c759796487b12ddd3c0d5d45a40"
+          }
+        },
+        {
+          "client_id": "493563871632-52gnlbj4i48bvppt5f4o0efijvm3kr2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxzFbwROg56yB75vkKpvmuTcoTGjeM8q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493563871632-52gnlbj4i48bvppt5f4o0efijvm3kr2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

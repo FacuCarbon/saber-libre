@@ -1,157 +1,170 @@
 <div class="gestion-contenido ion-padding">
-  <h1>Gestión de libros</h1>
+  <h1>Gestión de Preferences (momentaneo)</h1>
 
-  <section>
-    <h2>Buscar por ISBN</h2>
+  <section class="sincronizacion-local">
+    <div class="sincronizacion-header">
+      <div>
+        <p class="eyebrow">Sincronización local</p>
+        <h2>Web → APK para probar escaneo</h2>
+        <p>
+          Exportá los datos locales de la web e importalos en el celular para
+          que el APK encuentre los mismos códigos de barras.
+        </p>
+      </div>
+    </div>
 
-    <input type="text" [(ngModel)]="isbnBusqueda" placeholder="Ingresar ISBN" />
-
-    <button type="button" (click)="buscarPorIsbn()">Buscar por ISBN</button>
-  </section>
-
-  <section>
-    <h2>Buscar por título</h2>
-
-    <input
-      type="text"
-      [(ngModel)]="tituloBusqueda"
-      placeholder="Ingresar título"
-    />
-
-    <button type="button" (click)="buscarPorTitulo()">Buscar por título</button>
-  </section>
-
-  @if (mensaje) {
-  <p>{{ mensaje }}</p>
-  } @if (resultados.length > 0) {
-  <section class="sugerencias">
-    <h2>Sugerencias</h2>
-
-    @for (resultado of resultados; track $index) {
-    <article>
-      @if (resultado.imageLinks?.thumbnail; as portada) {
-      <img [src]="portada" [alt]="resultado.title" />
-      }
-
-      <h3>{{ resultado.title }}</h3>
-
-      <p>{{ resultado.authors?.join(', ') || 'Autor desconocido' }}</p>
-
-      <button type="button" (click)="seleccionarLibro(resultado)">
-        Seleccionar
-      </button>
-    </article>
+    @if (mensajeBackup) {
+    <p
+      class="mensaje-backup"
+      [class.mensaje-backup--error]="mensajeBackupEsError"
+    >
+      {{ mensajeBackup }}
+    </p>
     }
-  </section>
-  } @if (libroSeleccionado; as libro) {
-  <section>
-    <h2>Datos del libro</h2>
 
-    <form (ngSubmit)="guardarLibro(libro)">
-      <div>
-        <label for="tituloLibro">Título</label>
+    <div class="sincronizacion-grid">
+      <article class="backup-panel">
+        <div>
+          <h3>Exportar desde la web</h3>
+          <p>
+            Genera un JSON con libros, ejemplares, préstamos, multas y alertas
+            locales. Los usuarios no se exportan porque están en Firebase.
+          </p>
+        </div>
 
-        <input
-          id="tituloLibro"
-          name="tituloLibro"
-          type="text"
-          [(ngModel)]="libro.title"
-          required
-        />
-      </div>
+        <div class="backup-acciones">
+          <button
+            type="button"
+            class="boton-principal"
+            [disabled]="procesandoBackup"
+            (click)="exportarDatosLocales()"
+          >
+            Exportar datos
+          </button>
+          <button
+            type="button"
+            [disabled]="!jsonExportado"
+            (click)="copiarJsonExportado()"
+          >
+            Copiar JSON
+          </button>
+          <button
+            type="button"
+            [disabled]="!jsonExportado"
+            (click)="descargarJsonExportado()"
+          >
+            Descargar otra vez
+          </button>
+        </div>
 
-      <div>
-        <label for="autoresLibro">Autores</label>
+        @if (jsonExportado) {
+        <label class="campo-texto">
+          JSON exportado
+          <textarea readonly [value]="jsonExportado"></textarea>
+        </label>
+        }
+      </article>
 
-        <input
-          id="autoresLibro"
-          type="text"
-          [value]="libro.authors?.join(', ') || ''"
-          readonly
-        />
-      </div>
+      <article class="backup-panel backup-panel--importar">
+        <div>
+          <h3>Importar en el APK</h3>
+          <p>
+            Seleccioná el archivo exportado o pegá el JSON. La importación
+            reemplaza los datos locales del dispositivo.
+          </p>
+        </div>
 
-      <div>
-        <label for="categoriasLibro">Categorías</label>
+        <label class="archivo-backup">
+          Seleccionar archivo JSON
+          <input
+            type="file"
+            accept=".json,application/json"
+            (change)="cargarArchivoBackup($event)"
+          />
+        </label>
 
-        <input
-          id="categoriasLibro"
-          type="text"
-          [value]="libro.categories?.join(', ') || ''"
-          readonly
-        />
-      </div>
+        @if (archivoImportadoNombre) {
+        <p class="archivo-seleccionado">{{ archivoImportadoNombre }}</p>
+        }
 
-      <div>
-        <label for="descripcionLibro">Descripción</label>
+        <label class="campo-texto">
+          JSON a importar
+          <textarea
+            name="jsonImportacion"
+            [(ngModel)]="jsonImportacion"
+            (ngModelChange)="limpiarPrevisualizacionImportacion()"
+            placeholder="Pegá acá el contenido del backup exportado desde la web"
+          ></textarea>
+        </label>
 
-        <textarea
-          id="descripcionLibro"
-          name="descripcionLibro"
-          [(ngModel)]="libro.description"
-        ></textarea>
-      </div>
+        <div class="backup-acciones">
+          <button
+            type="button"
+            [disabled]="!jsonImportacion.trim() || procesandoBackup"
+            (click)="previsualizarImportacion()"
+          >
+            Previsualizar
+          </button>
+          <button
+            type="button"
+            class="boton-peligro"
+            [disabled]="!jsonImportacion.trim() || procesandoBackup"
+            (click)="solicitarConfirmacionImportacion()"
+          >
+            Importar datos
+          </button>
+        </div>
 
-      <div>
-        <label for="cantidadLibro">Cantidad</label>
-
-        <input
-          id="cantidadLibro"
-          name="cantidadLibro"
-          type="number"
-          min="1"
-          [(ngModel)]="cantidad"
-          required
-        />
-      </div>
-
-      @if (libro.imageLinks?.thumbnail; as portada) {
-      <img [src]="portada" [alt]="libro.title" />
-      }
-
-      <button type="submit" [disabled]="cantidad <= 0">Guardar libro</button>
-    </form>
-  </section>
-  }
-
-  <section>
-    <h2>Libros guardados</h2>
-
-    @for (libro of librosGuardados; track libro.id) {
-    <article>
-      <h3>{{ libro.titulo }}</h3>
-      <p>ISBN: {{ libro.isbn }}</p>
-      <p>Autores: {{ libro.autores.join(', ') || 'Sin autor' }}</p>
-      <p>Categorias: {{ libro.categorias.join(', ') || 'Sin categoria' }}</p>
-      <p>Disponibles: {{ libro.cantidadDisponible }}</p>
-      <p>Total: {{ libro.cantidadTotal }}</p>
-    </article>
-    } @empty {
-    <p>Todavía no hay libros guardados.</p>
-    }
-  </section>
-
-  <section>
-    <h2>Buscar libro por titulo, categoria o autor</h2>
-
-    <input
-      type="text"
-      [(ngModel)]="busqueda"
-      placeholder="Ingrese titulo, categoria o autor"
-    />
-
-    <button type="button" (click)="buscarLibros()">Buscar libro</button>
-
-    @if(librosFiltrados.length > 0){
-    <ul>
-      @for (libro of librosFiltrados; track libro.id) {
-      <li>
-        <p>{{ libro.titulo }}</p>
-        <p>{{ libro.autores.join(', ') }}</p>
-        <p>{{ libro.categorias.join(', ') }}</p>
-      </li>
-      }
-    </ul>
-    }
+        @if (resumenImportacion) {
+        <dl class="resumen-backup">
+          <div>
+            <dt>Libros</dt>
+            <dd>{{ resumenImportacion.libros }}</dd>
+          </div>
+          <div>
+            <dt>Ejemplares</dt>
+            <dd>{{ resumenImportacion.ejemplares }}</dd>
+          </div>
+          <div>
+            <dt>Préstamos</dt>
+            <dd>{{ resumenImportacion.prestamos }}</dd>
+          </div>
+          <div>
+            <dt>Multas</dt>
+            <dd>{{ resumenImportacion.multas }}</dd>
+          </div>
+          <div>
+            <dt>Alertas</dt>
+            <dd>{{ resumenImportacion.alertasMora }}</dd>
+          </div>
+        </dl>
+        } @if (mostrarConfirmacionImportacion) {
+        <div class="confirmacion-importacion">
+          <strong>Esta acción reemplaza los datos locales actuales.</strong>
+          <p>
+            Confirmá solo si este es el backup que querés usar para probar el
+            escáner en este dispositivo.
+          </p>
+          <div class="backup-acciones">
+            <button
+              type="button"
+              [disabled]="procesandoBackup"
+              (click)="cancelarImportacion()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="boton-peligro"
+              [disabled]="procesandoBackup"
+              (click)="confirmarImportacion()"
+            >
+              Confirmar importación
+            </button>
+          </div>
+        </div>
+        }
+      </article>
+    </div>
   </section>
 </div>

@@ -36,8 +36,24 @@ export class LibroService {
    * Obtiene todos los libros.
    * @returns Una lista de libros.
    */
-  obtenerLibros(): Promise<Libro[]> {
-    return this._storageService.obtenerLista<Libro>('libros');
+  async obtenerLibros(): Promise<Libro[]> {
+    const libros = await this._storageService.obtenerLista<Libro>('libros');
+    const librosNormalizados = libros.map((libro) =>
+      this.normalizarPortadaLibro(libro),
+    );
+
+    await Promise.all(
+      librosNormalizados
+        .filter(
+          (libro, indice) =>
+            libro.imagenPortada !== libros[indice].imagenPortada,
+        )
+        .map((libro) =>
+          this._storageService.actualizar<Libro>('libros', libro),
+        ),
+    );
+
+    return librosNormalizados;
   }
 
   /**
@@ -45,8 +61,18 @@ export class LibroService {
    * @param id El ID del libro a obtener.
    * @returns El libro encontrado o null si no se encuentra.
    */
-  obtenerLibroPorId(id: string): Promise<Libro | null> {
-    return this._storageService.obtenerPorId<Libro>('libros', id);
+  async obtenerLibroPorId(id: string): Promise<Libro | null> {
+    const libro = await this._storageService.obtenerPorId<Libro>('libros', id);
+    if (!libro) {
+      return null;
+    }
+
+    const libroNormalizado = this.normalizarPortadaLibro(libro);
+    if (libroNormalizado.imagenPortada !== libro.imagenPortada) {
+      await this._storageService.actualizar<Libro>('libros', libroNormalizado);
+    }
+
+    return libroNormalizado;
   }
 
   /**
@@ -284,7 +310,7 @@ export class LibroService {
       cantidadTotal: cantidad,
       cantidadDisponible: cantidad,
       activo: true,
-      imagenPortada: volumen.imageLinks?.thumbnail,
+      imagenPortada: this.normalizarUrlPortada(volumen.imageLinks?.thumbnail),
       descripcion: volumen.description,
     };
 
@@ -335,7 +361,7 @@ export class LibroService {
       cantidadTotal: cantidad,
       cantidadDisponible: cantidad,
       activo: true,
-      imagenPortada: volumen.imageLinks?.thumbnail,
+      imagenPortada: this.normalizarUrlPortada(volumen.imageLinks?.thumbnail),
       descripcion: volumen.description,
     };
 
@@ -361,5 +387,16 @@ export class LibroService {
     }
 
     return true;
+  }
+
+  private normalizarUrlPortada(url: string | undefined): string | undefined {
+    return url?.replace(/^http:\/\//i, 'https://');
+  }
+
+  private normalizarPortadaLibro(libro: Libro): Libro {
+    return {
+      ...libro,
+      imagenPortada: this.normalizarUrlPortada(libro.imagenPortada),
+    };
   }
 }

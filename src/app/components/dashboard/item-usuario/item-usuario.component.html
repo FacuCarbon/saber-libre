@@ -1,0 +1,37 @@
+<article class="usuario-item">
+  <div class="usuario-identidad">
+    <div class="usuario-info">
+      <h3 [title]="usuario.nombreCompleto">{{ usuario.nombreCompleto }}</h3>
+      <p [title]="usuario.email">{{ usuario.email }}</p>
+    </div>
+  </div>
+
+  <div class="dato rol">
+    <span class="etiqueta-mobile">Rol:</span>
+    <ion-select
+      interface="popover"
+      [(ngModel)]="rolSeleccionado"
+      [disabled]="deshabilitado || guardando"
+    >
+      <ion-select-option value="administrador">Administrador</ion-select-option>
+      <ion-select-option value="bibliotecario">Bibliotecario</ion-select-option>
+      <ion-select-option value="lector">Lector</ion-select-option>
+    </ion-select>
+    @if (esUsuarioActual) {
+      <small class="ayuda">No podés editar tu propio rol.</small>
+    } @else if (esUnicoAdministrador) {
+      <small class="ayuda">Es el único administrador del sistema.</small>
+    }
+  </div>
+
+  <div class="acciones">
+    <ion-button
+      fill="outline"
+      size="small"
+      [disabled]="deshabilitado || !huboCambio || guardando"
+      (click)="guardar()"
+    >
+      {{ guardando ? "Guardando..." : "Guardar" }}
+    </ion-button>
+  </div>
+</article>

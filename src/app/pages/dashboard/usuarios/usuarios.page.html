@@ -1,0 +1,86 @@
+<main class="usuarios-contenido">
+  <app-header-page
+    titulo="Gestión de usuarios"
+    subtitulo="Consultá los usuarios registrados y administrá sus roles."
+  ></app-header-page>
+
+  @if (mensaje) {
+  <p class="mensaje" [class.mensaje--error]="mensajeEsError">{{ mensaje }}</p>
+  }
+
+  <section class="resumen" aria-label="Resumen de usuarios">
+    <article class="resumen-item resumen-item--total">
+      <div class="resumen-icono"><ion-icon name="people-outline"></ion-icon></div>
+      <div>
+        <strong>{{ usuarios.length }}</strong>
+        <span>Usuarios registrados</span>
+      </div>
+    </article>
+    <article class="resumen-item resumen-item--admins">
+      <div class="resumen-icono"><ion-icon name="person-circle-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadAdministradores }}</strong>
+        <span>Administradores</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="listado-usuarios">
+    <div class="listado-encabezado">
+      <div>
+        <h2>Usuarios</h2>
+        <p>Buscá por nombre o email y ajustá el rol de cada usuario.</p>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <app-buscador-libros
+        placeholder="Buscar por nombre o email..."
+        (busqueda)="filtrarUsuarios($event)"
+      ></app-buscador-libros>
+
+      <ion-select
+        label="Rol"
+        labelPlacement="stacked"
+        interface="popover"
+        [(ngModel)]="filtroRol"
+        (ionChange)="cambiarFiltroRol()"
+      >
+        <ion-select-option value="todos">Todos</ion-select-option>
+        <ion-select-option value="administrador">Administrador</ion-select-option>
+        <ion-select-option value="bibliotecario">Bibliotecario</ion-select-option>
+        <ion-select-option value="lector">Lector</ion-select-option>
+      </ion-select>
+    </div>
+
+    @if (cargando) {
+    <div class="estado-listado">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando usuarios...</p>
+    </div>
+    } @else {
+    <div class="usuarios-columnas" aria-hidden="true">
+      <span>Usuario</span>
+      <span>Rol</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="usuarios-lista">
+      @for (usuario of usuariosFiltrados; track usuario.id) {
+      <app-item-usuario
+        [usuario]="usuario"
+        [esUsuarioActual]="usuario.id === idUsuarioActual"
+        [esUnicoAdministrador]="esUnicoAdministrador(usuario)"
+        [guardando]="idProcesando === usuario.id"
+        (cambiarRol)="guardarRol($event)"
+      ></app-item-usuario>
+      } @empty {
+      <div class="estado-listado">
+        <ion-icon name="people-outline"></ion-icon>
+        <p>No se encontraron usuarios.</p>
+      </div>
+      }
+    </div>
+    }
+  </section>
+</main>

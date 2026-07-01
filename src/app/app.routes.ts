@@ -103,6 +103,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'alertas-mora',
+        loadComponent: () =>
+          import('./pages/dashboard/alertas-mora/alertas-mora.page').then(
+            (m) => m.AlertasMoraPage,
+          ),
+      },
+      {
         path: 'multas/registrar',
         loadComponent: () =>
           import('./pages/dashboard/multas/registrar/registrar-multa.component').then(
@@ -115,6 +122,17 @@ export const routes: Routes = [
           import('./pages/dashboard/perfil/perfil.page').then(
             (m) => m.PerfilPage,
           ),
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./pages/dashboard/usuarios/usuarios.page').then(
+            (m) => m.UsuariosPage,
+          ),
+        canActivate: [roleGuard],
+        data: {
+          rolesPermitidos: ['administrador'],
+        },
       },
       {
         path: 'gestion',

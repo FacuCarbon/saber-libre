@@ -106,7 +106,7 @@ ion-popover.more-popover {
 ion-header {
   box-shadow: none;
   border-bottom: 1px solid lightgray;
-  padding: 10px;
+  padding: calc(10px + max(var(--ion-safe-area-top, 0px), env(safe-area-inset-top, 0px))) 10px 10px;
 }
 
 ion-header::after {

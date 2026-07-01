@@ -622,8 +622,53 @@
   }
 }
 
-@media (max-width: 400px) {
-  .nav-actions .btn-ghost {
+@media (max-width: 500px) {
+  .nav-inner {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .logo-grande ::ng-deep .logo {
+    max-width: 40px;
+  }
+
+  .logo-grande ::ng-deep .titulo {
+    font-size: 18px;
+  }
+
+  .logo-grande ::ng-deep .descripcion {
     display: none;
+  }
+
+  .nav-user {
+    max-width: 90px;
+    font-size: 12px;
+    padding: 0 4px;
+  }
+
+  .btn-ghost {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    min-height: 32px;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-inner {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .logo-grande ::ng-deep .logo {
+    max-width: 32px;
+  }
+
+  .logo-grande ::ng-deep .titulo {
+    font-size: 15px;
+  }
+
+  .nav-user {
+    max-width: 70px;
+    font-size: 11px;
   }
 }

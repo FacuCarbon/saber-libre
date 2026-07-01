@@ -32,7 +32,7 @@ export const roleGuard: CanActivateFn = async (route, _state) => {
   ) {
     return true;
   } else {
-    alert('No tenes permisos para entrar acá.');
-    return router.parseUrl('/dashboard');
+    
+    return router.parseUrl('/');
   }
 };

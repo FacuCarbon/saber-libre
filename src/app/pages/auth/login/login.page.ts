@@ -54,7 +54,7 @@ export class LoginPage {
 
     try {
       await this._authService.iniciarSesion(this.email, this.password);
-      this._router.navigate(['/dashboard/catalogo']);
+      this._router.navigate(['/']);
     } catch (err: unknown) {
       this.error = err instanceof Error ? err.message : 'Error al iniciar sesión.';
     }
@@ -65,7 +65,7 @@ export class LoginPage {
 
     try {
       await this._authService.iniciarSesionGoogle();
-      this._router.navigate(['/dashboard/catalogo']);
+      this._router.navigate(['/']);
     } catch (err: unknown) {
       this.error = err instanceof Error ? err.message : 'Error al iniciar sesión con Google.';
     }

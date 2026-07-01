@@ -101,7 +101,7 @@ export class NavegacionService {
     },
     {
       title: 'Mi perfil',
-      url: '/dashboard/perfil',
+      url: '/perfil',
       icon: 'person-circle-outline',
       mobile: 'more',
       exact: true,

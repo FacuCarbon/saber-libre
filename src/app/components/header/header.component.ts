@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit {
 
   async irAPerfil() {
     this.cerrarPopover();
-    await this.router.navigate(['/dashboard/perfil']);
+    await this.router.navigate(['/perfil']);
   }
 
   async cerrarSesion() {
@@ -98,5 +98,6 @@ export class HeaderComponent implements OnInit {
     await this.authService.logout();
     this.usuario = null;
     this.rol = null;
+    await this.router.navigate(['/']);
   }
 }

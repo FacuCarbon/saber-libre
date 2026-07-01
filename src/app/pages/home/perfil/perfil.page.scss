@@ -1,0 +1,50 @@
+.perfil-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.perfil-encabezado {
+  margin-bottom: 2rem;
+}
+
+.seccion {
+  color: #ff6b35;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.perfil-encabezado h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.descripcion {
+  margin-top: 0.75rem;
+  color: #6b6560;
+  font-size: 1rem;
+}
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.columna {
+  margin-top: 6rem;
+}
+
+@media (max-width: 992px) {
+  .perfil-page {
+    padding: 1rem;
+  }
+
+  .perfil-grid {
+    grid-template-columns: 1fr;
+  }
+}

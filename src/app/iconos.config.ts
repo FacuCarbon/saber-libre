@@ -41,6 +41,8 @@ import {
   reorderThreeOutline,
   barcodeOutline,
   printOutline,
+  settingsOutline,
+  saveOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -85,6 +87,8 @@ export const iconosApp = {
   'reorder-three-outline': reorderThreeOutline,
   'barcode-outline': barcodeOutline,
   'print-outline': printOutline,
+  'settings-outline': settingsOutline,
+  'save-outline': saveOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

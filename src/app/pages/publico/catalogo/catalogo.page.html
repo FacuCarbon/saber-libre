@@ -1,0 +1,38 @@
+<app-header />
+
+<ion-content style="--ion-background-color: #f8f6f3;">
+  <main class="catalogo-container">
+    <div class="catalogo-header">
+      <h1>Catálogo de libros</h1>
+      <p>Explorá nuestra colección de lectura libre</p>
+    </div>
+
+    <app-filtros-catalogo
+      [categorias]="categorias"
+      [usuarioLogueado]="usuarioLogueado"
+      [categoriaActiva]="categoriaSeleccionada"
+      [disponibilidadActiva]="disponibilidadSeleccionada"
+      (busqueda)="onBusqueda($event)"
+      (categoriaSeleccionada)="onCategoria($event)"
+      (disponibilidadSeleccionada)="onDisponibilidad($event)"
+      (limpiarCategoria)="onLimpiarCategoria()"
+      (limpiarDisponibilidad)="onLimpiarDisponibilidad()"
+    />
+
+    @if (librosFiltrados.length === 0) {
+      <div class="catalogo-vacio">
+        <p>No se encontraron libros con esos filtros.</p>
+      </div>
+    } @else {
+      <div class="catalogo-grid">
+        @for (libro of librosFiltrados; track libro.id) {
+          <app-tarjeta-libro-lector
+            [libro]="libro"
+            [usuarioLogueado]="usuarioLogueado"
+            (seleccionar)="onSeleccionarLibro($event)"
+          />
+        }
+      </div>
+    }
+  </main>
+</ion-content>

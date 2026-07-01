@@ -28,7 +28,7 @@ export class NavegacionService {
       exact: false,
     },
     {
-      title: 'Prestamos',
+      title: 'Préstamos',
       url: '/dashboard/prestamos',
       icon: 'swap-horizontal',
       mobile: 'tab',
@@ -43,6 +43,37 @@ export class NavegacionService {
       rolesPermitidos: ['administrador', 'bibliotecario'],
     },
 
+    {
+      title: 'Mi perfil',
+      url: '/dashboard/perfil',
+      icon: 'person-circle-outline',
+      mobile: 'more',
+      exact: true,
+    },
+  ];
+
+  public lectorMenu: NavItem[] = [
+    {
+      title: 'Inicio',
+      url: '/lector/inicio',
+      icon: 'home-outline',
+      mobile: 'tab',
+      exact: true,
+    },
+    {
+      title: 'Catálogo',
+      url: '/catalogo',
+      icon: 'library-outline',
+      mobile: 'tab',
+      exact: false,
+    },
+    {
+      title: 'Mis Préstamos',
+      url: '/lector/mis-prestamos',
+      icon: 'swap-horizontal',
+      mobile: 'tab',
+      exact: false,
+    },
     {
       title: 'Mi perfil',
       url: '/dashboard/perfil',

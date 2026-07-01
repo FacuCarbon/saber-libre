@@ -2,8 +2,8 @@
   <div class="nav-inner">
     <logo-app class="logo-grande"></logo-app>
     <div class="nav-links">
-      <a routerLink="/" class="nav-link nav-link--active">Home</a>
-      <a routerLink="/demo" class="nav-link">Catálogo</a>
+      <a routerLink="/" class="nav-link" routerLinkActive="nav-link--active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/catalogo" class="nav-link" routerLinkActive="nav-link--active">Catálogo</a>
     </div>
     <div class="nav-actions">
       @if (cargando) {
@@ -11,16 +11,26 @@
       } @else {
         @if (usuario) {
           <span class="nav-user">{{ usuario.nombreCompleto }}</span>
-          <ion-button id="user-menu-trigger" fill="clear" class="btn-ghost">
+          <ion-button id="user-menu-trigger" fill="clear" class="btn-ghost" (click)="togglePopover($event)">
             <ion-icon slot="icon-only" name="caret-down-outline"></ion-icon>
           </ion-button>
-          <ion-popover trigger="user-menu-trigger" triggerAction="click" [dismissOnSelect]="true">
+          <ion-popover [isOpen]="popoverAbierto" [event]="popoverEvent" (didDismiss)="cerrarPopover()" [dismissOnSelect]="true">
             <ng-template>
               <ion-list lines="none">
                 @if (puedeVerDashboard) {
                   <ion-item button (click)="irADashboard()">
                     <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
                     <ion-label>Dashboard</ion-label>
+                  </ion-item>
+                }
+                @if (esLector) {
+                  <ion-item button (click)="irALector()">
+                    <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
+                    <ion-label>Mi espacio</ion-label>
+                  </ion-item>
+                  <ion-item button (click)="irACatalogo()">
+                    <ion-icon name="library-outline" slot="start"></ion-icon>
+                    <ion-label>Catálogo</ion-label>
                   </ion-item>
                 }
                 <ion-item button (click)="irAPerfil()">

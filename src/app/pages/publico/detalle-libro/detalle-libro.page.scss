@@ -1,0 +1,163 @@
+.detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.btn-volver {
+  --color: #ff6b35;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  --padding-start: 0;
+}
+
+.detalle-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.detalle-portada {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.portada-placeholder {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%);
+
+  ion-icon {
+    font-size: 4rem;
+    color: #bfae9e;
+  }
+}
+
+.detalle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detalle-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #bfae9e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detalle-info h1 {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: #2d2d2d;
+  line-height: 1.2;
+}
+
+.badge {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.badge-disponible {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.badge-no-disponible {
+  background: #fde8e8;
+  color: #c62828;
+}
+
+.login-link {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ff6b35;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.detalle-descripcion {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #6b6b6b;
+  line-height: 1.6;
+}
+
+.detalle-metadata {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metadata-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #bfae9e;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metadata-value {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.detalle-vacio {
+  text-align: center;
+  padding: 60px 20px;
+
+  p {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #999;
+  }
+}
+
+@media (min-width: 700px) {
+  .detalle-layout {
+    grid-template-columns: 280px 1fr;
+    align-items: start;
+  }
+
+  .detalle-portada {
+    margin: 0;
+    max-width: none;
+  }
+}

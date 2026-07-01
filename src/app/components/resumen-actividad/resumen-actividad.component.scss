@@ -1,0 +1,44 @@
+.resumen-card {
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+
+    ion-card-header {
+        padding-bottom: 0.5rem;
+    }
+
+
+    ion-card-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1A1A1A;
+    }
+}
+
+
+.fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+    padding: 1rem 0;
+    border-bottom: 1px solid #ECECEC;
+
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+
+    span {
+        color: #777;
+        font-size: 0.95rem;
+    }
+
+
+    strong {
+        color: #1A1A1A;
+        font-weight: 600;
+    }
+}

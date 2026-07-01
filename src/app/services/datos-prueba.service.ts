@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { Ejemplar, Multa, Prestamo } from '../models';
+import { Ejemplar, Multa, Prestamo, Usuario } from '../models';
 import { AuthService } from './auth.service';
 import { EjemplarService } from './ejemplar.service';
 import { LibroService } from './libro.service';
@@ -29,29 +29,38 @@ export class DatosPruebaService {
 
   private readonly idPrestamoVigente = 'datos-prueba-prestamo-vigente';
   private readonly idPrestamoVencido = 'datos-prueba-prestamo-vencido';
+  private readonly idPrestamoVencidoSinMulta =
+    'datos-prueba-prestamo-vencido-sin-multa';
   private readonly idPrestamoDevuelto = 'datos-prueba-prestamo-devuelto';
   private readonly idMultaPendiente = 'datos-prueba-multa-pendiente';
 
   /**
    * Carga prestamos y una multa de prueba sin pisar datos existentes.
+   * Si ya existe la base cargada por una version anterior (sin el escenario
+   * de prestamo vencido sin multa), solo agrega ese escenario faltante.
    * @returns El resultado de la carga.
    */
   async cargarDatosPrueba(): Promise<ResultadoDatosPrueba> {
     const prestamos = await this._prestamoService.obtenerPrestamos();
     const multas = await this._storageService.obtenerLista<Multa>('multas');
-    const idsPrestamos = [
+
+    const idsPrestamosBase = [
       this.idPrestamoVigente,
       this.idPrestamoVencido,
       this.idPrestamoDevuelto,
     ];
-    const prestamosExistentes = prestamos.filter((prestamo) =>
-      idsPrestamos.includes(prestamo.id),
+    const prestamosBaseExistentes = prestamos.filter((prestamo) =>
+      idsPrestamosBase.includes(prestamo.id),
     );
     const multaExistente = multas.some(
       (multa) => multa.id === this.idMultaPendiente,
     );
+    const vencidoSinMultaExistente = prestamos.some(
+      (prestamo) => prestamo.id === this.idPrestamoVencidoSinMulta,
+    );
+    const baseCompleta = prestamosBaseExistentes.length === 3 && multaExistente;
 
-    if (prestamosExistentes.length === 3 && multaExistente) {
+    if (baseCompleta && vencidoSinMultaExistente) {
       return this.crearResultado(
         true,
         'Los datos de prueba ya estaban cargados.',
@@ -59,7 +68,7 @@ export class DatosPruebaService {
       );
     }
 
-    if (prestamosExistentes.length > 0 || multaExistente) {
+    if (!baseCompleta && (prestamosBaseExistentes.length > 0 || multaExistente)) {
       return this.crearResultado(
         false,
         'Hay una carga de prueba incompleta. No se modificaron los datos.',
@@ -87,36 +96,28 @@ export class DatosPruebaService {
       );
     }
 
-    const ejemplares = await this._ejemplarService.obtenerEjemplares();
-    const prestamosActivos = prestamos.filter((prestamo) => !prestamo.fechaDevReal);
-    const ejemplaresDisponibles = ejemplares.filter(
-      (ejemplar) =>
-        ejemplar.estadoEjemplar === 'disponible' &&
-        !prestamosActivos.some(
-          (prestamo) => prestamo.idEjemplar === ejemplar.id,
-        ),
-    );
-    const ejemplaresValidos: Ejemplar[] = [];
-
-    for (const ejemplar of ejemplaresDisponibles) {
-      const libro = await this._libroService.obtenerLibroPorId(ejemplar.idLibro);
-      if (libro && libro.activo !== false) {
-        ejemplaresValidos.push(ejemplar);
-      }
-
-      if (ejemplaresValidos.length === 2) {
-        break;
-      }
+    if (baseCompleta) {
+      return this.agregarEscenarioVencidoSinMulta(bibliotecario, lector);
     }
 
-    if (ejemplaresValidos.length < 2) {
+    return this.crearEscenarioCompleto(bibliotecario, lector);
+  }
+
+  private async crearEscenarioCompleto(
+    bibliotecario: Usuario,
+    lector: Usuario,
+  ): Promise<ResultadoDatosPrueba> {
+    const ejemplaresValidos = await this.seleccionarEjemplaresValidos(3);
+
+    if (ejemplaresValidos.length < 3) {
       return this.crearResultado(
         false,
-        'Se necesitan al menos dos ejemplares disponibles de libros activos.',
+        'Se necesitan al menos tres ejemplares disponibles de libros activos.',
       );
     }
 
-    const [ejemplarVigente, ejemplarVencido] = ejemplaresValidos;
+    const [ejemplarVigente, ejemplarVencido, ejemplarVencidoSinMulta] =
+      ejemplaresValidos;
     const ahora = new Date();
     const prestamoDevuelto: Prestamo = {
       id: this.idPrestamoDevuelto,
@@ -143,6 +144,14 @@ export class DatosPruebaService {
       fechaDevEstimada: this.obtenerFecha(ahora, -10, true),
       idBibliotecario: bibliotecario.id,
     };
+    const prestamoVencidoSinMulta: Prestamo = {
+      id: this.idPrestamoVencidoSinMulta,
+      idUsuario: lector.id,
+      idEjemplar: ejemplarVencidoSinMulta.id,
+      fechaPrestamo: this.obtenerFecha(ahora, -15),
+      fechaDevEstimada: this.obtenerFecha(ahora, -5, true),
+      idBibliotecario: bibliotecario.id,
+    };
     const multaPendiente: Multa = {
       id: this.idMultaPendiente,
       idUsuario: lector.id,
@@ -154,6 +163,7 @@ export class DatosPruebaService {
       prestamoDevuelto,
       prestamoVigente,
       prestamoVencido,
+      prestamoVencidoSinMulta,
     ];
     const idsGuardados: string[] = [];
     let multaGuardada = false;
@@ -165,11 +175,7 @@ export class DatosPruebaService {
           prestamo,
         );
         if (!guardado) {
-          await this.restaurarCarga(
-            idsGuardados,
-            multaGuardada,
-            ejemplaresValidos,
-          );
+          await this.restaurarCarga(idsGuardados, false, ejemplaresValidos);
           return this.crearResultado(false, 'No se pudieron guardar los prestamos.');
         }
         idsGuardados.push(prestamo.id);
@@ -214,18 +220,131 @@ export class DatosPruebaService {
         exito: true,
         mensaje: 'Datos de prueba cargados correctamente.',
         yaExistian: false,
-        prestamosCreados: 3,
+        prestamosCreados: 4,
         multasCreadas: 1,
       };
     } catch (error) {
       console.error(error);
+      await this.restaurarCarga(idsGuardados, multaGuardada, ejemplaresValidos);
+      return this.crearResultado(false, 'Ocurrio un error al cargar los datos de prueba.');
+    }
+  }
+
+  private async agregarEscenarioVencidoSinMulta(
+    bibliotecario: Usuario,
+    lector: Usuario,
+  ): Promise<ResultadoDatosPrueba> {
+    const ejemplaresValidos = await this.seleccionarEjemplaresValidos(1);
+
+    if (ejemplaresValidos.length < 1) {
+      return this.crearResultado(
+        false,
+        'Se necesita al menos un ejemplar disponible de un libro activo.',
+      );
+    }
+
+    const [ejemplarVencidoSinMulta] = ejemplaresValidos;
+    const ahora = new Date();
+    const prestamoVencidoSinMulta: Prestamo = {
+      id: this.idPrestamoVencidoSinMulta,
+      idUsuario: lector.id,
+      idEjemplar: ejemplarVencidoSinMulta.id,
+      fechaPrestamo: this.obtenerFecha(ahora, -15),
+      fechaDevEstimada: this.obtenerFecha(ahora, -5, true),
+      idBibliotecario: bibliotecario.id,
+    };
+
+    try {
+      const guardado = await this._storageService.guardar<Prestamo>(
+        'prestamos',
+        prestamoVencidoSinMulta,
+      );
+      if (!guardado) {
+        return this.crearResultado(false, 'No se pudo guardar el prestamo.');
+      }
+
+      const actualizado = await this._ejemplarService.actualizarEstadoEjemplar(
+        ejemplarVencidoSinMulta.id,
+        'prestado',
+      );
+      if (!actualizado) {
+        await this.restaurarCarga(
+          [prestamoVencidoSinMulta.id],
+          false,
+          ejemplaresValidos,
+        );
+        return this.crearResultado(false, 'No se pudo reservar el ejemplar.');
+      }
+
+      const librosSincronizados = await this.sincronizarLibros(ejemplaresValidos);
+      if (!librosSincronizados) {
+        await this.restaurarCarga(
+          [prestamoVencidoSinMulta.id],
+          false,
+          ejemplaresValidos,
+        );
+        return this.crearResultado(false, 'No se pudo sincronizar el inventario.');
+      }
+
+      return {
+        exito: true,
+        mensaje:
+          'Se agregó el escenario de préstamo vencido sin multa a los datos de prueba.',
+        yaExistian: false,
+        prestamosCreados: 1,
+        multasCreadas: 0,
+      };
+    } catch (error) {
+      console.error(error);
       await this.restaurarCarga(
-        idsGuardados,
-        multaGuardada,
+        [prestamoVencidoSinMulta.id],
+        false,
         ejemplaresValidos,
       );
       return this.crearResultado(false, 'Ocurrio un error al cargar los datos de prueba.');
     }
+  }
+
+  private async seleccionarEjemplaresValidos(
+    cantidad: number,
+  ): Promise<Ejemplar[]> {
+    const libros = await this._libroService.obtenerLibros();
+    const ordenLibros = new Map(libros.map((libro, indice) => [libro.id, indice]));
+
+    const [ejemplares, prestamos] = await Promise.all([
+      this._ejemplarService.obtenerEjemplares(),
+      this._prestamoService.obtenerPrestamos(),
+    ]);
+    const prestamosActivos = prestamos.filter((prestamo) => !prestamo.fechaDevReal);
+
+    const ejemplaresDisponibles = ejemplares
+      .filter(
+        (ejemplar) =>
+          ejemplar.estadoEjemplar === 'disponible' &&
+          !prestamosActivos.some(
+            (prestamo) => prestamo.idEjemplar === ejemplar.id,
+          ),
+      )
+      .sort(
+        (a, b) =>
+          (ordenLibros.get(b.idLibro) ?? -1) -
+          (ordenLibros.get(a.idLibro) ?? -1),
+      );
+
+    const ejemplaresValidos: Ejemplar[] = [];
+
+    for (const ejemplar of ejemplaresDisponibles) {
+      const libro = libros.find((item) => item.id === ejemplar.idLibro);
+      if (libro && libro.activo !== false) {
+        ejemplaresValidos.push(ejemplar);
+      }
+
+      if (ejemplaresValidos.length === cantidad) {
+        break;
+      }
+    }
+
+    return ejemplaresValidos;
   }
 
   private obtenerFecha(fechaBase: Date, dias: number, finDelDia = false): string {

@@ -18,13 +18,14 @@ import { Ejemplar, Libro, Prestamo, Usuario } from 'src/app/models';
 import { BarcodeService } from 'src/app/services/barcode.service';
 import { EjemplarService } from 'src/app/services/ejemplar.service';
 import { LibroService } from 'src/app/services/libro.service';
+import { MultaService } from 'src/app/services/multa.service';
 import { PerfilUsuarioService } from 'src/app/services/perfil-usuario.service';
 import { PrestamoService } from 'src/app/services/prestamo.service';
 
 @Component({
-  selector: 'app-devolver-prestamo',
-  templateUrl: './devolver-prestamo.component.html',
-  styleUrls: ['./devolver-prestamo.component.scss'],
+  selector: 'app-registrar-multa',
+  templateUrl: './registrar-multa.component.html',
+  styleUrls: ['./registrar-multa.component.scss'],
   standalone: true,
   imports: [
     FormsModule,
@@ -38,15 +39,17 @@ import { PrestamoService } from 'src/app/services/prestamo.service';
     SelectorEjemplarComponent,
   ],
 })
-export class DevolverPrestamoComponent implements OnInit {
+export class RegistrarMultaComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   private _barcodeService = inject(BarcodeService);
   private _ejemplarService = inject(EjemplarService);
   private _libroService = inject(LibroService);
   private _perfilUsuarioService = inject(PerfilUsuarioService);
   private _prestamoService = inject(PrestamoService);
+  private _multaService = inject(MultaService);
 
   codigoBarras = '';
+  monto: number | null = null;
   ejemplarSeleccionado: Ejemplar | null = null;
   libroSeleccionado: Libro | null = null;
   prestamoSeleccionado: Prestamo | null = null;
@@ -66,10 +69,10 @@ export class DevolverPrestamoComponent implements OnInit {
     }
 
     this.codigoBarras = codigo;
-    await this.buscarPrestamo();
+    await this.buscarMulta();
   }
 
-  async buscarPrestamo(): Promise<void> {
+  async buscarMulta(): Promise<void> {
     const codigo = this.codigoBarras.trim();
     if (!codigo || this.buscando) {
       this.mostrarMensaje('Ingresá el código de barras del ejemplar.', true);
@@ -131,10 +134,24 @@ export class DevolverPrestamoComponent implements OnInit {
           );
 
     if (!prestamo) {
+      this.mostrarMensaje('El ejemplar no tiene un préstamo activo.', true);
+      return;
+    }
+
+    if (new Date(prestamo.fechaDevEstimada) >= new Date()) {
       this.mostrarMensaje(
-        'El ejemplar no tiene un préstamo activo para devolver.',
+        'El préstamo no está vencido, no corresponde generar una multa.',
         true,
       );
+      return;
+    }
+
+    const multaExistente = await this._multaService.obtenerMultaPorPrestamo(
+      prestamo.id,
+    );
+
+    if (multaExistente) {
+      this.mostrarMensaje('Este préstamo ya tiene una multa registrada.', true);
       return;
     }
 
@@ -148,7 +165,10 @@ export class DevolverPrestamoComponent implements OnInit {
     this.libroSeleccionado = libro;
     this.lectorSeleccionado = lector;
 
-    this.mostrarMensaje('Préstamo encontrado. Revisá los datos.', false);
+    this.mostrarMensaje(
+      'Préstamo vencido encontrado. Revisá los datos y completá el monto.',
+      false,
+    );
   }
 
   async escanearCodigo(): Promise<void> {
@@ -166,7 +186,7 @@ export class DevolverPrestamoComponent implements OnInit {
       }
 
       this.codigoBarras = codigo;
-      await this.buscarPrestamo();
+      await this.buscarMulta();
     } catch (error) {
       console.error(error);
       this.mostrarMensaje(
@@ -178,8 +198,13 @@ export class DevolverPrestamoComponent implements OnInit {
     }
   }
 
-  async confirmarDevolucion(): Promise<void> {
+  async confirmarRegistro(): Promise<void> {
     if (!this.prestamoSeleccionado || this.procesando) {
+      return;
+    }
+
+    if (!this.monto || this.monto <= 0) {
+      this.mostrarMensaje('Ingresá un monto válido para la multa.', true);
       return;
     }
 
@@ -187,27 +212,30 @@ export class DevolverPrestamoComponent implements OnInit {
     this.mensaje = '';
 
     try {
-      const devuelto = await this._prestamoService.registrarDevolucion(
+      const multa = await this._multaService.crearMulta(
+        this.prestamoSeleccionado.idUsuario,
         this.prestamoSeleccionado.id,
+        this.monto,
       );
 
-      if (!devuelto) {
+      if (!multa) {
         this.mostrarMensaje(
-          'No se pudo registrar la devolución. El préstamo pudo haber sido actualizado.',
+          'No se pudo registrar la multa. El préstamo pudo haber sido actualizado.',
           true,
         );
         return;
       }
 
       this.codigoBarras = '';
+      this.monto = null;
       this.limpiarSeleccion();
-      this.mostrarMensaje('Devolución registrada correctamente.', false);
+      this.mostrarMensaje('Multa registrada correctamente.', false);
     } catch (error) {
       console.error(error);
       this.mostrarMensaje(
         error instanceof Error
           ? error.message
-          : 'No se pudo registrar la devolución.',
+          : 'No se pudo registrar la multa.',
         true,
       );
     } finally {
@@ -217,14 +245,6 @@ export class DevolverPrestamoComponent implements OnInit {
 
   get escanerDisponible(): boolean {
     return this._barcodeService.esAndroidNativo();
-  }
-
-  get prestamoVencido(): boolean {
-    if (!this.prestamoSeleccionado) {
-      return false;
-    }
-
-    return new Date(this.prestamoSeleccionado.fechaDevEstimada) < new Date();
   }
 
   formatearFecha(fecha: string): string {
@@ -240,6 +260,7 @@ export class DevolverPrestamoComponent implements OnInit {
     this.libroSeleccionado = null;
     this.prestamoSeleccionado = null;
     this.lectorSeleccionado = null;
+    this.monto = null;
   }
 
   private mostrarMensaje(mensaje: string, esError: boolean): void {

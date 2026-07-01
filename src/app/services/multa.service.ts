@@ -57,4 +57,83 @@ export class MultaService {
   guardarMulta(multa: Multa): Promise<boolean> {
     return this._storageService.guardar<Multa>('multas', multa);
   }
+
+  /**
+   * Obtiene una multa por su ID.
+   * @param idMulta El ID de la multa.
+   * @returns La multa o null si no se encontro.
+   */
+  obtenerMultaPorId(idMulta: string): Promise<Multa | null> {
+    return this._storageService.obtenerPorId<Multa>('multas', idMulta);
+  }
+
+  /**
+   * Obtiene la multa asociada a un prestamo.
+   * @param idPrestamo El ID del prestamo.
+   * @returns La multa o null si no existe.
+   */
+  async obtenerMultaPorPrestamo(idPrestamo: string): Promise<Multa | null> {
+    const multas = await this.obtenerMultas();
+    return multas.find((multa) => multa.idPrestamo === idPrestamo) ?? null;
+  }
+
+  /**
+   * Crea una multa para un prestamo vencido.
+   * @param idUsuario El ID del usuario lector.
+   * @param idPrestamo El ID del prestamo vencido.
+   * @param monto El monto de la multa.
+   * @returns La multa creada o null si no se pudo crear.
+   */
+  async crearMulta(
+    idUsuario: string,
+    idPrestamo: string,
+    monto: number,
+  ): Promise<Multa | null> {
+    if (!idUsuario.trim() || !idPrestamo.trim() || monto <= 0) {
+      return null;
+    }
+
+    const multaExistente = await this.obtenerMultaPorPrestamo(idPrestamo);
+    if (multaExistente) {
+      return null;
+    }
+
+    const multa: Multa = {
+      id: crypto.randomUUID(),
+      idUsuario,
+      idPrestamo,
+      monto,
+      pagada: false,
+    };
+
+    try {
+      const multaGuardada = await this.guardarMulta(multa);
+      return multaGuardada ? multa : null;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  /**
+   * Marca una multa como pagada.
+   * @param idMulta El ID de la multa.
+   * @returns true si se actualizo correctamente, false en caso contrario.
+   */
+  async pagarMulta(idMulta: string): Promise<boolean> {
+    const multa = await this.obtenerMultaPorId(idMulta);
+    if (!multa || multa.pagada) {
+      return false;
+    }
+
+    try {
+      return await this._storageService.actualizar<Multa>('multas', {
+        ...multa,
+        pagada: true,
+      });
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }

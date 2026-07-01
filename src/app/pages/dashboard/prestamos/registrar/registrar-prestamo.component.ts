@@ -13,6 +13,7 @@ import {
 import { GoBackComponent } from 'src/app/components/botones/go-back/go-back.component';
 import { BannerMoraComponent } from 'src/app/components/banner-mora/banner-mora.component';
 import { HeaderPageComponent } from 'src/app/components/dashboard/header-page/header-page.component';
+import { SelectorEjemplarComponent } from 'src/app/components/selector-ejemplar/selector-ejemplar.component';
 import { Ejemplar, Libro, Usuario } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { BarcodeService } from 'src/app/services/barcode.service';
@@ -39,6 +40,7 @@ import { PrestamoService } from 'src/app/services/prestamo.service';
     GoBackComponent,
     BannerMoraComponent,
     HeaderPageComponent,
+    SelectorEjemplarComponent,
   ],
 })
 export class RegistrarPrestamoComponent implements OnInit {
@@ -56,6 +58,7 @@ export class RegistrarPrestamoComponent implements OnInit {
   codigoBarras = '';
   fechaDevEstimada = '';
   fechaMinima = '';
+  mostrarSelector = false;
 
   ejemplarSeleccionado: Ejemplar | null = null;
   libroSeleccionado: Libro | null = null;
@@ -135,32 +138,7 @@ export class RegistrarPrestamoComponent implements OnInit {
         return;
       }
 
-      const libro = await this._libroService.obtenerLibroPorId(
-        ejemplar.idLibro,
-      );
-
-      if (!libro) {
-        this.mostrarMensaje('No se encontró el libro del ejemplar.', true);
-        return;
-      }
-
-      this.ejemplarSeleccionado = ejemplar;
-      this.libroSeleccionado = libro;
-
-      if (libro.activo === false) {
-        this.mostrarMensaje('El libro está dado de baja.', true);
-        return;
-      }
-
-      if (ejemplar.estadoEjemplar !== 'disponible') {
-        this.mostrarMensaje(
-          `El ejemplar no está disponible. Estado actual: ${ejemplar.estadoEjemplar}.`,
-          true,
-        );
-        return;
-      }
-
-      this.mostrarMensaje('Ejemplar disponible para prestar.', false);
+      await this.procesarEjemplarEncontrado(ejemplar);
     } catch (error) {
       console.error(error);
       this.mostrarMensaje('No se pudo buscar el ejemplar.', true);
@@ -173,6 +151,47 @@ export class RegistrarPrestamoComponent implements OnInit {
     this.ejemplarSeleccionado = null;
     this.libroSeleccionado = null;
     this.mensaje = '';
+  }
+
+  async elegirEjemplarDesdeSelector(ejemplar: Ejemplar): Promise<void> {
+    this.codigoBarras = ejemplar.codigoBarras;
+    this.ejemplarSeleccionado = null;
+    this.libroSeleccionado = null;
+    this.mensaje = '';
+
+    try {
+      await this.procesarEjemplarEncontrado(ejemplar);
+    } catch (error) {
+      console.error(error);
+      this.mostrarMensaje('No se pudo cargar el ejemplar elegido.', true);
+    }
+  }
+
+  private async procesarEjemplarEncontrado(ejemplar: Ejemplar): Promise<void> {
+    const libro = await this._libroService.obtenerLibroPorId(ejemplar.idLibro);
+
+    if (!libro) {
+      this.mostrarMensaje('No se encontró el libro del ejemplar.', true);
+      return;
+    }
+
+    this.ejemplarSeleccionado = ejemplar;
+    this.libroSeleccionado = libro;
+
+    if (libro.activo === false) {
+      this.mostrarMensaje('El libro está dado de baja.', true);
+      return;
+    }
+
+    if (ejemplar.estadoEjemplar !== 'disponible') {
+      this.mostrarMensaje(
+        `El ejemplar no está disponible. Estado actual: ${ejemplar.estadoEjemplar}.`,
+        true,
+      );
+      return;
+    }
+
+    this.mostrarMensaje('Ejemplar disponible para prestar.', false);
   }
 
   async escanearCodigo(): Promise<void> {

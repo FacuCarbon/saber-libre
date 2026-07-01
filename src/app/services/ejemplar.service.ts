@@ -73,6 +73,18 @@ export class EjemplarService {
   }
 
   /**
+   * Obtiene los ejemplares prestados de un libro.
+   * @param idLibro El ID del libro.
+   * @returns Lista de ejemplares prestados.
+   */
+  async obtenerEjemplaresPrestadosPorLibro(idLibro: string): Promise<Ejemplar[]> {
+    const ejemplares = await this.obtenerEjemplaresPorLibro(idLibro);
+    return ejemplares.filter(
+      (ejemplar) => ejemplar.estadoEjemplar === 'prestado',
+    );
+  }
+
+  /**
    * Obtiene el primer ejemplar disponible de un libro.
    * @param idLibro El ID del libro.
    * @returns El ejemplar disponible o null.
@@ -125,7 +137,7 @@ export class EjemplarService {
       const ejemplar: Ejemplar = {
         id: crypto.randomUUID(),
         idLibro,
-        codigoBarras: `EX-${crypto.randomUUID()}`,
+        codigoBarras: await this.generarCodigoBarrasUnico(),
         estadoEjemplar: 'disponible',
         ubicacion,
       };
@@ -139,6 +151,34 @@ export class EjemplarService {
     }
 
     return creados;
+  }
+
+  /**
+   * Genera un codigo de barras corto (formato EX-XXXXXXXX, apto para CODE128)
+   * y verifica que no colisione con uno existente.
+   * @returns El codigo de barras unico generado.
+   */
+  private async generarCodigoBarrasUnico(): Promise<string> {
+    let codigo: string;
+
+    do {
+      codigo = `EX-${this.generarSufijoAleatorio(8)}`;
+    } while (await this.obtenerEjemplarPorCodigoBarras(codigo));
+
+    return codigo;
+  }
+
+  private generarSufijoAleatorio(longitud: number): string {
+    const alfabeto = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    const valoresAleatorios = new Uint32Array(longitud);
+    crypto.getRandomValues(valoresAleatorios);
+
+    let sufijo = '';
+    for (const valor of valoresAleatorios) {
+      sufijo += alfabeto[valor % alfabeto.length];
+    }
+
+    return sufijo;
   }
 
   /**

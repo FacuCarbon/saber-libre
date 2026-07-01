@@ -109,6 +109,28 @@
           </div>
         }
 
+        <div class="campo campo-completo">
+          <ion-button
+            type="button"
+            fill="clear"
+            class="boton-alternativo"
+            (click)="mostrarSelector = !mostrarSelector"
+          >
+            {{
+              mostrarSelector
+                ? "Ocultar buscador por título o autor"
+                : "¿No tenés el código a mano? Buscar por título o autor"
+            }}
+          </ion-button>
+
+          @if (mostrarSelector) {
+            <app-selector-ejemplar
+              modo="disponible"
+              (ejemplarElegido)="elegirEjemplarDesdeSelector($event.ejemplar)"
+            ></app-selector-ejemplar>
+          }
+        </div>
+
         <div class="campo">
           <ion-label position="stacked">Devolución estimada</ion-label>
           <ion-input

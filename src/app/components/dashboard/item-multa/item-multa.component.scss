@@ -1,0 +1,157 @@
+:host {
+  display: block;
+}
+
+.multa-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "identidad identidad"
+    "monto estado"
+    "acciones acciones";
+  align-items: center;
+  gap: 0.85rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9e3dd;
+  color: #29231f;
+}
+
+:host(:last-child) .multa-item {
+  border-bottom: 0;
+}
+
+.multa-identidad {
+  grid-area: identidad;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.icono-multa {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 48px;
+  background: #fff0e9;
+  border-radius: 0.65rem;
+  color: #ce3f0b;
+  font-size: 1.2rem;
+}
+
+.multa-info {
+  min-width: 0;
+}
+
+.multa-info h3,
+.multa-info p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.multa-info h3 {
+  margin: 0;
+  color: #29231f;
+  font: 800 0.95rem var(--font-display);
+}
+
+.multa-info p {
+  margin: 0.25rem 0 0;
+  color: #746b65;
+  font-size: 0.78rem;
+}
+
+.dato,
+.estado {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 0.35rem;
+  color: #5f5751;
+  font-size: 0.8rem;
+}
+
+.monto {
+  grid-area: monto;
+}
+
+.estado {
+  grid-area: estado;
+  justify-self: end;
+}
+
+.etiqueta-mobile {
+  color: #918981;
+  font-size: 0.72rem;
+}
+
+.estado-badge {
+  padding: 0.3rem 0.55rem;
+  background: #fcecea;
+  border-radius: 999px;
+  color: #b53c36;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.multa-item--pagada .estado-badge {
+  background: #eef6f2;
+  color: #27775b;
+}
+
+.acciones {
+  grid-area: acciones;
+  justify-self: end;
+}
+
+.acciones ion-button {
+  --border-color: #e2d7cf;
+  --border-radius: 0.65rem;
+  --box-shadow: none;
+  --color: #9f3512;
+
+  margin: 0;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.sin-accion {
+  color: #918981;
+  font-size: 0.72rem;
+}
+
+@media (min-width: 992px) {
+  .multa-item {
+    grid-template-columns: var(
+      --columnas-multas,
+      minmax(220px, 1.8fr) 120px 110px 140px
+    );
+    grid-template-areas: "identidad monto estado acciones";
+    gap: 1rem;
+    min-height: 72px;
+    padding: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .multa-item:hover {
+    background: #fffaf7;
+  }
+
+  .dato {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .estado {
+    justify-self: initial;
+  }
+
+  .etiqueta-mobile {
+    display: none;
+  }
+}

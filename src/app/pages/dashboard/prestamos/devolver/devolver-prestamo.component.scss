@@ -96,6 +96,16 @@ ion-input {
   font-size: 0.68rem;
 }
 
+.boton-alternativo {
+  --padding-start: 0;
+  --padding-end: 0;
+
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: none;
+}
+
 .boton-buscar,
 .boton-escanear,
 .boton-cancelar,

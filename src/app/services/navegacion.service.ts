@@ -15,7 +15,7 @@ export class NavegacionService {
   public dashboardMenu: NavItem[] = [
     {
       title: 'Inicio',
-      url: '/dashboard/inicio',
+      url: '/',
       icon: 'home-outline',
       mobile: 'tab',
       exact: true,
@@ -39,17 +39,10 @@ export class NavegacionService {
       url: '/dashboard/multas',
       icon: 'receipt-outline',
       mobile: 'more',
-      exact: true,
+      exact: false,
       rolesPermitidos: ['administrador', 'bibliotecario'],
     },
-    {
-      title: 'Gestion',
-      url: '/dashboard/gestion',
-      icon: 'construct-outline',
-      mobile: 'tab',
-      exact: true,
-      rolesPermitidos: ['administrador', 'bibliotecario'],
-    },
+
     {
       title: 'Mi perfil',
       url: '/dashboard/perfil',

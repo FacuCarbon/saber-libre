@@ -288,6 +288,15 @@
             </div>
 
             <div class="acciones-item">
+              <ion-button
+                type="button"
+                fill="clear"
+                class="boton-icono"
+                aria-label="Ver código de barras"
+                (click)="abrirImpresion(ejemplar)"
+              >
+                <ion-icon name="barcode-outline" />
+              </ion-button>
               @if (libroActual.activo === false) {
                 <span class="sin-acciones">Libro inactivo</span>
               } @else if (ejemplar.estadoEjemplar === "baja") {
@@ -335,4 +344,40 @@
       </div>
     </section>
   }
+
+  <ion-modal [isOpen]="ejemplarParaImprimir !== null" (didDismiss)="cerrarImpresion()">
+    <ng-template>
+      @if (ejemplarParaImprimir) {
+        <div class="modal-imprimir panel">
+          <div class="modal-encabezado">
+            <p class="eyebrow">Código de barras</p>
+            <ion-button
+              type="button"
+              fill="clear"
+              class="boton-icono"
+              aria-label="Cerrar"
+              (click)="cerrarImpresion()"
+            >
+              <ion-icon name="close-circle" />
+            </ion-button>
+          </div>
+
+          <div class="etiqueta-imprimible">
+            <h2>{{ libroActual?.titulo }}</h2>
+            <app-ejemplar-barcode [codigo]="ejemplarParaImprimir.codigoBarras" />
+          </div>
+
+          <ion-button
+            type="button"
+            expand="block"
+            class="boton-primario"
+            (click)="imprimir()"
+          >
+            <ion-icon name="print-outline" slot="start" />
+            Imprimir etiqueta
+          </ion-button>
+        </div>
+      }
+    </ng-template>
+  </ion-modal>
 </main>

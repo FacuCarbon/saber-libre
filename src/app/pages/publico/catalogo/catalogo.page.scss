@@ -1,0 +1,55 @@
+.catalogo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.catalogo-header {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #2d2d2d;
+  }
+
+  p {
+    margin: 4px 0 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #999;
+  }
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.catalogo-vacio {
+  text-align: center;
+  padding: 40px 20px;
+
+  p {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #999;
+  }
+}
+
+@media (min-width: 900px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

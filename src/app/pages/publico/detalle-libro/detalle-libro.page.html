@@ -1,0 +1,68 @@
+<app-header />
+
+<ion-content style="--ion-background-color: #f8f6f3;">
+  @if (libro) {
+    <main class="detalle-container">
+      <ion-button fill="clear" class="btn-volver" (click)="volver()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Volver al catálogo
+      </ion-button>
+
+      <div class="detalle-layout">
+        <div class="detalle-portada">
+          @if (libro.imagenPortada) {
+            <img [src]="libro.imagenPortada" [alt]="libro.titulo" />
+          } @else {
+            <div class="portada-placeholder">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+          }
+        </div>
+
+        <div class="detalle-info">
+          <span class="detalle-eyebrow">Libro</span>
+          <h1>{{ libro.titulo }}</h1>
+
+          @if (usuarioLogueado) {
+            @if (libro.cantidadDisponible > 0) {
+              <span class="badge badge-disponible">Disponible</span>
+            } @else {
+              <span class="badge badge-no-disponible">No disponible</span>
+            }
+          } @else {
+            <a class="login-link" routerLink="/auth/login">Iniciá sesión para ver disponibilidad</a>
+          }
+
+          @if (libro.descripcion) {
+            <p class="detalle-descripcion">{{ libro.descripcion }}</p>
+          }
+
+          <div class="detalle-metadata">
+            <div class="metadata-item">
+              <span class="metadata-label">Autor</span>
+              <span class="metadata-value">{{ libro.autores.join(', ') }}</span>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-label">ISBN</span>
+              <span class="metadata-value">{{ libro.isbn }}</span>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-label">Categoría</span>
+              <span class="metadata-value">{{ libro.categorias.join(', ') }}</span>
+            </div>
+            @if (usuarioLogueado) {
+              <div class="metadata-item">
+                <span class="metadata-label">Copias</span>
+                <span class="metadata-value">{{ libro.cantidadDisponible }} de {{ libro.cantidadTotal }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </main>
+  } @else {
+    <div class="detalle-vacio">
+      <p>Libro no encontrado.</p>
+    </div>
+  }
+</ion-content>

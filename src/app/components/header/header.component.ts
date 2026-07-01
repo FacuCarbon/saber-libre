@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   IonButton,
@@ -28,6 +28,7 @@ import { RolUsuario, Usuario } from 'src/app/models';
     IonItem,
     IonLabel,
     RouterLink,
+    RouterLinkActive,
     LogoAppComponent,
   ],
 })
@@ -39,6 +40,8 @@ export class HeaderComponent implements OnInit {
   usuario: Usuario | null = null;
   rol: RolUsuario | null = null;
   cargando = true;
+  popoverAbierto = false;
+  popoverEvent: Event | null = null;
 
   ngOnInit() {
     onAuthStateChanged(this.auth, async (user) => {
@@ -57,15 +60,41 @@ export class HeaderComponent implements OnInit {
     return this.rol === 'administrador' || this.rol === 'bibliotecario';
   }
 
+  get esLector(): boolean {
+    return this.rol === 'lector';
+  }
+
+  togglePopover(ev: Event) {
+    this.popoverEvent = ev;
+    this.popoverAbierto = !this.popoverAbierto;
+  }
+
+  cerrarPopover() {
+    this.popoverAbierto = false;
+  }
+
   async irADashboard() {
+    this.cerrarPopover();
     await this.router.navigate(['/dashboard']);
   }
 
+  async irALector() {
+    this.cerrarPopover();
+    await this.router.navigate(['/lector']);
+  }
+
+  async irACatalogo() {
+    this.cerrarPopover();
+    await this.router.navigate(['/catalogo']);
+  }
+
   async irAPerfil() {
+    this.cerrarPopover();
     await this.router.navigate(['/dashboard/perfil']);
   }
 
   async cerrarSesion() {
+    this.cerrarPopover();
     await this.authService.logout();
     this.usuario = null;
     this.rol = null;

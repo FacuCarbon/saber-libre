@@ -125,6 +125,50 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'lector',
+    loadComponent: () =>
+      import('./pages/lector/lector.page').then((m) => m.LectorPage),
+    canActivate: [authGuard, roleGuard],
+    data: {
+      rolesPermitidos: ['lector'],
+    },
+    children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/lector/inicio/inicio.page').then(
+            (m) => m.LectorInicioPage,
+          ),
+      },
+      {
+        path: 'mis-prestamos',
+        loadComponent: () =>
+          import('./pages/lector/mis-prestamos/mis-prestamos.page').then(
+            (m) => m.MisPrestamosPage,
+          ),
+      },
+    ],
+  },
+  {
+    path: 'catalogo',
+    loadComponent: () =>
+      import('./pages/publico/catalogo/catalogo.page').then(
+        (m) => m.CatalogoPage,
+      ),
+  },
+  {
+    path: 'catalogo/:id',
+    loadComponent: () =>
+      import('./pages/publico/detalle-libro/detalle-libro.page').then(
+        (m) => m.DetalleLibroPage,
+      ),
+  },
+  {
     path: 'demo',
     loadComponent: () =>
       import('./pages/demo/demo.page').then((m) => m.DemoPage),

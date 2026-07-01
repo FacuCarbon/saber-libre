@@ -6,9 +6,11 @@ import {
   IonIcon,
   IonInput,
   IonLabel,
+  IonModal,
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
+import { EjemplarBarcodeComponent } from 'src/app/components/ejemplar-barcode/ejemplar-barcode.component';
 import { GoBackComponent } from 'src/app/components/botones/go-back/go-back.component';
 import { HeaderPageComponent } from 'src/app/components/dashboard/header-page/header-page.component';
 import { Ejemplar, EstadoEjemplar, Libro } from 'src/app/models';
@@ -26,8 +28,10 @@ import { LibroService } from 'src/app/services/libro.service';
     IonIcon,
     IonInput,
     IonLabel,
+    IonModal,
     IonSelect,
     IonSelectOption,
+    EjemplarBarcodeComponent,
     GoBackComponent,
     HeaderPageComponent,
   ],
@@ -50,6 +54,7 @@ export class EjemplaresComponent implements OnInit {
   estadoEdicion: EstadoEjemplar = 'disponible';
 
   ejemplarParaBaja: Ejemplar | null = null;
+  ejemplarParaImprimir: Ejemplar | null = null;
   procesando = false;
   mensaje = '';
   mensajeEsError = false;
@@ -353,6 +358,18 @@ export class EjemplaresComponent implements OnInit {
     } finally {
       this.procesando = false;
     }
+  }
+
+  abrirImpresion(ejemplar: Ejemplar): void {
+    this.ejemplarParaImprimir = ejemplar;
+  }
+
+  cerrarImpresion(): void {
+    this.ejemplarParaImprimir = null;
+  }
+
+  imprimir(): void {
+    window.print();
   }
 
   obtenerTextoEstado(estado: EstadoEjemplar): string {

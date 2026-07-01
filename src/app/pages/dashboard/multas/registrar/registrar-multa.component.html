@@ -1,12 +1,12 @@
-<main class="container-devolver">
+<main class="container-registrar">
   <app-go-back
-    texto="Volver a préstamos"
-    ruta="/dashboard/prestamos"
+    texto="Volver a multas"
+    ruta="/dashboard/multas"
   ></app-go-back>
 
   <app-header-page
-    titulo="Procesar devolución"
-    subtitulo="Buscá el ejemplar prestado, revisá los datos y confirmá la recepción."
+    titulo="Registrar multa"
+    subtitulo="Buscá el ejemplar con préstamo vencido, revisá los datos y completá el monto."
   />
 
   @if (mensaje) {
@@ -19,12 +19,12 @@
     </p>
   }
 
-  <div class="devolucion-layout">
+  <div class="registrar-layout">
     <section class="panel panel-busqueda" aria-labelledby="titulo-busqueda">
       <div class="panel-encabezado">
         <div>
           <p class="eyebrow">Paso 1</p>
-          <h2 id="titulo-busqueda">Identificar ejemplar</h2>
+          <h2 id="titulo-busqueda">Identificar préstamo vencido</h2>
         </div>
         <span>Usá el código pegado en la copia física.</span>
       </div>
@@ -40,13 +40,13 @@
             placeholder="Ej. EX-1234"
             [(ngModel)]="codigoBarras"
             (ngModelChange)="cambiarCodigoBarras()"
-            (keyup.enter)="buscarPrestamo()"
+            (keyup.enter)="buscarMulta()"
           />
           <ion-button
             type="button"
             class="boton-buscar"
             [disabled]="buscando || !codigoBarras.trim()"
-            (click)="buscarPrestamo()"
+            (click)="buscarMulta()"
           >
             <ion-icon name="search-outline" slot="start" />
             {{ buscando ? "Buscando..." : "Buscar préstamo" }}
@@ -87,7 +87,7 @@
 
       @if (mostrarSelector) {
         <app-selector-ejemplar
-          modo="prestado"
+          modo="vencido"
           (ejemplarElegido)="elegirEjemplarDesdeSelector($event)"
         ></app-selector-ejemplar>
       }
@@ -97,7 +97,7 @@
       <div class="panel-encabezado">
         <div>
           <p class="eyebrow">Paso 2</p>
-          <h2 id="titulo-confirmacion">Confirmar recepción</h2>
+          <h2 id="titulo-confirmacion">Confirmar multa</h2>
         </div>
       </div>
 
@@ -112,9 +112,7 @@
           }
 
           <div class="libro-info">
-            <span class="estado" [class.estado--vencido]="prestamoVencido">
-              {{ prestamoVencido ? "Préstamo vencido" : "Préstamo vigente" }}
-            </span>
+            <span class="estado estado--vencido">Préstamo vencido</span>
             <h3>{{ libroSeleccionado?.titulo || "Libro no encontrado" }}</h3>
             <p>{{ libroSeleccionado?.autores?.join(", ") || "Sin autor" }}</p>
             <small>{{ ejemplarSeleccionado.codigoBarras }}</small>
@@ -136,17 +134,31 @@
           </div>
           <div>
             <dt>Devolución estimada</dt>
-            <dd [class.fecha-vencida]="prestamoVencido">
+            <dd class="fecha-vencida">
               {{ formatearFecha(prestamoSeleccionado.fechaDevEstimada) }}
             </dd>
           </div>
         </dl>
 
-        <div class="aviso-devolucion">
-          <ion-icon name="return-down-back-outline" aria-hidden="true" />
+        <div class="campo campo-monto">
+          <ion-label position="stacked">Monto de la multa</ion-label>
+          <ion-input
+            id="monto"
+            name="monto"
+            type="number"
+            mode="md"
+            fill="outline"
+            min="1"
+            placeholder="Ej. 1500"
+            [(ngModel)]="monto"
+          />
+        </div>
+
+        <div class="aviso-registro">
+          <ion-icon name="warning-outline" aria-hidden="true" />
           <p>
-            Al confirmar, el préstamo quedará cerrado y el ejemplar volverá a
-            estar disponible.
+            Al confirmar, la multa quedará registrada y el lector no podrá
+            solicitar nuevos préstamos hasta que la pague.
           </p>
         </div>
 
@@ -155,7 +167,7 @@
             type="button"
             fill="outline"
             class="boton-cancelar"
-            routerLink="/dashboard/prestamos"
+            routerLink="/dashboard/multas"
           >
             Cancelar
           </ion-button>
@@ -163,17 +175,17 @@
             type="button"
             class="boton-confirmar"
             [disabled]="procesando"
-            (click)="confirmarDevolucion()"
+            (click)="confirmarRegistro()"
           >
             <ion-icon name="checkmark-outline" slot="start" />
-            {{ procesando ? "Procesando..." : "Confirmar devolución" }}
+            {{ procesando ? "Procesando..." : "Registrar multa" }}
           </ion-button>
         </div>
       } @else {
         <div class="estado-vacio">
-          <ion-icon name="return-down-back-outline" aria-hidden="true" />
+          <ion-icon name="receipt-outline" aria-hidden="true" />
           <h3>Sin préstamo seleccionado</h3>
-          <p>Buscá el ejemplar para ver quién lo tiene y cuándo debía devolverlo.</p>
+          <p>Buscá el ejemplar para ver si su préstamo está vencido.</p>
         </div>
       }
     </section>

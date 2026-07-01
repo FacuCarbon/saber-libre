@@ -466,6 +466,28 @@ ion-select {
   }
 }
 
+.modal-imprimir {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.modal-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: -0.5rem;
+}
+
+.etiqueta-imprimible {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: #fffdfa;
+  border: 1px solid #e9e3dd;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
 @media (max-width: 575px) {
   .panel {
     padding: 1rem;

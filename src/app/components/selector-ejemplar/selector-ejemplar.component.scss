@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.selector-ejemplar {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.estado-selector {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 1.25rem 0;
+  color: #918981;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.estado-selector ion-icon {
+  font-size: 1.4rem;
+}
+
+.estado-selector p {
+  margin: 0;
+}
+
+.lista-resultados,
+.lista-ejemplares {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lista-resultados button,
+.lista-ejemplares button {
+  display: grid;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #fffdfa;
+  border: 1px solid #e9e3dd;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.lista-resultados button:hover,
+.lista-ejemplares button:hover {
+  background: #fff0e9;
+  border-color: #f3c6b8;
+}
+
+.lista-resultados strong,
+.lista-ejemplares strong {
+  color: #29231f;
+  font-size: 0.82rem;
+}
+
+.lista-resultados span,
+.lista-ejemplares span {
+  margin-top: 0.2rem;
+  color: #746b65;
+  font-size: 0.72rem;
+}
+
+.libro-elegido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: #fff0e9;
+  border-radius: 0.7rem;
+}
+
+.libro-elegido .etiqueta {
+  display: block;
+  color: #9f3512;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.libro-elegido strong {
+  color: #29231f;
+  font-size: 0.82rem;
+}

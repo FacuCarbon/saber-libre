@@ -39,6 +39,8 @@ import {
   warningOutline,
   caretDownOutline,
   reorderThreeOutline,
+  barcodeOutline,
+  printOutline,
 } from 'ionicons/icons';
 
 export const iconosApp = {
@@ -81,6 +83,8 @@ export const iconosApp = {
   'warning-outline': warningOutline,
   'caret-down-outline': caretDownOutline,
   'reorder-three-outline': reorderThreeOutline,
+  'barcode-outline': barcodeOutline,
+  'print-outline': printOutline,
 };
 
 export type IconosAppType = keyof typeof iconosApp;

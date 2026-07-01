@@ -1,0 +1,46 @@
+<article
+  class="multa-item"
+  [class.multa-item--pagada]="detalle.multa.pagada"
+>
+  <div class="multa-identidad">
+    <div class="icono-multa" aria-hidden="true">
+      <ion-icon name="receipt-outline"></ion-icon>
+    </div>
+
+    <div class="multa-info">
+      <h3 [title]="detalle.usuario?.nombreCompleto || 'Lector no encontrado'">
+        {{ detalle.usuario?.nombreCompleto || "Lector no encontrado" }}
+      </h3>
+      <p [title]="detalle.libro?.titulo || 'Libro no encontrado'">
+        {{ detalle.libro?.titulo || "Libro no encontrado" }}
+      </p>
+    </div>
+  </div>
+
+  <div class="dato monto">
+    <span class="etiqueta-mobile">Monto:</span>
+    <span>${{ detalle.multa.monto }}</span>
+  </div>
+
+  <div class="estado">
+    <span class="etiqueta-mobile">Estado:</span>
+    <span class="estado-badge">
+      {{ detalle.multa.pagada ? "Pagada" : "Pendiente" }}
+    </span>
+  </div>
+
+  <div class="acciones">
+    @if (!detalle.multa.pagada) {
+    <ion-button
+      fill="outline"
+      size="small"
+      (click)="marcarPagada.emit(detalle.multa.id)"
+    >
+      <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+      Marcar pagada
+    </ion-button>
+    } @else {
+    <span class="sin-accion">Saldada</span>
+    }
+  </div>
+</article>

@@ -35,16 +35,10 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'inicio',
+        redirectTo: 'catalogo',
         pathMatch: 'full',
       },
-      {
-        path: 'inicio',
-        loadComponent: () =>
-          import('./pages/dashboard/inicio/inicio.page').then(
-            (m) => m.InicioPage,
-          ),
-      },
+
       {
         path: 'catalogo',
         loadComponent: () =>
@@ -106,6 +100,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/dashboard/multas/multas.page').then(
             (m) => m.MultasPage,
+          ),
+      },
+      {
+        path: 'multas/registrar',
+        loadComponent: () =>
+          import('./pages/dashboard/multas/registrar/registrar-multa.component').then(
+            (m) => m.RegistrarMultaComponent,
           ),
       },
       {

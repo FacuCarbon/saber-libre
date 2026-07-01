@@ -1,0 +1,14 @@
+.cargando-app {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  background: #fffdfa;
+}
+
+.cargando-app ion-spinner {
+  color: #ce3f0b;
+  width: 2.5rem;
+  height: 2.5rem;
+}

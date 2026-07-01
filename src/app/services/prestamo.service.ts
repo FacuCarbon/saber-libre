@@ -65,6 +65,27 @@ export class PrestamoService {
   }
 
   /**
+   * Obtiene el prestamo activo de cada ejemplar de la lista, si existe.
+   * @param idsEjemplar Los IDs de los ejemplares a resolver.
+   * @returns Un mapa de idEjemplar a su prestamo activo.
+   */
+  async obtenerPrestamosActivosPorEjemplares(
+    idsEjemplar: string[],
+  ): Promise<Map<string, Prestamo>> {
+    const prestamosActivos = await this.obtenerPrestamosActivos();
+    const idsBuscados = new Set(idsEjemplar);
+
+    const mapa = new Map<string, Prestamo>();
+    for (const prestamo of prestamosActivos) {
+      if (idsBuscados.has(prestamo.idEjemplar)) {
+        mapa.set(prestamo.idEjemplar, prestamo);
+      }
+    }
+
+    return mapa;
+  }
+
+  /**
    * Crea un prestamo para un ejemplar concreto.
    * @param idUsuario El ID del usuario lector.
    * @param idEjemplar El ID del ejemplar.

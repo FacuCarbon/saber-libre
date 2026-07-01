@@ -1,0 +1,76 @@
+<div class="selector-ejemplar">
+  @if (!libroElegido) {
+    <app-buscador-libros
+      placeholder="Buscar libro por título o autor..."
+      (busqueda)="buscarLibros($event)"
+    ></app-buscador-libros>
+
+    @if (buscando) {
+      <div class="estado-selector">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    } @else if (busquedaRealizada) {
+      <ul class="lista-resultados">
+        @for (libro of librosEncontrados; track libro.id) {
+          <li>
+            <button type="button" (click)="elegirLibro(libro)">
+              <strong>{{ libro.titulo }}</strong>
+              <span>{{ libro.autores.join(", ") }}</span>
+            </button>
+          </li>
+        } @empty {
+          <li class="estado-selector">
+            <ion-icon name="search-outline"></ion-icon>
+            <p>No se encontraron libros para esa búsqueda.</p>
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    <div class="libro-elegido">
+      <div>
+        <span class="etiqueta">Libro seleccionado</span>
+        <strong>{{ libroElegido.titulo }}</strong>
+      </div>
+      <ion-button
+        type="button"
+        fill="clear"
+        size="small"
+        (click)="volverABusqueda()"
+      >
+        Cambiar libro
+      </ion-button>
+    </div>
+
+    @if (cargandoEjemplares) {
+      <div class="estado-selector">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    } @else {
+      <ul class="lista-ejemplares">
+        @for (fila of filas; track fila.ejemplar.id) {
+          <li>
+            <button type="button" (click)="elegirEjemplar(fila)">
+              <strong>{{ fila.ejemplar.codigoBarras }}</strong>
+              @if (fila.lector) {
+                <span>
+                  {{ fila.lector.nombreCompleto }}
+                  @if (fila.prestamo) {
+                    · vence {{ formatearFecha(fila.prestamo.fechaDevEstimada) }}
+                  }
+                </span>
+              } @else {
+                <span>{{ fila.ejemplar.ubicacion }}</span>
+              }
+            </button>
+          </li>
+        } @empty {
+          <li class="estado-selector">
+            <ion-icon name="book-outline"></ion-icon>
+            <p>Este libro no tiene ejemplares en el estado necesario.</p>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>

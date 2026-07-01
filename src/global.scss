@@ -66,3 +66,21 @@ select,
 textarea {
   font: inherit;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .etiqueta-imprimible,
+  .etiqueta-imprimible * {
+    visibility: visible;
+  }
+
+  .etiqueta-imprimible {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

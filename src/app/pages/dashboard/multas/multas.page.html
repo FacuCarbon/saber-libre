@@ -1,3 +1,94 @@
-<div class="ion-padding">
-  <h1>Multas!</h1>
-</div>
+<main class="multas-contenido">
+  <app-header-page
+    titulo="Gestión de multas"
+    subtitulo="Controlá las multas pendientes y pagadas de los lectores."
+    textoBoton="Registrar multa"
+    icono="add"
+    [botonAnchoCompleto]="true"
+    (accion)="registrarMulta()"
+  ></app-header-page>
+
+  @if (mensaje) {
+  <p class="mensaje" [class.mensaje--error]="mensajeEsError">{{ mensaje }}</p>
+  }
+
+  <section class="resumen" aria-label="Resumen de multas">
+    <article class="resumen-item resumen-item--pendientes">
+      <div class="resumen-icono"><ion-icon name="receipt-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadPendientes }}</strong>
+        <span>Pendientes</span>
+      </div>
+    </article>
+    <article class="resumen-item resumen-item--monto">
+      <div class="resumen-icono"><ion-icon name="time-outline"></ion-icon></div>
+      <div>
+        <strong>${{ montoPendienteTotal }}</strong>
+        <span>Monto pendiente</span>
+      </div>
+    </article>
+    <article class="resumen-item resumen-item--pagadas">
+      <div class="resumen-icono"><ion-icon name="checkmark-outline"></ion-icon></div>
+      <div>
+        <strong>{{ cantidadPagadas }}</strong>
+        <span>Pagadas</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="listado-multas">
+    <div class="listado-encabezado">
+      <div>
+        <h2>Historial de multas</h2>
+        <p>Consultá el estado de cada multa registrada.</p>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <app-buscador-libros
+        placeholder="Buscar por lector o libro..."
+        (busqueda)="filtrarMultas($event)"
+      ></app-buscador-libros>
+
+      <ion-select
+        label="Estado"
+        labelPlacement="stacked"
+        interface="popover"
+        [(ngModel)]="filtroEstado"
+        (ionChange)="cambiarFiltroEstado()"
+      >
+        <ion-select-option value="todas">Todas</ion-select-option>
+        <ion-select-option value="pendiente">Pendientes</ion-select-option>
+        <ion-select-option value="pagada">Pagadas</ion-select-option>
+      </ion-select>
+    </div>
+
+    @if (cargando) {
+    <div class="estado-listado">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando multas...</p>
+    </div>
+    } @else {
+    <div class="multas-columnas" aria-hidden="true">
+      <span>Lector y libro</span>
+      <span>Monto</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="multas-lista">
+      @for (detalle of multasFiltradas; track detalle.multa.id) {
+      <app-item-multa
+        [detalle]="detalle"
+        (marcarPagada)="marcarComoPagada($event)"
+      ></app-item-multa>
+      } @empty {
+      <div class="estado-listado">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <p>No se encontraron multas.</p>
+      </div>
+      }
+    </div>
+    }
+  </section>
+</main>

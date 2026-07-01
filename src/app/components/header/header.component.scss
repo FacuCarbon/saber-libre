@@ -13,10 +13,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(248, 246, 243, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #f0edea;
+  background: #ffffff;
+  border-bottom: 1.5px solid #f0edea;
+  box-shadow: 0 1px 0 #f0edea;
 }
 
 .nav-inner {
@@ -85,6 +84,7 @@
 }
 
 .btn-primary--sm {
+  --background: #ff6b35;
   --padding-top: 8px;
   --padding-bottom: 8px;
   --padding-start: 16px;

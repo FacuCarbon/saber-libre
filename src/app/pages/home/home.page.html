@@ -1,48 +1,5 @@
 <ion-content class="home-content">
-  <nav class="nav">
-    <div class="nav-inner">
-      <logo-app class="logo-grande"></logo-app>
-      <div class="nav-links">
-        <a routerLink="/" class="nav-link nav-link--active">Home</a>
-        <a routerLink="/demo" class="nav-link">Catálogo</a>
-      </div>
-      <div class="nav-actions">
-        @if (cargando) {
-          <ion-spinner name="lines"></ion-spinner>
-        } @else {
-          @if (usuario) {
-            <span class="nav-user">{{ usuario.nombreCompleto }}</span>
-            <ion-button id="user-menu-trigger" fill="clear" class="btn-ghost">
-              <ion-icon slot="icon-only" name="caret-down-outline"></ion-icon>
-            </ion-button>
-            <ion-popover trigger="user-menu-trigger" triggerAction="click" [dismissOnSelect]="true">
-              <ng-template>
-                <ion-list lines="none">
-                  @if (puedeVerDashboard) {
-                    <ion-item button (click)="irADashboard()">
-                      <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
-                      <ion-label>Dashboard</ion-label>
-                    </ion-item>
-                  }
-                  <ion-item button (click)="irAPerfil()">
-                    <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-                    <ion-label>Mi perfil</ion-label>
-                  </ion-item>
-                  <ion-item button (click)="cerrarSesion()">
-                    <ion-icon name="log-out-outline" slot="start"></ion-icon>
-                    <ion-label>Cerrar sesión</ion-label>
-                  </ion-item>
-                </ion-list>
-              </ng-template>
-            </ion-popover>
-          } @else {
-            <ion-button routerLink="/auth/login" fill="clear" class="btn-ghost">Iniciar sesión</ion-button>
-            <ion-button routerLink="/auth/register" class="btn-primary btn-primary--sm">Registrarse</ion-button>
-          }
-        }
-      </div>
-    </div>
-  </nav>
+  <app-header></app-header>
 
   <section class="hero">
     <div class="hero-bg"></div>
@@ -141,7 +98,7 @@
       <div class="footer-info">
         <div class="footer-item"><ion-icon name="time-outline"></ion-icon><span>Lun a Vie 9:00–18:00 | Sáb 9:00–13:00</span></div>
         <div class="footer-item"><ion-icon name="location-outline"></ion-icon><span>Av. Siempre Viva 123, Ciudad</span></div>
-        <div class="footer-item"><ion-icon name="mail-outline"></ion-icon><span>contacto@saber-libre.com</span></div>
+        <div class="footer-item"><ion-icon name="mail-outline"></ion-icon><span>contacto@sabrelibre.com</span></div>
       </div>
     </div>
     <div class="footer-bottom"><p>&copy; 2026 Saber Libre — Biblioteca Popular. Todos los derechos reservados.</p></div>

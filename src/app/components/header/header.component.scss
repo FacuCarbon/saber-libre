@@ -1,0 +1,165 @@
+:host {
+  display: block;
+}
+
+//  BRANDING TOKENS
+// Naranja:   #ff6b35 / #e85a26 / #ff8f65 / #fff4ef
+// Fondo:     #f8f6f3
+// Superf.:   #ffffff / #fffdfa
+// Bordes:    #f0edea / #eae6e1
+// Texto:     #2a2520 / #6b6560 / #a8a29c
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(248, 246, 243, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #f0edea;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+}
+
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b6560;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nav-link:hover,
+.nav-link--active {
+  color: #ff6b35;
+  border-bottom-color: #ff6b35;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ghost {
+  --color: #6b6560;
+  --background-hover: #fff4ef;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 36px;
+  text-transform: none;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+.btn-ghost:hover {
+  --color: #ff6b35;
+}
+
+.nav-user {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a2520;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.btn-primary--sm {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  min-height: 36px;
+  font-size: 13px;
+}
+
+.logo-grande ::ng-deep .logo {
+  max-width: 55px;
+}
+
+.logo-grande ::ng-deep .titulo {
+  font-size: 23px;
+}
+
+.logo-grande ::ng-deep .descripcion {
+  font-size: 10px;
+}
+
+// RESPONSIVE
+
+@media (min-width: 640px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+@media (max-width: 500px) {
+  .nav-inner {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .logo-grande ::ng-deep .logo {
+    max-width: 40px;
+  }
+
+  .logo-grande ::ng-deep .titulo {
+    font-size: 18px;
+  }
+
+  .logo-grande ::ng-deep .descripcion {
+    display: none;
+  }
+
+  .nav-user {
+    max-width: 90px;
+    font-size: 12px;
+    padding: 0 4px;
+  }
+
+  .btn-ghost {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    min-height: 32px;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-inner {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .logo-grande ::ng-deep .logo {
+    max-width: 32px;
+  }
+
+  .logo-grande ::ng-deep .titulo {
+    font-size: 15px;
+  }
+
+  .nav-user {
+    max-width: 70px;
+    font-size: 11px;
+  }
+}
